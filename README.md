@@ -11,6 +11,10 @@
 ```bash
 npm install
 ```
+```bash
+npm install -g prisma
+```
+
 3. start the database using [docker](https://docs.docker.com/engine/install/)
 ```bash
 docker run --name value-app-postgres -e POSTGRES_PASSWORD=password -e POSTGRES_DB=value-app -d -p 5432:5432 docker.io/postgres
@@ -25,7 +29,7 @@ NEXTAUTH_URL="http://localhost:3000"
 ```
 5. run prisma push to create the database schema
 ```bash
-npm run  db:push
+npm run db:push
 ```
 6. run the application
 ```bash
