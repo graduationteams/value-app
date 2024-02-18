@@ -41,14 +41,25 @@ model Session {
     user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
+enum userType {
+    ADMIN
+    USER
+    DRIVER
+    SELLER
+}
+
 model User {
     id            String    @id @default(cuid())
     name          String?
     email         String?   @unique
     emailVerified DateTime?
     image         String?
+    userType      userType  @default(USER)
+    addresses     Address[]
     accounts      Account[]
     sessions      Session[]
+    Order         Order[]
+    Store         Store?
 }
 
 model VerificationToken {
@@ -57,4 +68,89 @@ model VerificationToken {
     expires    DateTime
 
     @@unique([identifier, token])
+}
+
+model Address {
+    id     String  @id @default(cuid())
+    city   String
+    lat    String
+    lng    String
+    user   User    @relation(fields: [userId], references: [id])
+    userId String
+    Order  Order[]
+}
+
+model Driver {
+    id          String  @id @default(cuid())
+    name        String
+    phoneNumber String
+    carPlate    String
+    carModel    String
+    Order       Order[]
+}
+
+model Image {
+    id        String  @id @default(cuid())
+    url       String
+    product   Product @relation(fields: [productId], references: [id])
+    productId String
+}
+
+model Category {
+    id       String    @id @default(cuid())
+    name     String
+    products Product[]
+}
+
+model Product {
+    id          String     @id @default(cuid())
+    name        String
+    description String
+    price       Float
+    images      Image[]
+    categories  Category[]
+    orders      Order[]
+    Store       Store      @relation(fields: [storeId], references: [id])
+    storeId     String
+}
+
+enum OrderStatus {
+    CREATED
+    CONFIRMED
+    DELIVERED
+    CANCELLED
+}
+
+model Order {
+    id        String      @id @default(cuid())
+    user      User        @relation(fields: [userId], references: [id])
+    userId    String
+    products  Product[]
+    status    OrderStatus
+    address   Address     @relation(fields: [addressId], references: [id])
+    addressId String
+
+    driver   Driver? @relation(fields: [driverId], references: [id])
+    driverId String?
+
+    deliveryAmount Float
+    totalAmount    Float
+
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+}
+
+model Store {
+    id       String @id @default(cuid())
+    name     String
+    address  String
+    lat      String
+    lng      String
+    Logo     String
+    seller   User   @relation(fields: [sellerId], references: [id])
+    sellerId String
+
+    products Product[]
+
+    @@unique([sellerId])
 }
