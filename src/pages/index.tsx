@@ -10,7 +10,7 @@ export default function Home() {
   const hello = api.post.hello.useQuery({ text: "from tRPC" });
 
   return (
-    <div className="container">
+    <main className="container">
       <div className="flex flex-col items-center gap-2">
         <AuthShowcase />
       </div>
@@ -18,7 +18,7 @@ export default function Home() {
         <HomeButtons/>
         </div>
       
-    </div>
+    </main>
   );
 }
 
