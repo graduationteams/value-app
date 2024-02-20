@@ -1,0 +1,126 @@
+/* For image */
+.onb {
+    display: flex;
+    justify-content: center;
+    width: 314.09px;
+    height: 234px;
+    left: 40px;
+    top: 171px;
+    margin-left: 500px;
+  } 
+  
+  /* For Header */
+  .onb2 {
+    display: flex;
+    font-size: 25px;
+    font-weight: bold;
+    justify-content: center;
+  }
+  
+  /* For p */
+  .onb3 {
+    display: flex;
+    font-size: 18px;
+    justify-content: center;
+  }
+
+  .point {
+    margin-left: 623px;
+    padding-top: 30px;
+  }
+  
+  /* For buttons */
+  .Btonb3 {
+    display: flex;
+    gap: 30px;
+    padding-top: 50px;
+    justify-content: center;
+    flex-direction: column;
+  }
+  
+  .Obtn1 {
+    background-color: mediumseagreen;
+    width: 270px;
+    height: 35px;
+    border-radius: 5px;
+    margin-left: 39%;
+    color: aliceblue;
+    font-weight: bold;
+  }
+  
+  .Obtn2 {
+    background-color: white;
+    width: 270px;
+    height: 35px;
+    border: 2px solid #969292;
+    border-radius: 5px;
+    margin-left: 39%;
+    color: gray;
+    font-weight: bold;
+  }
+  
+  @media screen and (max-width: 767px) {
+      .onb {
+          display: flex;
+          justify-content: center;
+          width: 314.09px;
+          height: 234px;
+          left: 40px;
+          top: 171px;
+          margin-left: 100px;
+          padding-top: 15px;
+        } 
+        
+        /* For Header */
+        .onb2 {
+          display: flex;
+          font-size: 25px;
+          font-weight: bold;
+          justify-content: center;
+        }
+        
+        /* For p */
+        .onb3 {
+          display: flex;
+          font-size: 18px;
+          justify-content: center;
+          padding: 10px;
+        }
+
+        .point {
+          margin-left: 238px;
+          padding-top: 30px;
+        }
+        
+        /* For buttons */
+        .Btonb3 {
+          display: flex;
+          gap: 30px;
+          padding-top: 50px;
+          justify-content: center;
+          flex-direction: column;
+          margin-right: 200px;
+        }
+        
+        .Obtn1 {
+          background-color: #32cd32;
+          width: 270px;
+          height: 35px;
+          border-radius: 5px;
+          margin-left: 40%;
+          color: aliceblue;
+          font-weight: bold;
+        }
+        
+        .Obtn2 {
+          background-color: white;
+          width: 270px;
+          height: 35px;
+          border: 2px solid #969292;
+          border-radius: 5px;
+          margin-left: 40%;
+          color: gray;
+          font-weight: bold;
+          margin-bottom: 30px;
+        }
+  }

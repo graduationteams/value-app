@@ -1,0 +1,26 @@
+
+.Hbtn{
+    display: flex;
+    gap: 30px;
+}
+
+.btn{
+    background-color:lightblue;
+    height: 120px;
+    width: 120px;
+}
+
+.HHbtn{
+    display: flex;
+    gap: 30px;
+    padding-bottom: 70px;
+}
+
+.Hbt{
+    background-color:lightblue;
+    height: 90px;
+    width: 220px;
+}
+
+
+
