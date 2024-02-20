@@ -21,12 +21,9 @@
     "@trpc/next": "^10.43.6",
     "@trpc/react-query": "^10.43.6",
     "@trpc/server": "^10.43.6",
-<<<<<<< HEAD
     "bootstrap": "^5.3.2",
-=======
     "bcrypt": "^5.1.1",
     "cookies": "^0.9.1",
->>>>>>> b63ddd22cfe24d3c18d0d741d6b35f520e613d79
     "next": "^14.0.4",
     "next-auth": "^4.24.5",
     "react": "18.2.0",
