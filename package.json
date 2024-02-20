@@ -21,6 +21,8 @@
     "@trpc/next": "^10.43.6",
     "@trpc/react-query": "^10.43.6",
     "@trpc/server": "^10.43.6",
+    "bcrypt": "^5.1.1",
+    "cookies": "^0.9.1",
     "next": "^14.0.4",
     "next-auth": "^4.24.5",
     "react": "18.2.0",
@@ -29,6 +31,9 @@
     "zod": "^3.22.4"
   },
   "devDependencies": {
+    "@faker-js/faker": "^8.4.1",
+    "@types/bcrypt": "^5.0.2",
+    "@types/cookies": "^0.9.0",
     "@types/eslint": "^8.44.7",
     "@types/node": "^18.17.0",
     "@types/react": "^18.2.37",
