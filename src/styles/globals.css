@@ -50,12 +50,12 @@
   --color-W100: #fffffb;
   --color-W200: #fffff9;
   --color-W300: #fffff8;
-  --color-W400: #fffff9;  /* Assuming repetition for demonstration */
-  --color-W500: #fffff8;  /* Assuming repetition for demonstration */
+  --color-W400: #fffff9;  
+  --color-W500: #fffff8;  
 
   /* Warning Colors */
-  --color-WA50: #fefaed;  /* Note: Duplicate variable names for white and warning */
-  --color-WA75: #fbebb4;  /* Consider renaming for clarity */
+  --color-WA50: #fefaed;  
+  --color-WA75: #fbebb4;  
   --color-WA100: #f9e294;
   --color-WA200: #f7d666;
   --color-WA300: #f5cd47;
