@@ -1,3 +1,8 @@
+.onb, .onb2, .onb3, .Obtn1, .Obtn2 {
+  font-family: 'Montserrat-Arabic', sans-serif; /* Apply Montserrat-Arabic font */
+}
+
+
 /* For image */
 .onb {
   display: flex;
@@ -39,7 +44,7 @@
 }
 
 .Obtn1 {
-  background-color: #32cd32;
+  background-color: var(--color-P300);
   width: 270px;
   height: 35px;
   border-radius: 5px;
@@ -49,13 +54,13 @@
 }
 
 .Obtn2 {
-  background-color: white;
+  background-color: var(--color-W50);
   width: 270px;
   height: 35px;
-  border: 2px solid #969292;
+  border: 2px solid var(--color-B50);
   border-radius: 5px;
   margin-left: 39%;
-  color: gray;
+  color:var(--color-B100);
   font-weight: bold;
 }
 

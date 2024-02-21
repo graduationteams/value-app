@@ -2,6 +2,87 @@
 @tailwind components;
 @tailwind utilities;
 
+/* globals.css */
+@font-face {
+  font-family: 'Montserrat-Arabic';
+  src: url('/assets/fonts/Montserrat-Arabic-Regular.woff2') format('woff2');
+  font-weight: 400; /* Regular */
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Montserrat-Arabic';
+  src: url('/assets/fonts/Montserrat-Arabic-Medium.woff2') format('woff2');
+  font-weight: 500; /* Medium */
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Montserrat-Arabic';
+  src: url('/assets/fonts/Montserrat-Arabic-SemiBold.woff2') format('woff2');
+  font-weight: 600; /* SemiBold */
+  font-style: normal;
+}
+
+/* globals.css */
+:root {
+  /* Primary Colors */
+  --color-P50: #e9fdf7;
+  --color-P75: #a3f7df;
+  --color-P100: #7df3d1;
+  --color-P200: #44eebd;
+  --color-P300: #32CD32;
+  --color-P400: #15a57b;
+  --color-P500: #128f6b;
+
+  /* Secondary Colors */
+  --color-S50: #e7f4fe;
+  --color-S75: #9ed2fa;
+  --color-S100: #76c0f8;
+  --color-S200: #3ba5f5;
+  --color-S300: #1392f3;
+  --color-S400: #0d66aa;
+  --color-S500: #0c5994;
+
+  /* White Shades */
+  --color-W50: #fffffe;
+  --color-W75: #fffffc;
+  --color-W100: #fffffb;
+  --color-W200: #fffff9;
+  --color-W300: #fffff8;
+  --color-W400: #fffff9;  /* Assuming repetition for demonstration */
+  --color-W500: #fffff8;  /* Assuming repetition for demonstration */
+
+  /* Warning Colors */
+  --color-WA50: #fefaed;  /* Note: Duplicate variable names for white and warning */
+  --color-WA75: #fbebb4;  /* Consider renaming for clarity */
+  --color-WA100: #f9e294;
+  --color-WA200: #f7d666;
+  --color-WA300: #f5cd47;
+  --color-WA400: #ac9032;
+  --color-WA500: #957d2b;
+
+  /* Danger Colors */
+  --color-D50: #f8e9e9;
+  --color-D75: #e4a5a6;
+  --color-D100: #d98081;
+  --color-D200: #c8494b;
+  --color-D300: #bd2426;
+  --color-D400: #84191b;
+  --color-D500: #731617;
+
+  /* Black Shades */
+  --color-B50: #e8e8e9;
+  --color-B75: #a2a2a3;
+  --color-B100: #7b7b7d;
+  --color-B200: #424244;
+  --color-B300: #1b1b1e;
+  --color-B400: #131315;
+  --color-B500: #101012;
+}
+
+
+
 * {
   background-color: white;
 }

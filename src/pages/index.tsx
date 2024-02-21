@@ -3,48 +3,41 @@ import Image from "next/image";
 import { api } from "~/utils/api";
 import "bootstrap/dist/css/bootstrap.min.css";
 import SearchBar from "~/components/searchBar/SearchBar";
-import HomeButtons from "~/components/home-buttons/HomeButtons"
-import onboarding from "./Onboarding1/onboarding"
+import HomeButtons from "~/components/home-buttons/HomeButtons";
+// Make sure the import path for onboarding is correct
+import onboarding from "./Onboarding1/onboarding";
 
 export default function Home() {
   const hello = api.post.hello.useQuery({ text: "from tRPC" });
 
   return (
-    <main className="container">
+    <main className="container font-montserrat"> {/* Applying Montserrat-Arabic font */}
       <div className="flex flex-col items-center gap-2">
         <AuthShowcase />
       </div>
       <div className="Hbut">
-        <HomeButtons/>
-        </div>
-      
+        <HomeButtons />
+      </div>
     </main>
   );
 }
 
 function AuthShowcase() {
-  
   const { data: sessionData } = useSession();
-
-  const { data: secretMessage } = api.post.getSecretMessage.useQuery(
-    undefined, // no input
-    { enabled: sessionData?.user !== undefined },
-  );
 
   return (
     <div className="flex flex-col items-center justify-center gap-4">
-      <p className="h5 text-center text-2xl">
+      {/* Using the custom-defined h2 size and bold weight from Tailwind config */}
+      <p className="text-h2 font-bold">
         {sessionData && <span>Hala! {sessionData.user?.name} </span>}
 
         <Image
           src="/images/icons/hand-icon.png"
           alt="hand icon"
-          className="hand"
           width={30}
-          height={10}
+          height={30} // Adjusted for consistency
         />
       </p>
-      
 
       <button
         className="btn btn-primary"
@@ -55,5 +48,6 @@ function AuthShowcase() {
     </div>
   );
 }
+
 
 
