@@ -10,10 +10,26 @@ import onboarding from "./Onboarding1/onboarding";
 export default function Home() {
   const hello = api.post.hello.useQuery({ text: "from tRPC" });
 
+  
+  // to test uncomment this :
+  // const { data: categoriesData, isLoading, isError } = api.categories.getByType.useQuery( { categoryType: 'FARM' });
+
+
   return (
     <main className="container font-montserrat"> {/* Applying Montserrat-Arabic font */}
       <div className="flex flex-col items-center gap-2">
         <AuthShowcase />
+
+        {/*FOR!!! TEST UNCOMMENT THIS  */}
+
+        {/* {isLoading && <p>Loading categories...</p>}
+        {isError && <p>Failed to load categories.</p>}
+        {categoriesData && (
+          <ul>
+            {categoriesData.map((category) => (
+              <li key={category.id}>{category.name}</li>
+            ))}
+          </ul> */}
       </div>
       <div className="Hbut">
         <HomeButtons />

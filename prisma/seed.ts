@@ -122,17 +122,19 @@ const seed = async () => {
 
       const categories: string[] = [];
 
-      for (let i = 0; i < answers.categories; i++) {
-        categories.push(
-          (
-            await tx.category.create({
-              data: {
-                name: faker.commerce.department(),
-              },
-            })
-          ).id,
-        );
-      }
+    for (let i = 0; i < answers.categories; i++) {
+  categories.push(
+    (
+      await tx.category.create({
+        data: {
+          name: faker.commerce.department(),
+          categoryType: 'FARM', // Or 'REGULAR', depending on your logic
+        },
+      })
+    ).id,
+  );
+}
+
 
       for (let j = 0; j < answers.stores; j++) {
         const { id: sellerId } = await tx.user.create({
