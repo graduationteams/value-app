@@ -12,7 +12,7 @@ export default function Home() {
 
   
   // to test uncomment this :
-  // const { data: categoriesData, isLoading, isError } = api.categories.getByType.useQuery( { categoryType: 'FARM' });
+  const { data: categoriesData, isLoading, isError } = api.categories.getByType.useQuery( { categoryType: 'FARM' });
 
 
   return (
@@ -21,15 +21,16 @@ export default function Home() {
         <AuthShowcase />
 
         {/*FOR!!! TEST UNCOMMENT THIS  */}
-
-        {/* {isLoading && <p>Loading categories...</p>}
+{/* 
+        {isLoading && <p>Loading categories...</p>}
         {isError && <p>Failed to load categories.</p>}
         {categoriesData && (
           <ul>
             {categoriesData.map((category) => (
               <li key={category.id}>{category.name}</li>
             ))}
-          </ul> */}
+          </ul>)} */}
+          
       </div>
       <div className="Hbut">
         <HomeButtons />
