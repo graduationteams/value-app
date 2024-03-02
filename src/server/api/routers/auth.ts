@@ -3,7 +3,12 @@ import { hash } from "bcrypt";
 import Cookies from "cookies";
 import { randomUUID } from "crypto";
 import { z } from "zod";
-import { createTRPCRouter, publicProcedure } from "~/server/api/trpc";
+import { env } from "~/env";
+import {
+  createTRPCRouter,
+  protectedProcedure,
+  publicProcedure,
+} from "~/server/api/trpc";
 
 export const authRouter = createTRPCRouter({
   register: publicProcedure
@@ -63,6 +68,72 @@ export const authRouter = createTRPCRouter({
 
       cookies.set("next-auth.session-token", sessionToken, {
         expires: sessionExpiry,
+      });
+    }),
+  edit: protectedProcedure
+    .input(
+      z.object({
+        name: z.string().min(3).nullish(),
+        profilePicture: z.string().nullish(),
+      }),
+    )
+    .mutation(async ({ input, ctx }) => {
+      let imageUrl: string | undefined = undefined;
+      if (input.profilePicture) {
+        // we will use imagebb for hosting images, it's free but we might need to change it in the future to something else (like s3 or cloudinary)
+        const form = new FormData();
+        // base64 string start with `data:image/png;base64,...actualBase64String...` so we need to remove the `data:image/png;base64,` part since imgbb doesn't accept it
+        const base64String = input.profilePicture.split(",")[1];
+        if (!base64String) {
+          throw new TRPCError({
+            code: "BAD_REQUEST",
+            message: "Invalid base64 string",
+          });
+        }
+        form.append("image", base64String);
+        try {
+          const res = await fetch(
+            "https://api.imgbb.com/1/upload?key=" + env.IMGBB_API_KEY,
+            {
+              method: "POST",
+              body: form,
+            },
+          );
+          const data = (await res.json()) as {
+            data?: { image?: { url?: string } };
+          };
+          if (!res.ok) {
+            throw new Error("Failed to upload image" + JSON.stringify(data));
+          }
+          if (data.data?.image?.url) {
+            imageUrl = data.data.image.url;
+          } else {
+            throw new Error("Failed to upload image " + JSON.stringify(data));
+          }
+        } catch (error) {
+          console.error(error);
+          if (error instanceof Error) {
+            throw new TRPCError({
+              code: "INTERNAL_SERVER_ERROR",
+              message: error.message,
+              cause: error,
+            });
+          }
+          throw new TRPCError({
+            code: "INTERNAL_SERVER_ERROR",
+            message: "Failed to upload image",
+            cause: error,
+          });
+        }
+      }
+      return await ctx.db.user.update({
+        where: {
+          id: ctx.session.user.id,
+        },
+        data: {
+          name: input.name ?? undefined,
+          image: imageUrl,
+        },
       });
     }),
 });
