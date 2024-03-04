@@ -56,4 +56,70 @@ export const productRouter = createTRPCRouter({
       });
       return product;
     }),
+  edit: protectedProcedure
+    .input(
+      z.object({
+        id: z.string(),
+        name: z.string().min(3).optional(),
+        description: z.string().min(3).optional(),
+        price: z.number().positive().optional(),
+        images: z.array(z.string()).optional(),
+        categories: z.array(z.string()).min(1).optional(),
+      }),
+    )
+    .mutation(async ({ input, ctx }) => {
+      // check if the storeId is valid and belongs to the current user
+      const store = await ctx.db.product.findUnique({
+        where: {
+          id: input.id,
+          Store: {
+            sellerId: ctx.session.user.id,
+          },
+        },
+        select: {
+          storeId: true,
+        },
+      });
+      if (!store) {
+        throw new TRPCError({
+          code: "UNAUTHORIZED",
+          message: "You are not authorized to edit this product",
+        });
+      }
+      let images: string[] | undefined = undefined;
+      if (input.images) {
+        //delete old images
+        await ctx.db.image.deleteMany({
+          where: {
+            productId: input.id,
+          },
+        });
+
+        images = await Promise.all(
+          input.images.map(async (image) => {
+            return upload_base64_image(image);
+          }),
+        );
+      }
+      await ctx.db.product.update({
+        where: {
+          id: input.id,
+        },
+        data: {
+          name: input.name ?? undefined,
+          description: input.description ?? undefined,
+          price: input.price ?? undefined,
+          images: {
+            create: images?.map((url) => {
+              return { url };
+            }),
+          },
+          categories: {
+            set: input.categories?.map((id) => {
+              return { id };
+            }),
+          },
+        },
+      });
+    }),
 });
