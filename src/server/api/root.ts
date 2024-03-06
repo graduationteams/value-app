@@ -3,6 +3,7 @@ import { createTRPCRouter } from "~/server/api/trpc";
 import { categoriesRouter } from "~/server/api/routers/getproductstype";
 import { authRouter } from "./routers/auth";
 import { productRouter } from "./routers/product";
+import { storeRouter } from "./routers/store";
 import { addCategoryRouter } from '~/server/api/routers/addcategory';
 
 /**
@@ -15,6 +16,7 @@ export const appRouter = createTRPCRouter({
   categories: categoriesRouter,
   auth: authRouter,
   product: productRouter,
+  store: storeRouter,
   addCategory: addCategoryRouter,
 });
 
