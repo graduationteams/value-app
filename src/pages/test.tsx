@@ -4,37 +4,47 @@ import { useState } from "react";
 import { MyDrawer } from "../components/Bottomsheet/bottomsheet";
 
 export default function Test() {
-  const [isAddressopen, setIsadressOpen] = useState(false);
-  const [isMapOpen, setIsmapOpen] = useState(false);
+  const [isAddressopen, setIsAddressOpen] = useState(false);
+  const [isMapOpen, setIsMapOpen] = useState(false);
 
   return (
     <div>
       <button
         onClick={() => {
-          setIsmapOpen(true);
+          setIsMapOpen(true);
+          setIsAddressOpen(false); // Close the first drawer
         }}
       >
-        map
+        Open Map
       </button>
       <br />
       <button
         onClick={() => {
-          setIsadressOpen(true);
+          setIsAddressOpen(true);
+          setIsMapOpen(false); // Close the second drawer
         }}
       >
-        address
+        Open Address
       </button>
       <br />
      
       <MyDrawer
         isOpen={isAddressopen}
         onclose={() => {
-          setIsadressOpen(false);
+          setIsAddressOpen(false);
         }}
       >
         <div className="text-red-600">
-          <h1>address</h1>
+          <h1>Address</h1>
           <div className="Signint w-[393px] h-[400px] relative bg-gray-50 rounded-tl-xl rounded-tr-xl">
+            <button
+              onClick={() => {
+                setIsMapOpen(true); // Open the second drawer
+                setIsAddressOpen(false); // Close the first drawer
+              }}
+            >
+              Open Map
+            </button>
             {/* Content of the drawer */}
           </div>
         </div>
@@ -43,11 +53,11 @@ export default function Test() {
       <MyDrawer
         isOpen={isMapOpen}
         onclose={() => {
-          setIsmapOpen(false);
+          setIsMapOpen(false);
         }}
       >
         <div className="text-red-600">
-          <h1>map</h1>
+          <h1>Map</h1>
           <p>This is the content of the drawer2</p>
         </div>
       </MyDrawer>
