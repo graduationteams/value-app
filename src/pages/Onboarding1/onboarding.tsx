@@ -19,12 +19,9 @@ export default function onboarding() {
         </p>
       </div>
 
-      <div className={styles.point}>
-        <img src="/images/point1.png" alt="" className="img3" />
-      </div>
-
+      
       <div className={styles.Btonb3}>
-        <button className={styles.Obtn1}>Next</button>
+      <button className={styles.Obtn1} onClick={() => { window.location.href = '../Onboarding2/onboarding2' }}>Next</button>
         
         <button className={styles.Obtn2}>Skip</button>
       </div>

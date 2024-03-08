@@ -97,10 +97,16 @@ model Image {
     productId String
 }
 
+enum CategoryType {
+  FARM
+  REGULAR
+}
+
 model Category {
     id       String    @id @default(cuid())
     name     String
     products Product[]
+    categoryType CategoryType
 }
 
 model Product {

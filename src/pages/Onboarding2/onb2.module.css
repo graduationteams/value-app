@@ -103,14 +103,15 @@
         }
         
         .Obtn1 {
-          background-color: #32cd32;
+          background-color: var(--color-P300);
           width: 270px;
           height: 35px;
           border-radius: 5px;
-          margin-left: 40%;
+          margin-left: 39%;
           color: aliceblue;
           font-weight: bold;
         }
+        
         
         .Obtn2 {
           background-color: white;

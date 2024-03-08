@@ -26,6 +26,7 @@ GOOGLE_CLIENT_ID="354269438319-0cbp494k0k8bpni739m81lbh05sv1od3.apps.googleuserc
 GOOGLE_CLIENT_SECRET="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"
 NEXTAUTH_SECRET="Pa17nNbqBHmxHUujDxFe5c1wGLTEA2isjDSGFOjz0T8="
 NEXTAUTH_URL="http://localhost:3000"
+IMGBB_API_KEY="81c3dfe81e04895bc6e8be7460e46166"
 ```
 5. run prisma push to create the database schema
 ```bash

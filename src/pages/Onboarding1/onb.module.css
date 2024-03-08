@@ -1,4 +1,4 @@
-.onb, .onb2, .onb3, .Obtn1, .Obtn2 {
+.onb, .onb2, .onb3, .Obtn1, .Obtn2, .inputtitle, .createAccount, .inputTitle, .inputField, .span {
   font-family: 'Montserrat-Arabic', sans-serif; /* Apply Montserrat-Arabic font */
 }
 
@@ -27,6 +27,7 @@
   display: flex;
   font-size: 18px;
   justify-content: center;
+  color: var(--color-B75);
 }
 
 .point {
@@ -45,9 +46,9 @@
 
 .Obtn1 {
   background-color: var(--color-P300);
-  width: 270px;
-  height: 35px;
-  border-radius: 5px;
+  width: 400px;
+  height: 45px;
+  border-radius: 10px;
   margin-left: 39%;
   color: aliceblue;
   font-weight: bold;
@@ -55,14 +56,107 @@
 
 .Obtn2 {
   background-color: var(--color-W50);
-  width: 270px;
-  height: 35px;
-  border: 2px solid var(--color-B50);
-  border-radius: 5px;
+  width: 400px;
+  height: 45px;
+  border-radius: 10px;
+  border: 1.5px solid var(--color-B50);
   margin-left: 39%;
   color:var(--color-B100);
   font-weight: bold;
 }
+
+
+.tst {
+  display: flex;
+  align-items: center;
+  font-size: 18px;
+  color: var(--color-B75);
+  text-align: center;
+  margin: 10px 0px 20px;
+}
+
+.tst .line {
+  flex: 1;
+  height: 1px;
+  background-color: var(--color-B75);
+}
+
+.tst .span {
+  padding: 0 10px;
+  background: #fff;
+}
+
+/* YourComponent.module.css */
+
+.formContainer {
+  width: 300px; /* Adjust width as needed */
+  margin: 0 auto; /* Center the form horizontally */
+}
+
+.inputContainer {
+  margin-bottom: 20px;
+}
+
+.inputTitle {
+  display: block;
+  font-weight: bold;
+  margin-bottom: 5px;
+}
+
+.inputField {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 10px;
+}
+
+.createAccount{
+  background-color: var(--color-P300);
+  width: 400px;
+  height: 45px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;  color: aliceblue;
+  font-weight: bold;
+  margin: 0 auto;
+}
+
+
+.googlebutton {
+  background-color: var(--color-W50);
+  width: 400px;
+  height: 45px;
+  border: 1.5px solid var(--color-B50);
+  border-radius: 10px;
+  margin: 0 auto; /* Centering the button horizontally */
+  color: var(--color-B100);
+  font-weight: bold;
+  display: flex;
+  align-items: center;
+  justify-content: center; /* Centering the content horizontally */
+}
+
+.googlebutton img {
+  width: 24px;
+  height: 24px;
+  margin-right: 8px; /* Adjusted margin to create space */
+}
+
+.googlebutton .onb2 {
+  color: black;
+  font-size: 19px;
+  padding-left: 8px;
+}
+.signInLink {
+  color: black; /* Change color as desired */
+  text-decoration: none; /* Remove underline */
+}
+
+.signInLink:hover {
+  text-decoration: underline; /* Add underline on hover */
+}
+
 
 @media screen and (max-width: 767px) {
   .onb {
@@ -72,7 +166,7 @@
     height: 234px;
     left: 40px;
     top: 171px;
-    margin-left: 100px;
+    margin-left: 50px;
     padding-top: 15px;
   }
 
@@ -101,7 +195,7 @@
   .Btonb3 {
     display: flex;
     gap: 30px;
-    padding-top: 50px;
+    padding-top: px;
     justify-content: center;
     flex-direction: column;
     margin-right: 200px;
@@ -109,23 +203,24 @@
 
   .Obtn1 {
     background-color: #32cd32;
-    width: 270px;
-    height: 35px;
-    border-radius: 5px;
-    margin-left: 40%;
+    width: 400px;
+    height: 45px;
+    border-radius: 10px;
+    margin-left: 20px;
     color: aliceblue;
     font-weight: bold;
   }
 
   .Obtn2 {
     background-color: white;
-    width: 270px;
-    height: 35px;
-    border: 2px solid #969292;
-    border-radius: 5px;
-    margin-left: 40%;
+    width: 400px;
+    height: 45px;
+    border-radius: 10px;
+    border: 1.5px solid #969292;
+    margin-left: 20px;
     color: gray;
     font-weight: bold;
     margin-bottom: 30px;
   }
 }
+

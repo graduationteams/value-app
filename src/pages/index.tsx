@@ -8,6 +8,11 @@ import HeadBtn from "~/components/Head-btn/HeadBtn";
 export default function Home() {
   const hello = api.post.hello.useQuery({ text: "from tRPC" });
 
+  
+  // to test uncomment this :
+  // const { data: categoriesData, isLoading, isError } = api.categories.getByType.useQuery( { categoryType: 'FARM' });
+
+
   return (
     <main className="font-montserrat container">
       {" "}
@@ -20,6 +25,17 @@ export default function Home() {
     
       <div className="flex flex-col items-center gap-2">
         <AuthShowcase />
+
+        {/*FOR!!! TEST UNCOMMENT THIS  */}
+
+        {/* {isLoading && <p>Loading categories...</p>}
+        {isError && <p>Failed to load categories.</p>}
+        {categoriesData && (
+          <ul>
+            {categoriesData.map((category) => (
+              <li key={category.id}>{category.name}</li>
+            ))}
+          </ul> */}
       </div>
       <br />
       <br />
@@ -59,3 +75,6 @@ function AuthShowcase() {
     </div>
   );
 }
+
+
+
