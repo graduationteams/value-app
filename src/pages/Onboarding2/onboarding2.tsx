@@ -28,9 +28,6 @@ export default function Onboarding() {
         </p>
       </div>
 
-      <div className={styles.point}>
-        <img src="/images/point2.png" alt="" className="img4" />
-      </div>
 
       <div className={styles.Btonb3}>
         <button
