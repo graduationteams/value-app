@@ -1,0 +1,16 @@
+.container-nav {
+  position: fixed;
+  display: flex;
+  margin-top: 440px;
+  border: solid 2px grey;
+}
+
+.bottom-nav {
+  display: flex;
+  justify-content: center;
+  gap: 60px;
+  padding-top: 10px;
+  width: 440px;
+  height: 59px;
+}
+

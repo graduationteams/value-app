@@ -1,0 +1,48 @@
+.title {
+  font-weight: bold;
+  font-size: 25px;
+  margin-left: 10%;
+}
+
+.container {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  border: 1.5px solid #e8e8e9;
+  width: 361px;
+  height: 102px;
+  margin-left: 10%;
+  border-radius: 10px;
+}
+
+.page {
+  margin-left: 20px;
+  padding-top: 10px;
+  font-weight: bold;
+}
+
+.h2 {
+  margin-left: 40px;
+  margin-top: -23px;
+  
+}
+
+.container2 {
+  border: 1.5px solid #e8e8e9;
+  width: 122px;
+  height: 70px;
+  border-radius: 10px;
+  margin-left: 10%;
+}
+
+.btn {
+  font-weight: bold;
+  color: #bd2426;
+  margin-left: 20px;
+}
+
+.btn2 {
+  margin-left: 30px;
+  margin-top: -25px;
+  
+}
