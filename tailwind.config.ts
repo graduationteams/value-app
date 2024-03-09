@@ -80,6 +80,13 @@ const config: Config = {
           B400: '#131315',
           B500: '#101012',
         },
+        spacing: {
+        '44': '11rem', // Add custom spacing value for width
+        '72': '18rem', // Add custom spacing value for height
+      },
+      height: {
+        '32': '8rem', // Custom height for the image
+      },
       },
     },
   },

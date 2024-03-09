@@ -6,6 +6,9 @@ import SearchBar from "~/components/searchBar/SearchBar";
 import HomeButtons from "~/components/home-buttons/HomeButtons";
 // Make sure the import path for onboarding is correct
 import onboarding from "./Onboarding1/onboarding";
+import Onboarding from "./Onboarding2/onboarding2";
+import ProductCard from '~/components/productcard/productcard'; 
+
 
 export default function Home() {
   const hello = api.post.hello.useQuery({ text: "from tRPC" });
@@ -14,10 +17,11 @@ export default function Home() {
   // to test uncomment this :
   // const { data: categoriesData, isLoading, isError } = api.categories.getByType.useQuery( { categoryType: 'FARM' });
 
-
+   
   return (
     <main className="container font-montserrat"> {/* Applying Montserrat-Arabic font */}
       <div className="flex flex-col items-center gap-2">
+      <ProductCard/>
         <AuthShowcase />
 
         {/*FOR!!! TEST UNCOMMENT THIS  */}
@@ -30,6 +34,7 @@ export default function Home() {
               <li key={category.id}>{category.name}</li>
             ))}
           </ul> */}
+      
       </div>
       <div className="Hbut">
         <HomeButtons />
@@ -44,6 +49,7 @@ function AuthShowcase() {
   return (
     <div className="flex flex-col items-center justify-center gap-4">
       {/* Using the custom-defined h2 size and bold weight from Tailwind config */}
+       <p/> 
       <p className="text-h2 font-bold">
         {sessionData && <span>Hala! {sessionData.user?.name} </span>}
 
