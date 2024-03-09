@@ -40,7 +40,7 @@ const seed = async () => {
 
   await prisma.$transaction(
     async (tx) => {
-      const hashedPassword = await hash("19451945", 10);
+      const hashedPassword = await hash(answers.password, 10);
       const { id: adminId } = await tx.user.create({
         data: {
           email: "admin@value.app",
@@ -122,19 +122,18 @@ const seed = async () => {
 
       const categories: string[] = [];
 
-    for (let i = 0; i < answers.categories; i++) {
-  categories.push(
-    (
-      await tx.category.create({
-        data: {
-          name: faker.commerce.department(),
-          categoryType: 'FARM', // Or 'REGULAR', depending on your logic
-        },
-      })
-    ).id,
-  );
-}
-
+      for (let i = 0; i < answers.categories; i++) {
+        categories.push(
+          (
+            await tx.category.create({
+              data: {
+                name: faker.commerce.department(),
+                categoryType: "FARM", // Or 'REGULAR', depending on your logic
+              },
+            })
+          ).id,
+        );
+      }
 
       for (let j = 0; j < answers.stores; j++) {
         const { id: sellerId } = await tx.user.create({
@@ -211,9 +210,15 @@ const seed = async () => {
             userId: userId,
             addressId: adress.id,
             deliveryAmount: 10,
-            products: {
-              connect: {
-                id: product.id,
+            productOrder: {
+              createMany: {
+                data: [
+                  {
+                    price: product.price,
+                    quantity: faker.number.int({ min: 1, max: 5 }),
+                    productId: product.id,
+                  },
+                ],
               },
             },
             status: "DELIVERED",

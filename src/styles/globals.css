@@ -2,24 +2,28 @@
 @tailwind components;
 @tailwind utilities;
 
+@import "tailwindcss/base";
+@import "tailwindcss/components";
+@import "tailwindcss/utilities";
+
 /* globals.css */
 @font-face {
-  font-family: 'Montserrat-Arabic';
-  src: url('/assets/fonts/Montserrat-Arabic-Regular.woff2') format('woff2');
+  font-family: "Montserrat-Arabic";
+  src: url("/assets/fonts/Montserrat-Arabic-Regular.woff2") format("woff2");
   font-weight: 400; /* Regular */
   font-style: normal;
 }
 
 @font-face {
-  font-family: 'Montserrat-Arabic';
-  src: url('/assets/fonts/Montserrat-Arabic-Medium.woff2') format('woff2');
+  font-family: "Montserrat-Arabic";
+  src: url("/assets/fonts/Montserrat-Arabic-Medium.woff2") format("woff2");
   font-weight: 500; /* Medium */
   font-style: normal;
 }
 
 @font-face {
-  font-family: 'Montserrat-Arabic';
-  src: url('/assets/fonts/Montserrat-Arabic-SemiBold.woff2') format('woff2');
+  font-family: "Montserrat-Arabic";
+  src: url("/assets/fonts/Montserrat-Arabic-SemiBold.woff2") format("woff2");
   font-weight: 600; /* SemiBold */
   font-style: normal;
 }
@@ -31,7 +35,7 @@
   --color-P75: #a3f7df;
   --color-P100: #7df3d1;
   --color-P200: #44eebd;
-  --color-P300: #32CD32;
+  --color-P300: #32cd32;
   --color-P400: #15a57b;
   --color-P500: #128f6b;
 
@@ -50,12 +54,12 @@
   --color-W100: #fffffb;
   --color-W200: #fffff9;
   --color-W300: #fffff8;
-  --color-W400: #fffff9;  
-  --color-W500: #fffff8;  
+  --color-W400: #fffff9;
+  --color-W500: #fffff8;
 
   /* Warning Colors */
-  --color-WA50: #fefaed;  
-  --color-WA75: #fbebb4;  
+  --color-WA50: #fefaed;
+  --color-WA75: #fbebb4;
   --color-WA100: #f9e294;
   --color-WA200: #f7d666;
   --color-WA300: #f5cd47;
@@ -80,8 +84,6 @@
   --color-B400: #131315;
   --color-B500: #101012;
 }
-
-
 
 * {
   background-color: white;
@@ -118,6 +120,124 @@
   }
 }
 
+.h5 {
+  margin-left: 70px;
+}
+
+@media screen and (max-width: 767px) {
+  .h5 {
+    margin-left: 120px;
+  }
+}
 .Hbut {
-  margin-top: 250px;
+  margin-top: 200px;
+}
+
+.text-h2 {
+  margin-right: 600px;
+  padding-top: 10px;
+}
+
+.search {
+  margin-top: 80px;
+}
+
+.container-nav {
+  position: fixed;
+  display: flex;
+  margin-top: 470px;
+  border: solid 2px grey;
+}
+
+.bottom-nav {
+  display: flex;
+  justify-content: center;
+  gap: 60px;
+  padding-top: 10px;
+  width: 440px;
+  height: 59px;
+}
+
+.flex-container {
+  position: fixed;
+  display: flex;
+  margin-top: 210px;
+  gap: 20px;
+}
+
+.cat {
+  width: 113px;
+  height: 112px;
+  background-color: #e7f4fe;
+  border-radius: 10px;
+}
+
+.cat p {
+  text-decoration: none;
+  background-color: #e7f4fe;
+  color: #1c1c1c;
+}
+
+.cat a {
+  text-decoration: none;
+}
+
+.food-img {
+  width: 50px;
+}
+
+.cat img {
+  margin-left: 63px;
+}
+
+.headset-img {
+  width: 50px;
+}
+
+.panadol-img {
+  width: 50px;
+}
+
+.flex-container2 {
+  position: fixed;
+  display: flex;
+  margin-top: 130px;
+  gap: 20px;
+}
+
+.flex-container4 {
+  position: fixed;
+  display: flex;
+  margin-top: 130px;
+  gap: 20px;
+}
+.cat2 {
+  width: 180px;
+  height: 64px;
+  background-color: #e7f4fe;
+}
+
+.cat2 p {
+  text-decoration: none;
+  background-color: #e7f4fe;
+  color: #1c1c1c;
+}
+
+.cat2 a {
+  text-decoration: none;
+}
+
+.cat2 img {
+  margin-left: 103px;
+  margin-top: -30px;
+}
+
+.conv-img {
+  width: 56.14px;
+  height: 51.72px;
+}
+
+.farm-img {
+  width: 33.98px;
+  height: 45px;
 }
