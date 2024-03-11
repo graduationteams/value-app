@@ -29,6 +29,13 @@ export const orderRouter = createTRPCRouter({
         },
       });
 
+      if (cart.products.length === 0) {
+        throw new TRPCError({
+          code: "BAD_REQUEST",
+          message: "Can't create order with empty cart",
+        });
+      }
+
       let total = 0;
       for (const cartProduct of cart.products) {
         total += cartProduct.product.price * cartProduct.quantity;
