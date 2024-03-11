@@ -9,7 +9,7 @@ export const cartRouter = createTRPCRouter({
       }),
     )
     .mutation(async ({ ctx, input }) => {
-      const cart = await ctx.db.cart.findUniqueOrThrow({
+      const cart = await ctx.db.cart.findUnique({
         where: {
           userId: ctx.session.user.id,
         },
@@ -95,7 +95,7 @@ export const cartRouter = createTRPCRouter({
           },
         },
       });
-      if (product.quantity === 1) {
+      if (product.quantity <= 1) {
         return await ctx.db.cart.update({
           where: { userId: ctx.session.user.id },
           data: {
