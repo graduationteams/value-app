@@ -6,32 +6,28 @@ import "bootstrap/dist/css/bootstrap.min.css";
 // Make sure the import path for onboarding is correct
 import onboarding from "./Onboarding1/onboarding";
 import Onboarding from "./Onboarding2/onboarding2";
-import ProductCard from '~/components/productcard/productcard'; 
-
+import ProductCard from "~/components/productcard/productcard";
 
 import Category from "~/components/Category/Category";
 import Navbar from "~/components/Navbar/Navbar";
 import HeadBtn from "~/components/Head-btn/HeadBtn";
+import { useState } from "react";
+import { AddressLocator } from "~/components/address-locator";
 export default function Home() {
   const hello = api.post.hello.useQuery({ text: "from tRPC" });
 
-  
   // to test uncomment this :
   // const { data: categoriesData, isLoading, isError } = api.categories.getByType.useQuery( { categoryType: 'FARM' });
 
-   
   return (
-    <main className="font-montserrat container">
-      {" "}
+    <main className="container font-montserrat">
+      <ProductCard />
 
-      <ProductCard/>
-      
-      <Navbar/>
-      <HeadBtn/>
-      <Category/>
-    
+      <Navbar />
+      <HeadBtn />
+      <Category />
+
       <div className="flex flex-col items-center gap-2">
-     
         <AuthShowcase />
 
         {/*FOR!!! TEST UNCOMMENT THIS  */}
@@ -44,7 +40,6 @@ export default function Home() {
               <li key={category.id}>{category.name}</li>
             ))}
           </ul> */}
-      
       </div>
       <br />
       <br />
@@ -59,13 +54,13 @@ export default function Home() {
 
 function AuthShowcase() {
   const { data: sessionData } = useSession();
+  const [isAddressModelOpen, setIsAddressModelOpen] = useState(false);
 
   return (
     <div className="flex flex-col items-center justify-center gap-4">
       {/* Using the custom-defined h2 size and bold weight from Tailwind config */}
       <p className="h5 text-center text-2xl">
         {sessionData && <span>Hala! {sessionData.user?.name} </span>}
-
         <Image
           src="/images/icons/hand-icon.png"
           alt="hand icon"
@@ -74,6 +69,14 @@ function AuthShowcase() {
           height={10}
         />
       </p>
+      <h3
+        className="cursor-pointer"
+        onClick={() => {
+          setIsAddressModelOpen(true);
+        }}
+      >
+        address Map
+      </h3>
 
       <button
         className="btn btn-primary"
@@ -81,8 +84,15 @@ function AuthShowcase() {
       >
         {sessionData ? "Sign out" : "Sign in"}
       </button>
+      <AddressLocator
+        isOpen={isAddressModelOpen}
+        onClose={() => {
+          setIsAddressModelOpen(false);
+        }}
+        onSaveAddress={(address, langLat) => {
+          console.log(address, langLat);
+        }}
+      />
     </div>
   );
 }
-
-
