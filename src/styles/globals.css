@@ -85,23 +85,12 @@
   --color-B500: #101012;
 }
 
-* {
-  background-color: white;
-}
-
 .btn-primary {
   position: absolute;
   top: 10px;
   left: 20px;
 }
 
-.text-center {
-  margin-right: 750px;
-  position: absolute;
-  top: 15px;
-  font-size: 20px;
-  font-weight: bold;
-}
 
 .hand {
   margin-right: 740px;
@@ -110,15 +99,6 @@
   left: 260px;
 }
 
-@media screen and (max-width: 767px) {
-  .text-center {
-    margin-right: 10px;
-    position: absolute;
-    top: 15px;
-    font-size: 20px;
-    font-weight: bold;
-  }
-}
 
 .h5 {
   margin-left: 70px;
