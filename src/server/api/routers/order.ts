@@ -16,68 +16,63 @@ export const orderRouter = createTRPCRouter({
   create: protectedProcedure
     .input(
       z.object({
-        products: z.array(
-          z.object({
-            productID: z.string(),
-            quantity: z.number(),
-          }),
-        ),
         addressID: z.string(),
       }),
     )
     .mutation(async ({ ctx, input }) => {
-      const products = await ctx.db.product.findMany({
-        where: {
-          id: {
-            in: input.products.map((p) => p.productID),
+      const cart = await ctx.db.cart.findUniqueOrThrow({
+        where: { userId: ctx.session.user.id },
+        include: {
+          products: {
+            include: { product: true },
           },
         },
       });
-      if (products.length !== input.products.length) {
+
+      if (cart.products.length === 0) {
         throw new TRPCError({
           code: "BAD_REQUEST",
-          message: "Some products are not found",
+          message: "Can't create order with empty cart",
         });
       }
+
       let total = 0;
-      for (const product of products) {
-        const orderProduct = input.products.find(
-          (p) => p.productID === product.id,
-        );
-        if (!orderProduct) {
-          throw new TRPCError({
-            code: "BAD_REQUEST",
-            message: "Product not found with id " + product.id,
-          });
-        }
-        total += product.price * orderProduct.quantity;
+      for (const cartProduct of cart.products) {
+        total += cartProduct.product.price * cartProduct.quantity;
       }
-      const order = await ctx.db.order.create({
-        data: {
-          status: "CREATED",
-          deliveryAmount: DELIVERY_AMOUNT,
-          totalAmount: total + DELIVERY_AMOUNT,
-          address: {
-            connect: {
-              id: input.addressID,
+      const [order] = await ctx.db.$transaction([
+        ctx.db.order.create({
+          data: {
+            status: "CREATED",
+            deliveryAmount: DELIVERY_AMOUNT,
+            totalAmount: total + DELIVERY_AMOUNT,
+            address: {
+              connect: {
+                id: input.addressID,
+              },
+            },
+            user: {
+              connect: {
+                id: ctx.session.user.id,
+              },
+            },
+            productOrder: {
+              createMany: {
+                data: cart.products.map((cartProduct) => ({
+                  price: cartProduct.product.price,
+                  quantity: cartProduct.quantity,
+                  productId: cartProduct.productId,
+                })),
+              },
             },
           },
-          user: {
-            connect: {
-              id: ctx.session.user.id,
-            },
+        }),
+        ctx.db.cartProduct.deleteMany({
+          where: {
+            cartId: cart.id,
           },
-          productOrder: {
-            createMany: {
-              data: input.products.map((p) => ({
-                price: products.find((pr) => pr.id === p.productID)!.price,
-                quantity: p.quantity,
-                productId: p.productID,
-              })),
-            },
-          },
-        },
-      });
+        }),
+      ]);
 
       return order;
     }),
