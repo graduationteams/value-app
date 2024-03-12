@@ -24,14 +24,14 @@ export default function Home() {
     <main className="font-montserrat container">
       {" "}
 
-      
+      <ProductCard/>
       
       <Navbar/>
       <HeadBtn/>
       <Category/>
     
       <div className="flex flex-col items-center gap-2">
-      <ProductCard/>
+     
         <AuthShowcase />
 
         {/*FOR!!! TEST UNCOMMENT THIS  */}
@@ -84,6 +84,5 @@ function AuthShowcase() {
     </div>
   );
 }
-
 
 

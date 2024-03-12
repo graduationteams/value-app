@@ -14,7 +14,7 @@ export default function Category() {
         <a href="#">
           <p className="cat-p">Food and Groceries</p>
           <img
-            src="./images/peanut.png"
+            src="assets/images/food.png"
             className="food-img"
             alt="value-logo"
           />
