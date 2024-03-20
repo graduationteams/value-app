@@ -27,6 +27,12 @@ export const driverRouter = createTRPCRouter({
         status: "CONFIRMED",
         driverId: null,
       },
+      include: {
+        productOrder: {
+          include: { product: { include: { Store: true } } },
+        },
+        address: true,
+      },
     });
 
     return orders;
@@ -89,6 +95,12 @@ export const driverRouter = createTRPCRouter({
       where: {
         driverId: ctx.session.user.id,
         status: "CONFIRMED",
+      },
+      include: {
+        productOrder: {
+          include: { product: { include: { Store: true } } },
+        },
+        address: true,
       },
     });
   }),

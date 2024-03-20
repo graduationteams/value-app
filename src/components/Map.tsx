@@ -19,11 +19,13 @@ function Map({
   initialCenter,
   staticMarkers = [],
   selectMarker = false,
+  routes,
 }: {
   onMove?: (center: [number, number]) => void;
   initialCenter: [number, number];
   staticMarkers?: [number, number][];
   selectMarker?: boolean;
+  routes?: [number | string, number | string][];
 }) {
   const [map, setMap] = React.useState<mapboxgl.Map>();
 
@@ -64,6 +66,11 @@ function Map({
   }, [map, onMove, initialCenter, selectMarker]);
 
   useEffect(() => {
+    if (!map || !routes?.length) return;
+    void getRoute(routes, map);
+  }, [map, routes]);
+
+  useEffect(() => {
     if (!map) return;
     staticMarkers.forEach((marker) => {
       new mapbox.Marker({
@@ -78,3 +85,71 @@ function Map({
 }
 
 export default memo(Map);
+
+// create a function to make a directions request
+async function getRoute(
+  routes: [number | string, number | string][],
+  map: mapbox.Map,
+) {
+  const query = await fetch(
+    `https://api.mapbox.com/directions/v5/mapbox/driving/${routes
+      .map((r) => r.join(","))
+      .join(
+        ";",
+      )}?steps=true&geometries=geojson&access_token=${env.NEXT_PUBLIC_MAPBOX_API_TOKEN}`,
+    { method: "GET" },
+  );
+  const json = (await query.json()) as {
+    routes: Array<{
+      geometry: {
+        coordinates: [number, number][];
+      };
+    }>;
+  };
+  const data = json.routes[0];
+  const route = data?.geometry.coordinates;
+  if (!route) {
+    return;
+  }
+  const geojson = {
+    type: "Feature",
+    properties: {},
+    geometry: {
+      type: "LineString",
+      coordinates: route,
+    },
+  };
+  // if the route already exists on the map, we'll reset it using setData
+  if (map.getSource("route")) {
+    // @ts-expect-error we are sure that the source exists,
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-call
+    map.getSource("route").setData(geojson);
+  }
+  // otherwise, we'll make a new request
+  else {
+    map.addLayer({
+      id: "route",
+      type: "line",
+      source: {
+        type: "geojson",
+        data: {
+          type: "Feature",
+          properties: {},
+          geometry: {
+            type: "LineString",
+            coordinates: route,
+          },
+        },
+      },
+      layout: {
+        "line-join": "round",
+        "line-cap": "round",
+      },
+      paint: {
+        "line-color": "#3887be",
+        "line-width": 5,
+        "line-opacity": 0.75,
+      },
+    });
+  }
+}
