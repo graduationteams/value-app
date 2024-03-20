@@ -5,6 +5,26 @@ import inquirer from "inquirer";
 
 const prisma = new PrismaClient({ log: ["query"] });
 
+// we need this to make sure that the random lang lat is in the area of Burydah to make it easier to test the map
+const BURYDAH_LANG_LAT_AREA = [
+  [43.85729725328529, 26.391841766523566],
+  [43.9184087034806, 26.247823472840608],
+  [44.03307850328529, 26.312469212908553],
+  [43.958234142933726, 26.428740662093183],
+] as [number, number][];
+
+function getRandomLangLat() {
+  // to get a random lang lat in the area we will get a random number between min lang and max lang and a random number between min lat and max lat
+  const minLang = Math.min(...BURYDAH_LANG_LAT_AREA.map((x) => x[0]));
+  const maxLang = Math.max(...BURYDAH_LANG_LAT_AREA.map((x) => x[0]));
+  const minLat = Math.min(...BURYDAH_LANG_LAT_AREA.map((x) => x[1]));
+  const maxLat = Math.max(...BURYDAH_LANG_LAT_AREA.map((x) => x[1]));
+  return [
+    Math.random() * (maxLang - minLang) + minLang,
+    Math.random() * (maxLat - minLat) + minLat,
+  ];
+}
+
 const seed = async () => {
   const answers = (await inquirer.prompt([
     {
@@ -58,7 +78,8 @@ const seed = async () => {
           providerAccountId: adminId,
         },
       });
-
+      const address1 = getRandomLangLat();
+      const address2 = getRandomLangLat();
       const { id: userId } = await tx.user.create({
         data: {
           email: "user@value.app",
@@ -70,13 +91,13 @@ const seed = async () => {
               data: [
                 {
                   city: faker.location.city(),
-                  lat: "" + faker.location.latitude(),
-                  lng: "" + faker.location.longitude(),
+                  lat: "" + address1[1],
+                  lng: "" + address1[0],
                 },
                 {
                   city: faker.location.city(),
-                  lat: "" + faker.location.latitude(),
-                  lng: "" + faker.location.longitude(),
+                  lat: "" + address2[1],
+                  lng: "" + address2[0],
                 },
               ],
             },
@@ -111,8 +132,9 @@ const seed = async () => {
         },
       });
 
-      const { id: driverId } = await tx.driver.create({
+      const { userId: driverId } = await tx.driver.create({
         data: {
+          userId: driverUserId,
           name: faker.person.firstName() + " " + faker.person.lastName(),
           carModel: faker.vehicle.model(),
           carPlate: faker.vehicle.vrm(),
@@ -153,13 +175,13 @@ const seed = async () => {
             providerAccountId: sellerId,
           },
         });
-
+        const storeLangLat = getRandomLangLat();
         const { id: storeId } = await tx.store.create({
           data: {
             name: faker.company.name(),
             address: faker.location.streetAddress(),
-            lat: "" + faker.location.latitude(),
-            lng: "" + faker.location.longitude(),
+            lat: "" + storeLangLat[1],
+            lng: "" + storeLangLat[0],
             sellerId: sellerId,
             Logo: faker.image.url(),
           },
