@@ -213,39 +213,48 @@ const seed = async () => {
             },
           });
         }
+      }
+      const adress = await tx.address.findFirst({
+        where: {
+          userId: userId,
+        },
+      });
+      if (!adress) {
+        throw new Error("no address found");
+      }
+      const productsCount = await tx.product.count();
+      for (let i = 0; i < 20; i++) {
+        const productsOrderRandom = faker.number.int({ min: 2, max: 10 });
 
-        const adress = await tx.address.findFirst({
-          where: {
-            userId: userId,
-          },
+        const products = await tx.product.findMany({
+          take: productsOrderRandom,
+          skip: faker.number.int({
+            min: 0,
+            max: productsCount - productsOrderRandom,
+          }),
         });
-        const product = await tx.product.findFirst({
-          where: {
-            storeId: storeId,
-          },
-        });
-        if (!adress || !product) {
-          throw new Error("Address not found");
-        }
+        const productsOrder = products.map((product) => ({
+          price: product.price,
+          quantity: faker.number.int({ min: 1, max: 5 }),
+          productId: product.id,
+        }));
+        const IsDelivered = Math.random() > 0.5;
         await tx.order.create({
           data: {
             userId: userId,
             addressId: adress.id,
-            deliveryAmount: 10,
+            deliveryAmount: 30,
             productOrder: {
               createMany: {
-                data: [
-                  {
-                    price: product.price,
-                    quantity: faker.number.int({ min: 1, max: 5 }),
-                    productId: product.id,
-                  },
-                ],
+                data: productsOrder,
               },
             },
-            status: "DELIVERED",
-            totalAmount: product.price + 10,
-            driverId: driverId,
+            status: IsDelivered ? "DELIVERED" : "CONFIRMED",
+            totalAmount: productsOrder.reduce(
+              (acc, product) => acc + product.price * product.quantity,
+              30,
+            ),
+            driverId: IsDelivered ? driverId : null,
           },
         });
       }
