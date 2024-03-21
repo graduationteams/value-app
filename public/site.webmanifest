@@ -1,0 +1,17 @@
+{
+  "name": "Value",
+  "short_name": "Value",
+  "start_url": "/",
+  "orientation": "portrait",
+  "icons": [
+    {
+      "src": "/favicon.ico",
+      "sizes": "512x512",
+      "type": "image/ico",
+      "purpose": "any"
+    }
+  ],
+  "theme_color": "#e6dde9",
+  "background_color": "#0d0110",
+  "display": "standalone"
+}
