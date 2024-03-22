@@ -4,8 +4,8 @@ import { api } from "~/utils/api";
 import "bootstrap/dist/css/bootstrap.min.css";
 
 // Make sure the import path for onboarding is correct
-import onboarding from "./Onboarding1/onboarding";
-import Onboarding from "./Onboarding2/onboarding2";
+import onboarding from "../pages/Onboarding1/onboarding";
+import Onboarding from "../pages/Onboarding2/onboarding2";
 import ProductCard from "~/components/productcard/productcard";
 
 import Category from "~/components/Category/Category";

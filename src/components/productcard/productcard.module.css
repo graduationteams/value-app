@@ -1,0 +1,58 @@
+
+.bold, .light, .quantity, .addtobasket{
+    font-family: 'Montserrat-Arabic', sans-serif; /* Apply Montserrat-Arabic font */
+  }
+
+.container {
+    padding: 16px; 
+    display: flex;
+    align-items: center;
+  }
+  
+  .container img {
+    width: 40px;
+    height: 40px;
+    margin-right: 10px;
+  }
+
+.bold{
+  font-size: 18px;
+  color: black;
+  font-weight: bold;
+}
+
+.light{
+    display: flex;
+    font-size: 15px;
+    color: var(--color-B75);
+}
+
+.content{
+    padding: 16px; 
+    display: flex;
+}
+
+
+.content img{
+    height: 220;
+    width: 100%;
+    border-radius: 10px;
+}
+.quantity{
+    padding-left: 20px;
+    padding-right: 20px;
+    font-weight: bold;
+}
+
+.addtobasket {
+    background-color: var(--color-P300);
+    height: 45px;
+    width: 70%;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: aliceblue;
+    font-weight: bold;
+    margin-left: 10px; 
+  }
