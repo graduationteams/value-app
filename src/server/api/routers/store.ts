@@ -117,4 +117,342 @@ export const storeRouter = createTRPCRouter({
         },
       });
     }),
+
+  dashboard: protectedProcedure.query(async ({ ctx }) => {
+    const store = await ctx.db.store.findUnique({
+      where: {
+        sellerId: ctx.session.user.id,
+      },
+    });
+    if (!store) {
+      throw new TRPCError({
+        code: "NOT_FOUND",
+        message: "Store not found",
+      });
+    }
+
+    const orders = await ctx.db.order.findMany({
+      where: {
+        productOrder: {
+          some: {
+            product: {
+              storeId: store.id,
+            },
+          },
+        },
+      },
+      include: {
+        productOrder: {
+          include: {
+            product: true,
+          },
+        },
+      },
+    });
+
+    let totalRevenue = 0;
+    let monthlyRevenue = 0;
+    let monthlyOrders = 0;
+
+    const month = new Date().getMonth();
+
+    for (const order of orders) {
+      if (order.createdAt.getMonth() === month) monthlyOrders++;
+
+      for (const productOrder of order.productOrder) {
+        if (productOrder.product.storeId !== store.id) continue;
+        totalRevenue += productOrder.product.price * productOrder.quantity;
+        if (order.createdAt.getMonth() === month) {
+          monthlyRevenue += productOrder.product.price * productOrder.quantity;
+        }
+      }
+    }
+
+    return {
+      totalOrders: orders.length,
+      totalRevenue,
+      monthlyRevenue,
+      monthlyOrders,
+    };
+  }),
+  top5Products: protectedProcedure.query(async ({ ctx }) => {
+    const store = await ctx.db.store.findUnique({
+      where: {
+        sellerId: ctx.session.user.id,
+      },
+    });
+    if (!store) {
+      throw new TRPCError({
+        code: "NOT_FOUND",
+        message: "Store not found",
+      });
+    }
+
+    const products = await ctx.db.$queryRaw<
+      Array<{
+        product_id: string;
+        product_name: string;
+        total_quantity_sold: number;
+      }>
+    >`
+  SELECT
+    p.id AS product_id,
+    p.name AS product_name,
+    SUM(po.quantity) AS total_quantity_sold
+  FROM
+    public."Product" p
+  JOIN
+    public."productOrder" po ON p.id = po."productId"
+  WHERE
+    p."storeId" = ${store.id}
+  group by p.id, p.name
+  order by
+    total_quantity_sold desc
+  limit 5`;
+
+    return products;
+  }),
+
+  OrdersCount: protectedProcedure.query(async ({ ctx }) => {
+    // TODO: Parmitize this query to accept 2 dates
+
+    const store = await ctx.db.store.findUnique({
+      where: {
+        sellerId: ctx.session.user.id,
+      },
+    });
+
+    if (!store) {
+      throw new TRPCError({
+        code: "NOT_FOUND",
+        message: "Store not found",
+      });
+    }
+
+    const gte = new Date();
+    gte.setMonth(gte.getMonth() - 11, 1);
+    gte.setHours(0, 0, 0, 0);
+
+    const orders = await ctx.db.order.findMany({
+      where: {
+        createdAt: {
+          gte: gte,
+        },
+        productOrder: {
+          some: {
+            product: {
+              storeId: store.id,
+            },
+          },
+        },
+      },
+    });
+
+    const ordersCounts = [];
+
+    for (let i = 0; i < 12; i++) {
+      let month = new Date().getMonth() - i;
+      if (month < 0) {
+        month += 12;
+      }
+
+      const monthOrders = orders.filter(
+        (order) => order.createdAt.getMonth() === month,
+      );
+
+      ordersCounts.push({
+        month,
+        count: monthOrders.length,
+      });
+    }
+    return ordersCounts;
+  }),
+  orders: protectedProcedure.query(async ({ ctx }) => {
+    const store = await ctx.db.store.findUnique({
+      where: {
+        sellerId: ctx.session.user.id,
+      },
+    });
+
+    if (!store) {
+      throw new TRPCError({
+        code: "NOT_FOUND",
+        message: "Store not found",
+      });
+    }
+
+    const orders = await ctx.db.order.findMany({
+      where: {
+        productOrder: {
+          some: {
+            product: {
+              storeId: store.id,
+            },
+          },
+        },
+      },
+      include: {
+        productOrder: {
+          include: {
+            product: true,
+          },
+        },
+        user: true,
+        address: true,
+      },
+    });
+    return orders.map((order) => ({
+      ...order,
+      productOrder: order.productOrder.filter(
+        (p) => p.product.storeId === store.id,
+      ),
+    }));
+  }),
+  lastSales: protectedProcedure.query(async ({ ctx }) => {
+    const store = await ctx.db.store.findUnique({
+      where: {
+        sellerId: ctx.session.user.id,
+      },
+    });
+
+    if (!store) {
+      throw new TRPCError({
+        code: "NOT_FOUND",
+        message: "Store not found",
+      });
+    }
+
+    const orders = await ctx.db.order.findMany({
+      where: {
+        productOrder: {
+          some: {
+            product: {
+              storeId: store.id,
+            },
+          },
+        },
+        createdAt: {
+          gte: new Date(new Date().getTime() - 30 * 24 * 60 * 60 * 1000),
+        },
+      },
+      include: {
+        productOrder: {
+          include: {
+            product: true,
+          },
+        },
+      },
+    });
+
+    let lastWeekSales = 0;
+    let lastMonthSales = 0;
+
+    for (const order of orders) {
+      for (const productOrder of order.productOrder) {
+        if (productOrder.product.storeId !== store.id) continue;
+        lastMonthSales += productOrder.product.price * productOrder.quantity;
+        if (
+          order.createdAt.getTime() >
+          new Date().getTime() - 7 * 24 * 60 * 60 * 1000 // 7 days
+        ) {
+          lastWeekSales += productOrder.product.price * productOrder.quantity;
+        }
+      }
+    }
+    return {
+      lastWeekSales,
+      lastMonthSales,
+    };
+  }),
+  products: protectedProcedure.query(async ({ ctx }) => {
+    const store = await ctx.db.store.findUnique({
+      where: {
+        sellerId: ctx.session.user.id,
+      },
+    });
+
+    if (!store) {
+      throw new TRPCError({
+        code: "NOT_FOUND",
+        message: "Store not found",
+      });
+    }
+
+    return ctx.db.product.findMany({
+      where: {
+        storeId: store.id,
+      },
+      include: {
+        images: true,
+        productOrder: {
+          select: {
+            quantity: true,
+            price: true,
+          },
+        },
+        categories: true,
+      },
+    });
+  }),
+  setProductStatus: protectedProcedure
+    .input(
+      z.object({
+        id: z.string(),
+        status: z.enum(["VISIBLE", "HIDDEN"]),
+      }),
+    )
+    .mutation(async ({ ctx, input }) => {
+      const store = await ctx.db.store.findUnique({
+        where: {
+          sellerId: ctx.session.user.id,
+        },
+      });
+
+      if (!store) {
+        throw new TRPCError({
+          code: "NOT_FOUND",
+          message: "Store not found",
+        });
+      }
+
+      return ctx.db.product.update({
+        where: {
+          id: input.id,
+        },
+        data: {
+          status: input.status,
+        },
+      });
+    }),
+  product: protectedProcedure
+    .input(
+      z.object({
+        id: z.string(),
+      }),
+    )
+    .query(async ({ ctx, input }) => {
+      const store = await ctx.db.store.findUnique({
+        where: {
+          sellerId: ctx.session.user.id,
+        },
+      });
+
+      if (!store) {
+        throw new TRPCError({
+          code: "NOT_FOUND",
+          message: "Store not found",
+        });
+      }
+
+      return ctx.db.product.findUnique({
+        where: {
+          storeId: store.id,
+          id: input.id,
+        },
+        include: {
+          categories: true,
+          images: true,
+        },
+      });
+    }),
 });

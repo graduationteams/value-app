@@ -136,9 +136,15 @@ model Category {
     categoryType CategoryType
 }
 
+enum ProductStatus {
+    HIDDEN
+    VISIBLE
+}
+
 model Product {
     id           String         @id @default(cuid())
     name         String
+    status       ProductStatus  @default(VISIBLE)
     description  String
     price        Float
     images       Image[]

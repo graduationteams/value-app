@@ -12,14 +12,12 @@ export const productRouter = createTRPCRouter({
         price: z.number().positive(),
         images: z.array(z.string()),
         categories: z.array(z.string()).min(1),
-        storeId: z.string(),
       }),
     )
     .mutation(async ({ ctx, input }) => {
       // check if the storeId is valid and belongs to the current user
       const storeid = await ctx.db.store.findUnique({
         where: {
-          id: input.storeId,
           sellerId: ctx.session.user.id,
         },
       });
@@ -51,7 +49,7 @@ export const productRouter = createTRPCRouter({
               return { id };
             }),
           },
-          storeId: input.storeId,
+          storeId: storeid.id,
         },
       });
       return product;
@@ -63,7 +61,14 @@ export const productRouter = createTRPCRouter({
         name: z.string().min(3).optional(),
         description: z.string().min(3).optional(),
         price: z.number().positive().optional(),
-        images: z.array(z.string()).optional(),
+        images: z
+          .array(
+            z.object({
+              type: z.enum(["url", "base64"]),
+              value: z.string(),
+            }),
+          )
+          .optional(),
         categories: z.array(z.string()).min(1).optional(),
       }),
     )
@@ -97,7 +102,10 @@ export const productRouter = createTRPCRouter({
 
         images = await Promise.all(
           input.images.map(async (image) => {
-            return upload_base64_image(image);
+            if (image.type === "url") {
+              return image.value;
+            }
+            return upload_base64_image(image.value);
           }),
         );
       }

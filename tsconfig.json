@@ -26,8 +26,9 @@
     /* Path Aliases */
     "baseUrl": ".",
     "paths": {
-      "~/*": ["./src/*"]
-    }
+      "@/*": ["./src/*"],
+      "~/*": ["./src/*"],
+    },
   },
   "include": [
     ".eslintrc.cjs",
@@ -36,7 +37,10 @@
     "**/*.tsx",
     "**/*.cjs",
     "**/*.js",
-    ".next/types/**/*.ts"
-, "src/components/handImage.jsx", "src/components/searchBar/SearchBar.jsx", "src/components/tests/addresstest.jsx"  ],
-  "exclude": ["node_modules"]
+    ".next/types/**/*.ts",
+    "src/components/handImage.jsx",
+    "src/components/searchBar/SearchBar.jsx",
+    "src/components/tests/addresstest.jsx",
+  ],
+  "exclude": ["node_modules"],
 }

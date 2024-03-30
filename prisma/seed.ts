@@ -46,6 +46,11 @@ const seed = async () => {
       default: 100,
     },
     {
+      type: "number",
+      name: "orders",
+      message: "How many orders do you want to add?",
+    },
+    {
       type: "input",
       name: "password",
       message: "Enter the defualt password for all users: ",
@@ -56,11 +61,13 @@ const seed = async () => {
     categories: number;
     products: number;
     password: string;
+    orders: number;
   };
+  const hashedPassword = await hash(answers.password, 10);
+  const categories: string[] = [];
 
   await prisma.$transaction(
     async (tx) => {
-      const hashedPassword = await hash(answers.password, 10);
       const { id: adminId } = await tx.user.create({
         data: {
           email: "admin@value.app",
@@ -142,21 +149,33 @@ const seed = async () => {
         },
       });
 
-      const categories: string[] = [];
-
       for (let i = 0; i < answers.categories; i++) {
         categories.push(
           (
             await tx.category.create({
               data: {
                 name: faker.commerce.department(),
-                categoryType: "FARM", // Or 'REGULAR', depending on your logic
+                categoryType: Math.random() > 0.5 ? "FARM" : "REGULAR",
               },
             })
           ).id,
         );
       }
 
+      const adress = await tx.address.findFirst({
+        where: {
+          userId: userId,
+        },
+      });
+      if (!adress) {
+        throw new Error("no address found");
+      }
+    },
+    { timeout: 1000000, maxWait: 1000000 },
+  );
+
+  await prisma.$transaction(
+    async (tx) => {
       for (let j = 0; j < answers.stores; j++) {
         const { id: sellerId } = await tx.user.create({
           data: {
@@ -214,6 +233,17 @@ const seed = async () => {
           });
         }
       }
+    },
+    { timeout: 1000000, maxWait: 1000000 },
+  );
+
+  await prisma.$transaction(
+    async (tx) => {
+      const { id: userId } = await tx.user.findFirstOrThrow({
+        where: {
+          userType: "USER",
+        },
+      });
       const adress = await tx.address.findFirst({
         where: {
           userId: userId,
@@ -222,8 +252,14 @@ const seed = async () => {
       if (!adress) {
         throw new Error("no address found");
       }
+      const { id: driverId } = await tx.user.findFirstOrThrow({
+        where: {
+          userType: "DRIVER",
+        },
+      });
+
       const productsCount = await tx.product.count();
-      for (let i = 0; i < 20; i++) {
+      for (let i = 0; i < answers.orders; i++) {
         const productsOrderRandom = faker.number.int({ min: 2, max: 10 });
 
         const products = await tx.product.findMany({
@@ -241,6 +277,7 @@ const seed = async () => {
         const IsDelivered = Math.random() > 0.5;
         await tx.order.create({
           data: {
+            createdAt: faker.date.past(),
             userId: userId,
             addressId: adress.id,
             deliveryAmount: 30,
