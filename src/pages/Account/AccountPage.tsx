@@ -1,16 +1,46 @@
-import React from "react";
+import React, { useState } from "react";
+import { MyDrawer } from "../../components/Bottomsheet/bottomsheet"; 
 import styles from "./AccountPage.module.css";
 
 export default function AccountPage() {
+  const [isAccountInfoDrawerOpen, setIsAccountInfoDrawerOpen] = useState(false);
+  const [isAddressesDrawerOpen, setIsAddressesDrawerOpen] = useState(false);
+  const [selectedAddressIndex, setSelectedAddressIndex] = useState<number | null>(null); // Declaring selectedAddressIndex
+
+  const handleAccountInfoClick = () => {
+    setIsAccountInfoDrawerOpen(true);
+  };
+
+  const handleAddressesClick = () => {
+    setIsAddressesDrawerOpen(true);
+  };
+
   return (
     <div>
       <br />
       <br />
+      <div style={{ marginLeft: '40px' }}>
       <h1 className={styles.title}>Account</h1>
+
+      </div>
       <br />
+      <br />
+
+      <div className={styles.container}>
+  <div className={styles.pfp}>
+    <img src="/images/pfp.png" alt="" />
+    <p className={styles.profileText}>Sufian alfuraydi</p>
+    
+      </div>
+      <p className={styles.number}>
+        +966 51 123 1234
+      </p>
+</div>
+
+      
       <br />
       <div className={styles.container}>
-        <a href="#" className={styles.page}>
+        <a href="#" className={styles.page} onClick={handleAccountInfoClick}>
           <svg
             xmlns="http://www.w3.org/2000/svg"
             width="23"
@@ -23,7 +53,7 @@ export default function AccountPage() {
           </svg>
           <h2 className={styles.h2}>Account info</h2>
         </a>
-        <a href="#" className={styles.page}>
+        <a href="#" className={styles.page} onClick={handleAddressesClick}>
           <svg
             xmlns="http://www.w3.org/2000/svg"
             width="23"
@@ -39,7 +69,90 @@ export default function AccountPage() {
         </a>
       </div>
 
+      {/* Drawer for Account Info */}
+      <MyDrawer
+        isOpen={isAccountInfoDrawerOpen}
+        onclose={() => setIsAccountInfoDrawerOpen(false)}
+      >
+        <div className={styles.drawerContent}>
+          <h1 className={styles.title}>Account info</h1>
+          <br />
+          <div className={styles.imageContainer}>
+            <img
+              src="/images/pfp.png"
+              alt=""
+              className={styles.centeredImage}
+            />
+          </div>
+          <br />
+          <h2 className={styles.title2}>full name</h2>
+          <div className={styles.rectangle}>
+            Sufyan
+          </div>
+          <br />
+          <h2 className={styles.title2}>e-mail</h2>
+          <div className={styles.rectangle}>
+            sufian@gmail.com
+          </div>
+        </div>
+      </MyDrawer>
+
+{/* Drawer for Addresses */}
+<MyDrawer
+  isOpen={isAddressesDrawerOpen}
+  onclose={() => setIsAddressesDrawerOpen(false)}
+>
+  <div className={styles.drawerContent}>
+    <h1 className={styles.title}>Your delivery addresses</h1>
+    <div className={styles.addressList}>
+      <div className={styles.addressItem}>
+        <label className={styles.addressLabel}>
+          <input
+            type="checkbox"
+            checked={selectedAddressIndex === 0}
+            onChange={() => setSelectedAddressIndex(0)}
+          />
+          <span className={selectedAddressIndex === 0 ? styles.selected : styles.notSelected}>Alrass, Alshifaa</span>
+        </label>
+        {/* Description for Address 1 */}
+        <p className={styles.addressDescription}>Abu Al Aswad Al Duali Street, Al Naseem Al Sharqi, Riyadh 14244</p>
+      </div>
+      {/* Divider */}
+      <div className={styles.tst}>
+        <div className={styles.line}></div>
+      </div>
       <br />
+      <div className={styles.addressItem}>
+        <label className={styles.addressLabel}>
+          <input
+            type="checkbox"
+            checked={selectedAddressIndex === 1}
+            onChange={() => setSelectedAddressIndex(1)}
+          />
+          <span className={selectedAddressIndex === 1 ? styles.selected : styles.notSelected}>Buraydah, Alnahdhah</span>
+        </label>
+        {/* Description for Address 2 */}
+        <p className={styles.addressDescription}>Abu Al Aswad Al Duali Street, Al Naseem Al Sharqi, Riyadh 14244</p>
+      </div>
+      {/* Divider */}
+      <div className={styles.tst}>
+        <div className={styles.line}></div>
+      </div>
+      <div className={styles.addAddressContainer}>
+  <button>
+    <img src="/assets/icons/Subtract.png" alt="" />
+    <p className={styles.addressLabel}>Add new address</p>
+  </button>
+</div>
+
+    </div>
+  </div>
+</MyDrawer>
+
+
+
+      <br />
+
       <div className={styles.container}>
         <a href="#" className={styles.page}>
           <svg
@@ -72,8 +185,6 @@ export default function AccountPage() {
       </div>
 
       <br />
-      
-      
 
       <div className={styles.container2}>
         <a href="#" className={styles.btn}>
