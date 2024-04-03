@@ -151,6 +151,11 @@ enum ProductStatus {
     VISIBLE
 }
 
+enum ProductStatus {
+    HIDDEN
+    VISIBLE
+}
+
 model Product {
   id             String         @id @default(cuid())
   name           String
@@ -192,6 +197,7 @@ model Order {
     address   Address     @relation(fields: [addressId], references: [id])
     addressId String
 
+    driver   Driver? @relation(fields: [driverId], references: [userId])
     driver   Driver? @relation(fields: [driverId], references: [userId])
     driverId String?
 

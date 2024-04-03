@@ -2,18 +2,18 @@ import React from "react";
 import styles from "./onb.module.css";
 export default function onboarding() {
   return (
-    <div className="container">
+    <div className={styles.container}>
       <div className={styles.onb}>
         <img src="/images/Address11.jpg" alt="" className="img1" />
       </div>
       <br />
       
       <div className={styles.onb2}>
-        <p className="onp2">All you need <br />from wholesaler in one platform</p>
+        <p className={styles.onp2}>All you need <br />from wholesaler in one platform</p>
       </div>
       <br />
       <div className={styles.onb3}>
-        <p className="onp3">
+        <p className={styles.onp3}>
           we combine many wholesalers and warehouses <br /> in one platform to be easy
           and more fast to you
         </p>

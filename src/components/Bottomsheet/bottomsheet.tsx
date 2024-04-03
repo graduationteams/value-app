@@ -26,7 +26,7 @@ export function MyDrawer({
         <Drawer.Content className="fixed bottom-0 left-0 right-0 flex flex-col rounded-t-[10px] bg-white-W75">
           <div className="mx-auto mb-8 mt-4 h-1.5 w-24 flex-shrink-0 rounded-full bg-zinc-300" />
 
-          <div className="overflow-y-auto px-4">{children}</div>
+          <div>{children}</div>
         </Drawer.Content>
       </Drawer.Portal>
     </Drawer.Root>

@@ -26,17 +26,21 @@
     /* Path Aliases */
     "baseUrl": ".",
     "paths": {
-      "~/*": ["./src/*"]
-    }
+      "@/*": ["./src/*"],
+      "~/*": ["./src/*"],
+    },
   },
   "include": [
     ".eslintrc.cjs",
     "next-env.d.ts",
     "**/*.ts",
     "**/*.tsx",
+    "**/*.d.ts",
+    "**/*.mjs",
     "**/*.cjs",
     "**/*.js",
-    ".next/types/**/*.ts"
-, "src/components/handImage.jsx", "src/components/searchBar/SearchBar.jsx", "src/components/tests/addresstest.jsx"  ],
-  "exclude": ["node_modules"]
+    "**/*.jsx",
+    ".next/types/**/*.ts",
+  ],
+  "exclude": ["node_modules"],
 }

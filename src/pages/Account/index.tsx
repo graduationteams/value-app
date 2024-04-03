@@ -1,16 +1,42 @@
-import React from "react";
+import React, { useState } from "react";
+import { MyDrawer } from "../../components/Bottomsheet/bottomsheet";
 import styles from "./AccountPage.module.css";
+import AdressSelector from "@/components/adress-selector";
+import Navbar from "@/components/Navbar/Navbar";
 
 export default function AccountPage() {
+  const [isAccountInfoDrawerOpen, setIsAccountInfoDrawerOpen] = useState(false);
+  const [isAddressesDrawerOpen, setIsAddressesDrawerOpen] = useState(false);
+
+  const handleAccountInfoClick = () => {
+    setIsAccountInfoDrawerOpen(true);
+  };
+
+  const handleAddressesClick = () => {
+    setIsAddressesDrawerOpen(true);
+  };
+
   return (
     <div>
       <br />
       <br />
-      <h1 className={styles.title}>Account</h1>
+      <div style={{ marginLeft: "40px" }}>
+        <h1 className={styles.title}>Account</h1>
+      </div>
       <br />
+      <br />
+
+      <div className={styles.container}>
+        <div className={styles.pfp}>
+          <img src="/images/pfp.png" alt="" />
+          <p className={styles.profileText}>Sufian alfuraydi</p>
+        </div>
+        <p className={styles.number}>+966 51 123 1234</p>
+      </div>
+
       <br />
       <div className={styles.container}>
-        <a href="#" className={styles.page}>
+        <a href="#" className={styles.page} onClick={handleAccountInfoClick}>
           <svg
             xmlns="http://www.w3.org/2000/svg"
             width="23"
@@ -23,7 +49,7 @@ export default function AccountPage() {
           </svg>
           <h2 className={styles.h2}>Account info</h2>
         </a>
-        <a href="#" className={styles.page}>
+        <a href="#" className={styles.page} onClick={handleAddressesClick}>
           <svg
             xmlns="http://www.w3.org/2000/svg"
             width="23"
@@ -39,7 +65,37 @@ export default function AccountPage() {
         </a>
       </div>
 
+      {/* Drawer for Account Info */}
+      <MyDrawer
+        isOpen={isAccountInfoDrawerOpen}
+        onclose={() => setIsAccountInfoDrawerOpen(false)}
+      >
+        <div className={styles.drawerContent}>
+          <h1 className={styles.title}>Account info</h1>
+          <br />
+          <div className={styles.imageContainer}>
+            <img
+              src="/images/pfp.png"
+              alt=""
+              className={styles.centeredImage}
+            />
+          </div>
+          <br />
+          <h2 className={styles.title2}>full name</h2>
+          <div className={styles.rectangle}>Sufyan</div>
+          <br />
+          <h2 className={styles.title2}>e-mail</h2>
+          <div className={styles.rectangle}>sufian@gmail.com</div>
+        </div>
+      </MyDrawer>
+
+      <AdressSelector
+        isAddressesDrawerOpen={isAddressesDrawerOpen}
+        setIsAddressesDrawerOpen={setIsAddressesDrawerOpen}
+      />
+
       <br />
+
       <div className={styles.container}>
         <a href="#" className={styles.page}>
           <svg
@@ -72,8 +128,6 @@ export default function AccountPage() {
       </div>
 
       <br />
-      
-      
 
       <div className={styles.container2}>
         <a href="#" className={styles.btn}>
@@ -91,6 +145,7 @@ export default function AccountPage() {
           <h2 className={styles.btn2}>Log out</h2>
         </a>
       </div>
+      <Navbar />
     </div>
   );
 }
