@@ -31,6 +31,7 @@ export const addressRouter = createTRPCRouter({
       const address = await ctx.db.address.findUnique({
         where: {
           id: input.id,
+          userId: ctx.session.user.id,
         },
       });
       if (!address) {
@@ -113,4 +114,12 @@ export const addressRouter = createTRPCRouter({
       });
       return { success: true, message: "Address deleted successfully" };
     }),
+  userAddresses: protectedProcedure.query(async ({ ctx }) => {
+    const addresses = await ctx.db.address.findMany({
+      where: {
+        userId: ctx.session.user.id,
+      },
+    });
+    return addresses;
+  }),
 });

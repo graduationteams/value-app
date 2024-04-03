@@ -94,7 +94,6 @@ font-size: 18px;
 .drawerContent {
   display: flex;
   flex-direction: column;
-  margin-left: 10%;
   padding: 20px;
 }
 

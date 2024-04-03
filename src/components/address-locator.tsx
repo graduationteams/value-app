@@ -18,6 +18,7 @@ export function AddressLocator({
   onSaveAddress: (
     address: string | undefined,
     langLat: [number, number],
+    place?: string,
   ) => void;
 }) {
   const [initilized, setInitilized] = useState(false);
@@ -38,7 +39,10 @@ export function AddressLocator({
         throw new Error("Network response was not ok");
       }
       return res.json() as Promise<{
-        features?: Array<{ place_name_ar?: string }>;
+        features?: Array<{
+          place_name_ar?: string;
+          context?: Array<{ id: string; text: string }>;
+        }>;
       }>;
     },
   });
@@ -92,7 +96,15 @@ export function AddressLocator({
             disabled={isLoading}
             className="h-12 w-full rounded-3xl bg-primary-P300 text-center text-white-W50 disabled:opacity-50"
             onClick={() => {
-              onSaveAddress(address?.features?.[0]?.place_name_ar, langlat);
+              const place = address?.features?.[0]?.context?.find((context) =>
+                context.id.includes("place"),
+              )?.text;
+
+              onSaveAddress(
+                address?.features?.[0]?.place_name_ar,
+                langlat,
+                place,
+              );
             }}
           >
             Save
