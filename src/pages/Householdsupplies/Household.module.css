@@ -35,9 +35,9 @@
   overflow-x: auto;
   white-space: nowrap;
   scrollbar-width: none; /* Firefox */
-  -ms-overflow-style: none; /* Internet Explorer/Edge */
+ -ms-overflow-style: none; /* Internet Explorer/Edge */
   margin-right: 5%;
-
+  width: 100%;
 }
 
 .categoriesContainer::-webkit-scrollbar {
@@ -46,7 +46,9 @@
 .categories {
   display: inline-block;
   white-space: nowrap;
+  padding-left: 1px;
 }
+
 .selected {
   background-color: var(--color-P300);
   color: white; 
@@ -61,3 +63,7 @@
   padding-top: 20px; /* Add padding-top to ensure content isn't hidden */
 }
 
+.scrollablewrapper {
+    width: 55%; /* Adjust as needed */
+    overflow-x: auto;
+}

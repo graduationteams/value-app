@@ -29,6 +29,7 @@ export default function Household() {
 
 
         <div className={styles.categoriesContainer}>
+          <div className={styles.scrollablewrapper}>
           <div className={styles.categories}>
             <button
               className={`${styles.categoryButton} ${
@@ -78,7 +79,10 @@ export default function Household() {
             >
               outdoor
             </button>
+           
           </div>
+          </div>
+         
         </div>
         <br />
       </div>
