@@ -21,7 +21,7 @@
   }
 
   .categoryButton {
-    margin-left: 2%; 
+    margin-left: 1%; 
     font-weight: bold;
     font-size: 16px;
     padding: 4px 32px;
@@ -54,16 +54,10 @@
 
 .productCardsContainer {
   margin-top: 240px; /* Adjust the margin-top to accommodate the fixed header */
-  margin-left: 2.5%;
+  margin-left: 7%;
   display: grid;
   grid-template-columns: repeat(2, 1fr); /* Two columns with equal width */
-  grid-gap: 20px 5px;
+  grid-gap: 20px 20px;
   padding-top: 20px; /* Add padding-top to ensure content isn't hidden */
 }
 
-
-.productCardWrapper {
-  width: 50%;
-  padding: 0 10px;
-  box-sizing: border-box;
-}

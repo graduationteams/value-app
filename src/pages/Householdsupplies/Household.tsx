@@ -12,18 +12,6 @@ export default function Household() {
     setSelectedButton(buttonId);
   };
 
-  //This is just a test to add products to the page
-  const products = [
-    { id: 1, name: "Product 1", price: "$10" },
-    { id: 2, name: "Product 2", price: "$20" },
-    { id: 3, name: "Product 3", price: "$30" },
-    { id: 4, name: "Product 4", price: "$40" },
-    { id: 5, name: "Product 5", price: "$50" },
-    { id: 6, name: "Product 6", price: "$60" },
-    { id: 7, name: "Product 7", price: "$70" },
-    { id: 8, name: "Product 8", price: "$80" },
-    // Add more products as needed
-  ];
 
   return (
   
@@ -95,12 +83,20 @@ export default function Household() {
         <br />
       </div>
       <div className={styles.productCardsContainer}>
-        {/* Display ProductCard components in rows with two cards per row */}
-        {products.map((product) => (
-          <div key={product.id} className={styles.productCardWrapper}>
-            <ProductCard product={product} />
-          </div>
-        ))}
+       <ProductCard/>
+       <ProductCard/>
+       <ProductCard/>
+       <ProductCard/>
+       <ProductCard/>
+       <ProductCard/>
+       <ProductCard/>
+       <ProductCard/>
+       <ProductCard/>
+       <ProductCard/>
+       <ProductCard/>
+       <ProductCard/>
+       <ProductCard/>
+       <ProductCard/>
 
       </div>
     
