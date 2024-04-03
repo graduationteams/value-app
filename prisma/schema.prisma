@@ -151,10 +151,7 @@ enum ProductStatus {
     VISIBLE
 }
 
-enum ProductStatus {
-    HIDDEN
-    VISIBLE
-}
+
 
 model Product {
   id             String         @id @default(cuid())
