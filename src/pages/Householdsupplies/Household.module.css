@@ -1,0 +1,69 @@
+.container{
+    font-family: 'Montserrat-Arabic', sans-serif; /* Apply Montserrat-Arabic font */
+  }
+
+.header{
+    background-color: var(--color-S50);
+    font-size: 24px;
+    font-weight: bold;
+    position: fixed;
+
+}
+
+
+.container {
+    display: flex;
+    flex-direction: center;
+  }
+
+  .title{
+    margin-left: 4%;
+  }
+
+  .categoryButton {
+    margin-left: 2%; 
+    font-weight: bold;
+    font-size: 16px;
+    padding: 4px 32px;
+    background:white;
+    border-radius: 10px;
+    margin-top: 32px;
+    color: black;
+  }
+
+  .categoriesContainer {
+  overflow-x: auto;
+  white-space: nowrap;
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none; /* Internet Explorer/Edge */
+  margin-right: 5%;
+
+}
+
+.categoriesContainer::-webkit-scrollbar {
+  display: none; /* Chrome, Safari, Opera */
+}
+.categories {
+  display: inline-block;
+  white-space: nowrap;
+}
+.selected {
+  background-color: var(--color-P300);
+  color: white; 
+}
+
+.productCardsContainer {
+  margin-top: 240px; /* Adjust the margin-top to accommodate the fixed header */
+  margin-left: 2.5%;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr); /* Two columns with equal width */
+  grid-gap: 20px 5px;
+  padding-top: 20px; /* Add padding-top to ensure content isn't hidden */
+}
+
+
+.productCardWrapper {
+  width: 50%;
+  padding: 0 10px;
+  box-sizing: border-box;
+}
