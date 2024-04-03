@@ -198,7 +198,7 @@ model Order {
     addressId String
 
     driver   Driver? @relation(fields: [driverId], references: [userId])
-    driver   Driver? @relation(fields: [driverId], references: [userId])
+    
     driverId String?
 
     deliveryAmount Float
