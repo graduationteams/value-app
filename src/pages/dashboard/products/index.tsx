@@ -110,7 +110,7 @@ function Products() {
                       </Badge>
                     </TableCell>
                     <TableCell className="hidden md:table-cell">
-                      {product.categories.map((c) => c.name).join(", ")}
+                      {product.Subcategory.name}
                     </TableCell>
                     <TableCell className="hidden md:table-cell">
                       {new Intl.NumberFormat("ar", {

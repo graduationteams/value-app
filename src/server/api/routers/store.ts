@@ -390,7 +390,7 @@ export const storeRouter = createTRPCRouter({
             price: true,
           },
         },
-        categories: true,
+        Subcategory: true,
       },
     });
   }),
@@ -450,7 +450,7 @@ export const storeRouter = createTRPCRouter({
           id: input.id,
         },
         include: {
-          categories: true,
+          Subcategory: true,
           images: true,
         },
       });

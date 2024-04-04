@@ -25,24 +25,28 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
+import {
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectLabel,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 
 function EditProduct({
   product,
   categories,
 }: {
   product: NonNullable<RouterOutputs["store"]["product"]>;
-  categories: NonNullable<RouterOutputs["categories"]["all"]>;
+  categories: NonNullable<RouterOutputs["categories"]["subcategories"]>;
 }) {
   const router = useRouter();
 
   const [newName, setNewName] = useState(product.name);
   const [newDescription, setNewDescription] = useState(product.description);
-  const [newCategories, setNewCategories] = useState<Option[]>(
-    product.categories.map((c) => ({
-      label: c.name,
-      value: c.id,
-    })),
-  );
+  const [newCategory, setNewCategory] = useState(product.Subcategory.id);
   const [newPrice, setNewPrice] = useState(product.price);
 
   const [deleteImageIndex, setDeleteImageDialog] = useState(-1);
@@ -99,7 +103,7 @@ function EditProduct({
                     onClick={() => {
                       editProduct.mutate({
                         id: product.id,
-                        categories: newCategories.map((c) => c.value),
+                        categoryID: newCategory,
                         name: newName,
                         description: newDescription,
                         images: images,
@@ -158,23 +162,37 @@ function EditProduct({
                       <div className="grid gap-6 sm:grid-cols-3">
                         <div className="col-span-2 grid gap-3">
                           <Label htmlFor="category">Category</Label>
-                          <MultipleSelector
-                            options={
-                              categories.map((category) => ({
-                                label: category.name,
-                                value: category.id,
-                              })) ?? []
-                            }
-                            value={newCategories}
-                            onChange={(selected) => {
-                              setNewCategories(selected);
+                          <Select
+                            value={newCategory}
+                            onValueChange={(v) => {
+                              setNewCategory(v);
                             }}
-                            emptyIndicator={
-                              <p className="text-center text-lg leading-10 text-gray-600 dark:text-gray-400">
-                                no results found.
-                              </p>
-                            }
-                          />
+                          >
+                            <SelectTrigger className="w-[180px]">
+                              <SelectValue placeholder="Category">
+                                {categories
+                                  .map((c) => c.subcategories)
+                                  .flat()
+                                  .find((c) => c.id === newCategory)?.name ??
+                                  "Category"}
+                              </SelectValue>
+                            </SelectTrigger>
+                            <SelectContent>
+                              {categories.map((category) => (
+                                <SelectGroup key={category.id}>
+                                  <SelectLabel>{category.name}</SelectLabel>
+                                  {category.subcategories.map((subcategory) => (
+                                    <SelectItem
+                                      key={subcategory.id}
+                                      value={subcategory.id}
+                                    >
+                                      {subcategory.name}
+                                    </SelectItem>
+                                  ))}
+                                </SelectGroup>
+                              ))}
+                            </SelectContent>
+                          </Select>
                         </div>
                       </div>
                     </CardContent>
@@ -239,7 +257,21 @@ function EditProduct({
                 <Button variant="outline" size="sm">
                   Discard
                 </Button>
-                <Button size="sm">Save Product</Button>
+                <Button
+                  size="sm"
+                  onClick={() => {
+                    editProduct.mutate({
+                      id: product.id,
+                      categoryID: newCategory,
+                      name: newName,
+                      description: newDescription,
+                      images: images,
+                      price: newPrice,
+                    });
+                  }}
+                >
+                  Save Product
+                </Button>
               </div>
             </div>
           </main>
@@ -288,7 +320,7 @@ export default function EditProductPage() {
     },
   );
 
-  const categories = api.categories.all.useQuery();
+  const categories = api.categories.subcategories.useQuery();
 
   if (typeof productId !== "string") {
     return null;

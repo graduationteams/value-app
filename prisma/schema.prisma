@@ -130,20 +130,20 @@ enum CategoryType {
 }
 
 model Subcategory {
-  id         String   @id @default(cuid())
-  name       String
-  categoryId String
-  Category   Category @relation(fields: [categoryId], references: [id])
-  products   Product[]
+    id         String    @id @default(cuid())
+    name       String
+    categoryId String
+    Category   Category  @relation(fields: [categoryId], references: [id])
+    products   Product[]
 
-  @@unique([name, categoryId])
+    @@unique([name, categoryId])
 }
 
 model Category {
-    id           String       @id @default(cuid())
-    name         String
+    id            String        @id @default(cuid())
+    name          String
     subcategories Subcategory[]
-    categoryType CategoryType
+    categoryType  CategoryType
 }
 
 enum ProductStatus {
@@ -151,22 +151,20 @@ enum ProductStatus {
     VISIBLE
 }
 
-
-
 model Product {
-  id             String         @id @default(cuid())
-  name           String
-  status         ProductStatus  @default(VISIBLE)
-  description    String
-  price          Float
-  images         Image[]
-  // Removed direct relation to Category
-  subcategoryId  String
-  Subcategory    Subcategory   @relation(fields: [subcategoryId], references: [id])
-  Store          Store         @relation(fields: [storeId], references: [id])
-  storeId        String
-  productOrder   productOrder[]
-  cartOrder      cartProduct[]
+    id            String         @id @default(cuid())
+    name          String
+    status        ProductStatus  @default(VISIBLE)
+    description   String
+    price         Float
+    images        Image[]
+    // Removed direct relation to Category
+    subcategoryId String
+    Subcategory   Subcategory    @relation(fields: [subcategoryId], references: [id])
+    Store         Store          @relation(fields: [storeId], references: [id])
+    storeId       String
+    productOrder  productOrder[]
+    cartOrder     cartProduct[]
 }
 
 enum OrderStatus {
@@ -194,8 +192,8 @@ model Order {
     address   Address     @relation(fields: [addressId], references: [id])
     addressId String
 
-    driver   Driver? @relation(fields: [driverId], references: [userId])
-    
+    driver Driver? @relation(fields: [driverId], references: [userId])
+
     driverId String?
 
     deliveryAmount Float

@@ -25,17 +25,26 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
+import {
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectLabel,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 
 function NewProduct({
   categories,
 }: {
-  categories: NonNullable<RouterOutputs["categories"]["all"]>;
+  categories: NonNullable<RouterOutputs["categories"]["subcategories"]>;
 }) {
   const router = useRouter();
 
   const [Name, setName] = useState("");
   const [Description, setDescription] = useState("");
-  const [Categories, setCategories] = useState<Option[]>([]);
+  const [Category, setCategory] = useState<string>("");
   const [Price, setPrice] = useState(0);
 
   const [deleteImageIndex, setDeleteImageDialog] = useState(-1);
@@ -86,9 +95,7 @@ function NewProduct({
                     size="sm"
                     onClick={() => {
                       createProduct.mutate({
-                        categories: Categories.map(
-                          (category) => category.value,
-                        ),
+                        categoryID: Category,
                         description: Description,
                         images: images.map((image) => image.value), // since all images are base64 on creation
                         name: Name,
@@ -145,23 +152,37 @@ function NewProduct({
                       <div className="grid gap-6 sm:grid-cols-3">
                         <div className="col-span-2 grid gap-3">
                           <Label htmlFor="category">Category</Label>
-                          <MultipleSelector
-                            options={
-                              categories.map((category) => ({
-                                label: category.name,
-                                value: category.id,
-                              })) ?? []
-                            }
-                            value={Categories}
-                            onChange={(selected) => {
-                              setCategories(selected);
+                          <Select
+                            value={Category}
+                            onValueChange={(v) => {
+                              setCategory(v);
                             }}
-                            emptyIndicator={
-                              <p className="text-center text-lg leading-10 text-gray-600 dark:text-gray-400">
-                                no results found.
-                              </p>
-                            }
-                          />
+                          >
+                            <SelectTrigger className="w-[180px]">
+                              <SelectValue placeholder="Category">
+                                {categories
+                                  .map((c) => c.subcategories)
+                                  .flat()
+                                  .find((c) => c.id === Category)?.name ??
+                                  "Category"}
+                              </SelectValue>
+                            </SelectTrigger>
+                            <SelectContent>
+                              {categories.map((category) => (
+                                <SelectGroup key={category.id}>
+                                  <SelectLabel>{category.name}</SelectLabel>
+                                  {category.subcategories.map((subcategory) => (
+                                    <SelectItem
+                                      key={subcategory.id}
+                                      value={subcategory.id}
+                                    >
+                                      {subcategory.name}
+                                    </SelectItem>
+                                  ))}
+                                </SelectGroup>
+                              ))}
+                            </SelectContent>
+                          </Select>
                         </div>
                       </div>
                     </CardContent>
@@ -266,7 +287,7 @@ export default function EditProductPage() {
   const session = useSession();
   const router = useRouter();
 
-  const categories = api.categories.all.useQuery();
+  const categories = api.categories.subcategories.useQuery();
 
   if (session.status === "loading") {
     return (

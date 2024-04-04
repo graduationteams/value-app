@@ -11,7 +11,7 @@ export const productRouter = createTRPCRouter({
         description: z.string().min(3),
         price: z.number().positive(),
         images: z.array(z.string()),
-        categories: z.array(z.string()).min(1),
+        categoryID: z.string(),
       }),
     )
     .mutation(async ({ ctx, input }) => {
@@ -44,11 +44,7 @@ export const productRouter = createTRPCRouter({
               return { url };
             }),
           },
-          categories: {
-            connect: input.categories.map((id) => {
-              return { id };
-            }),
-          },
+          subcategoryId: input.categoryID,
           storeId: storeid.id,
         },
       });
@@ -69,7 +65,7 @@ export const productRouter = createTRPCRouter({
             }),
           )
           .optional(),
-        categories: z.array(z.string()).min(1).optional(),
+        categoryID: z.string().optional(),
       }),
     )
     .mutation(async ({ input, ctx }) => {
@@ -122,11 +118,7 @@ export const productRouter = createTRPCRouter({
               return { url };
             }),
           },
-          categories: {
-            set: input.categories?.map((id) => {
-              return { id };
-            }),
-          },
+          subcategoryId: input.categoryID ?? undefined,
         },
       });
     }),

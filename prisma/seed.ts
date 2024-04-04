@@ -35,12 +35,6 @@ const seed = async () => {
     },
     {
       type: "number",
-      name: "categories",
-      message: "How many categories do you want to add?",
-      default: 20,
-    },
-    {
-      type: "number",
       name: "products",
       message: "How many products do you want to add? (for each store)",
       default: 100,
@@ -58,13 +52,12 @@ const seed = async () => {
     },
   ])) as {
     stores: number;
-    categories: number;
     products: number;
     password: string;
     orders: number;
   };
   const hashedPassword = await hash(answers.password, 10);
-  const categories: string[] = [];
+  const subCategory: string[] = [];
 
   await prisma.$transaction(
     async (tx) => {
@@ -139,7 +132,7 @@ const seed = async () => {
         },
       });
 
-      const { userId: driverId } = await tx.driver.create({
+      await tx.driver.create({
         data: {
           userId: driverUserId,
           name: faker.person.firstName() + " " + faker.person.lastName(),
@@ -149,18 +142,133 @@ const seed = async () => {
         },
       });
 
-      for (let i = 0; i < answers.categories; i++) {
-        categories.push(
-          (
-            await tx.category.create({
-              data: {
-                name: faker.commerce.department(),
-                categoryType: Math.random() > 0.5 ? "FARM" : "REGULAR",
+      // TODO: add more SubCategories
+      const Categories = {
+        regular: [
+          {
+            name: "Household Supplies",
+            subcategories: [
+              { name: "Cleaning Supplies" },
+              { name: "Kitchen Essentials" },
+              { name: "Laundry Products" },
+              { name: "Storage Solutions" },
+              { name: "Home Decor" },
+            ],
+          },
+          {
+            name: "Food and Groceries",
+            subcategories: [
+              { name: "Fresh Produce" },
+              { name: "Canned Goods" },
+              { name: "Snacks and Beverages" },
+              { name: "Baking Essentials" },
+              { name: "Condiments and Spices" },
+            ],
+          },
+          {
+            name: "Personal Care and Hygiene",
+            subcategories: [
+              { name: "Skin Care" },
+              { name: "Hair Care" },
+              { name: "Oral Care" },
+              { name: "Feminine Hygiene" },
+              { name: "Men's Grooming" },
+            ],
+          },
+          {
+            name: "Electronics and Accessories",
+            subcategories: [
+              { name: "Computers and Laptops" },
+              { name: "Mobile Phones and Accessories" },
+              { name: "Audio and Video Equipment" },
+              { name: "Gaming Devices" },
+              { name: "Smart Home Devices" },
+            ],
+          },
+          {
+            name: "Medical Supplies",
+            subcategories: [
+              { name: "First Aid Kits" },
+              { name: "Medications" },
+              { name: "Medical Devices" },
+              { name: "Health Monitors" },
+              { name: "Mobility Aids" },
+            ],
+          },
+        ],
+        farms: [
+          {
+            name: "Dates",
+            subcategories: [
+              { name: "Fresh Dates" },
+              { name: "Dried Dates" },
+              { name: "Date Products" },
+              { name: "Date Trees" },
+              { name: "Date Palm Syrup" },
+            ],
+          },
+          {
+            name: "Fruits and Vegetables",
+            subcategories: [
+              { name: "Fresh Fruits" },
+              { name: "Fresh Vegetables" },
+              { name: "Frozen Produce" },
+              { name: "Organic Produce" },
+              { name: "Exotic Fruits" },
+            ],
+          },
+          {
+            name: "Dairy Products",
+            subcategories: [
+              { name: "Milk and Cream" },
+              { name: "Cheese and Yogurt" },
+              { name: "Butter and Eggs" },
+              { name: "Dairy Alternatives" },
+              { name: "Frozen Dairy" },
+            ],
+          },
+          {
+            name: "Processed Goods",
+            subcategories: [
+              { name: "Canned Foods" },
+              { name: "Packaged Snacks" },
+              { name: "Frozen Meals" },
+              { name: "Instant Noodles" },
+              { name: "Ready-to-Eat Foods" },
+            ],
+          },
+          {
+            name: "Crops and Grains",
+            subcategories: [
+              { name: "Wheat and Barley" },
+              { name: "Rice and Corn" },
+              { name: "Beans and Lentils" },
+              { name: "Grain Products" },
+              { name: "Flour and Baking Mixes" },
+            ],
+          },
+        ],
+      };
+
+      for (const [categoryType, categories] of Object.entries(Categories)) {
+        for (const category of categories) {
+          await tx.category.create({
+            data: {
+              name: category.name,
+              categoryType: categoryType === "regular" ? "REGULAR" : "FARM",
+              subcategories: {
+                createMany: {
+                  data: category.subcategories.map((subCategory) => ({
+                    name: subCategory.name,
+                  })),
+                },
               },
-            })
-          ).id,
-        );
+            },
+          });
+        }
       }
+
+      subCategory.push(...(await tx.subcategory.findMany()).map((x) => x.id));
 
       const adress = await tx.address.findFirst({
         where: {
@@ -213,11 +321,9 @@ const seed = async () => {
               description: faker.commerce.productDescription(),
               price: Number(faker.commerce.price()),
               storeId: storeId,
-              categories: {
-                connect: {
-                  id: categories[Math.floor(Math.random() * categories.length)],
-                },
-              },
+              subcategoryId:
+                subCategory[Math.floor(Math.random() * subCategory.length)] ??
+                "",
               images: {
                 createMany: {
                   data: [
