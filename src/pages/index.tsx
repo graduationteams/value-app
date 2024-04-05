@@ -13,6 +13,7 @@ import { useSession } from "next-auth/react";
 import { useAdressStore } from "@/zustand/store";
 import AdressSelector from "@/components/adress-selector";
 import { AuthDrawer } from "@/components/auth-drawer";
+import { Stores } from "@/components/stores-map";
 
 // Todo: This is a mock data for the categories, it should be fetched from the backend
 const categories: Record<
@@ -88,6 +89,8 @@ export default function Home() {
 
   const [authOpen, setAuthOpen] = useState(false);
 
+  const [StoresOpen, setStoresOpen] = useState(false);
+
   // to test uncomment this :
   // const { data: categoriesData, isLoading, isError } = api.categories.getByType.useQuery( { categoryType: 'FARM' });
 
@@ -128,7 +131,12 @@ export default function Home() {
               className="bg-black-B50 text-small text-gray-700 focus:outline-none"
             />
           </div>
-          <div className="flex h-8 w-8 items-center justify-center rounded-full bg-black-B50">
+          <div
+            className="flex h-8 w-8 cursor-pointer items-center justify-center rounded-full bg-black-B50"
+            onClick={() => {
+              setStoresOpen(true);
+            }}
+          >
             <Map />
           </div>
         </div>
@@ -212,6 +220,12 @@ export default function Home() {
         isOpen={session.status === "unauthenticated" && authOpen}
         onClose={async () => {
           setAuthOpen(false);
+        }}
+      />
+      <Stores
+        isOpen={StoresOpen}
+        onClose={() => {
+          setStoresOpen(false);
         }}
       />
     </>

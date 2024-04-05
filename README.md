@@ -17,7 +17,7 @@ npm install -g prisma
 
 3. start the database using [docker](https://docs.docker.com/engine/install/)
 ```bash
-docker run --name value-app-postgres -e POSTGRES_PASSWORD=password -e POSTGRES_DB=value-app -d -p 5432:5432 docker.io/postgres
+docker run --name value-app-postgres -e POSTGRES_PASSWORD=password -e POSTGRES_DB=value-app -d -p 5432:5432 postgis/postgis
 ```
 4. create .env file in the root of the project and add the following
 ```bash

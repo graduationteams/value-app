@@ -30,6 +30,7 @@ export function AddressLocator({
   const debouncedLanglat = useDebounce(langlat, 1000);
 
   const { data: address, isLoading } = useQuery({
+    enabled: initilized && isOpen,
     queryKey: ["adresss", debouncedLanglat],
     queryFn: async () => {
       const res = await fetch(
@@ -48,7 +49,7 @@ export function AddressLocator({
   });
 
   useEffect(() => {
-    if (initilized) return;
+    if (initilized || !isOpen) return;
     navigator.geolocation.getCurrentPosition(
       (position) => {
         if (initilized) return;
@@ -64,7 +65,7 @@ export function AddressLocator({
         timeout: 5000, // if the user takes more than 5 seconds to respond, we will stop trying to get the location
       },
     );
-  }, [initilized]);
+  }, [initilized, isOpen]);
 
   const addressSplit = address?.features?.[0]?.place_name_ar?.split("،");
   const addressSubText = addressSplit?.[0];
