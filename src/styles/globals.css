@@ -28,6 +28,11 @@
   font-style: normal;
 }
 
+body {
+
+  background-color: #fafbfc !important;
+}
+
 /* globals.css */
 :root {
   /* Primary Colors */
