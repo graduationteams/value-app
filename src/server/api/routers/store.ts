@@ -455,4 +455,27 @@ export const storeRouter = createTRPCRouter({
         },
       });
     }),
+  all: publicProcedure
+    .input(
+      z.object({
+        lat: z.number().nullable(),
+        long: z.number().nullable(),
+      }),
+    )
+    .query(async ({ ctx, input }) => {
+      if (!input.lat || !input.long) {
+        return [];
+      }
+      const stores = await ctx.db.$queryRaw<
+        Array<{
+          id: string;
+          name: string;
+          lat: string;
+          long: string;
+          logo: string;
+          dist_km: number;
+        }>
+      >`select * from nearby_Stores(${input.lat},${input.long});`;
+      return stores;
+    }),
 });
