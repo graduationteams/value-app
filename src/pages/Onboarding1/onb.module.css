@@ -75,8 +75,7 @@ font-weight: bold;
   word-break: keep-all;
   display: block;
   text-align: center;
-  font-weight: 600;
-  font-size: 11px;
+  font-size: 15px;
 }
 
 .separator .line {
@@ -103,23 +102,7 @@ font-weight: bold;
   padding-bottom: 10px;
 }
 
-.tst {
-  font-size: 18px;
-  color: var(--color-B75);
-  text-align: center;
-  margin: 10px 0px 20px;
-}
 
-.tst .line {
-  flex: 1;
-  height: 1px;
-  background-color: var(--color-B75);
-}
-
-.tst .span {
-  padding: 0 10px;
-  background: #fff;
-}
 
 /* YourComponent.module.css */
 

@@ -74,7 +74,7 @@ export function AuthDrawer({
               <br />
                 < div className={styles.separator}>
                 <div className={styles.line}></div>
-               <span>or sign up with e-mail</span>
+               <p>or sign up with e-mail</p>
                 <div className={styles.line}></div>
                   </div>
 
@@ -180,7 +180,7 @@ export function AuthDrawer({
                 <br />
               < div className={styles.separator}>
                 <div className={styles.line}></div>
-               <span>or sign in with e-mail</span>
+               <p>or sign in with e-mail</p>
                 <div className={styles.line}></div>
                   </div>
 
