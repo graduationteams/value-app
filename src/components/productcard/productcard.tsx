@@ -105,7 +105,7 @@ function ProductCard({
           <span className={Styles.bold}>{storeName}</span>
         </div>
         <div className={Styles.content}>
-          <div className={Styles.productContainer}>
+          <div className="w-full">
             <img
               className="w-full object-cover"
               src={productImage}
@@ -141,9 +141,13 @@ function ProductCard({
                 <p className={Styles.text}>Add to Cart</p>
               </button>
             </div>
+            
           </div>
+          
         </div>
+ 
       </MyDrawer>
+      
     </div>
   );
 }

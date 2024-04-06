@@ -17,25 +17,30 @@ export default function AccountPage() {
   };
 
   return (
-    <div>
+    
+    <div className={styles.container}>
       <br />
       <br />
-      <div style={{ marginLeft: "40px" }}>
+      <div style={{ marginRight: "240px" }}>
         <h1 className={styles.title}>Account</h1>
       </div>
       <br />
       <br />
 
-      <div className={styles.container}>
+      <div className={styles.rectangle}>
+
+        
         <div className={styles.pfp}>
           <img src="/images/pfp.png" alt="" />
           <p className={styles.profileText}>Sufian alfuraydi</p>
         </div>
         <p className={styles.number}>+966 51 123 1234</p>
-      </div>
+        </div>
 
       <br />
-      <div className={styles.container}>
+      
+      <div className={styles.rectangle}>
+
         <a href="#" className={styles.page} onClick={handleAccountInfoClick}>
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -63,7 +68,6 @@ export default function AccountPage() {
           </svg>
           <h2 className={styles.h2}>Addresses</h2>
         </a>
-      </div>
 
       {/* Drawer for Account Info */}
       <MyDrawer
@@ -82,10 +86,14 @@ export default function AccountPage() {
           </div>
           <br />
           <h2 className={styles.title2}>full name</h2>
-          <div className={styles.rectangle}>Sufyan</div>
+          <div className={styles.rectangle2}>
+            <p>Sufian</p>
+          </div>
           <br />
           <h2 className={styles.title2}>e-mail</h2>
-          <div className={styles.rectangle}>sufian@gmail.com</div>
+          <div className={styles.rectangle2}>
+            <p>sufian@gmail.com</p>
+          </div>
         </div>
       </MyDrawer>
 
@@ -94,9 +102,10 @@ export default function AccountPage() {
         setIsAddressesDrawerOpen={setIsAddressesDrawerOpen}
       />
 
+    
+      </div>
       <br />
-
-      <div className={styles.container}>
+      <div className={styles.rectangle}>
         <a href="#" className={styles.page}>
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -126,9 +135,7 @@ export default function AccountPage() {
           <h2 className={styles.h2}>Language</h2>
         </a>
       </div>
-
       <br />
-
       <div className={styles.container2}>
         <a href="#" className={styles.btn}>
           <svg
@@ -146,6 +153,7 @@ export default function AccountPage() {
         </a>
       </div>
       <Navbar />
+
     </div>
   );
 }

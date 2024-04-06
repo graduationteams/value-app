@@ -13,20 +13,20 @@ export default function Household() {
   };
 
   return (
-    <div className={styles.container}>
-      <div className={styles.header}>
-        <div className={styles.title}>
-          <br />
-          <button>
+    <>
+    <div className={styles.header}>
+      <br />
+      <br />
+    <button >
             <img src="/assets/icons/back.png" alt="" />
           </button>
           <br />
           <br />
           <h1>Household supplies </h1>
-        </div>
-
-        <div className={styles.categoriesContainer}>
+          <div className={styles.categoriesContainer}>
+            
           <div className={styles.scrollablewrapper}>
+            
             <div className={styles.categories}>
               <button
                 className={`${styles.categoryButton} ${
@@ -78,9 +78,14 @@ export default function Household() {
               </button>
             </div>
           </div>
-        </div>
-        <br />
-      </div>
+          <br />
+
+          </div>
+    </div>
+
+
+  <div className={styles.container}>
+   
       <div className={styles.productCardsContainer}>
         <ProductCard
           AdditionalInfo="Dishwasher"
@@ -210,5 +215,7 @@ export default function Household() {
         />
       </div>
     </div>
+    </>
+
   );
 }

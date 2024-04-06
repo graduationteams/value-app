@@ -1,24 +1,39 @@
-.container{
+.container, .header{
     font-family: 'Montserrat-Arabic', sans-serif; /* Apply Montserrat-Arabic font */
   }
 
-.header{
-    background-color: var(--color-S50);
-    font-size: 24px;
-    font-weight: bold;
-    position: fixed;
-
-}
 
 
 .container {
-    display: flex;
-    flex-direction: center;
-  }
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start; /* Align content at the top */
+  align-items: center;
+  padding-top: 50px; /* Padding from the top */
+}
 
-  .title{
-    margin-left: 4%;
-  }
+.header{
+  background-color: var(--color-S50);
+  position: fixed;
+  width: 100%;
+}
+
+.header h1{
+  margin-left: 2%;
+  font-size: 24px;
+  font-weight: bold;
+}
+
+.header img{
+  margin-left: 200%;
+}
+.categoriesContainer {
+  overflow-x: auto;
+  white-space: nowrap;
+  scrollbar-width: none; /* Firefox */
+ -ms-overflow-style: none; /* Internet Explorer/Edge */
+  margin-right: 5%;
+}
 
   .categoryButton {
     margin-left: 1%; 
@@ -31,18 +46,12 @@
     color: black;
   }
 
-  .categoriesContainer {
-  overflow-x: auto;
-  white-space: nowrap;
-  scrollbar-width: none; /* Firefox */
- -ms-overflow-style: none; /* Internet Explorer/Edge */
-  margin-right: 5%;
-  width: 100%;
-}
+
 
 .categoriesContainer::-webkit-scrollbar {
   display: none; /* Chrome, Safari, Opera */
 }
+
 .categories {
   display: inline-block;
   white-space: nowrap;
@@ -54,16 +63,15 @@
   color: white; 
 }
 
+.scrollablewrapper {
+  overflow-x: auto;
+}
+
 .productCardsContainer {
-  margin-top: 240px; /* Adjust the margin-top to accommodate the fixed header */
-  margin-left: 7%;
+  margin-top: 180px; /* Adjust the margin-top to accommodate the fixed header */
   display: grid;
   grid-template-columns: repeat(2, 1fr); /* Two columns with equal width */
   grid-gap: 20px 20px;
   padding-top: 20px; /* Add padding-top to ensure content isn't hidden */
 }
 
-.scrollablewrapper {
-    width: 55%; /* Adjust as needed */
-    overflow-x: auto;
-}
