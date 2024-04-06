@@ -34,64 +34,66 @@ function ProductCard({
   };
 
   return (
-    <div className="h-58 bg-white flex w-40 flex-col items-center overflow-hidden rounded-lg font-sans shadow-lg">
-      <div className="w-full cursor-pointer" onClick={handleTopSectionClick}>
-        {/* Top Section: Product Image and Information */}
-        <img
-          className="w-full object-cover"
-          src={productImage}
-          alt="Product"
-          style={{ height: "173px" }}
-        />
-        <div className="flex w-full flex-col items-start px-4 pt-4">
-          <div className="mb-2 text-xs text-gray-400">{storeName}</div>
-          <div className="mb-1 text-sm text-gray-900">{productName}</div>
-          <div className="mb-4 text-xs text-gray-400">{AdditionalInfo}</div>
-          <div className="mb-3 text-xs font-bold text-blue-600">
-            {Price} sar
+    <>
+      <div className="h-58 bg-white flex w-40 flex-col items-center overflow-hidden rounded-lg font-sans shadow-lg">
+        <div className="w-full cursor-pointer" onClick={handleTopSectionClick}>
+          {/* Top Section: Product Image and Information */}
+          <img
+            className="w-full object-cover"
+            src={productImage}
+            alt="Product"
+            style={{ height: "173px" }}
+          />
+          <div className="flex w-full flex-col items-start px-4 pt-4">
+            <div className="mb-2 text-xs text-gray-400">{storeName}</div>
+            <div className="mb-1 text-sm text-gray-900">{productName}</div>
+            <div className="mb-4 text-xs text-gray-400">{AdditionalInfo}</div>
+            <div className="mb-3 text-xs font-bold text-blue-600">
+              {Price} sar
+            </div>
           </div>
         </div>
-      </div>
-      {/* Bottom Section: Quantity Counter */}
-      <div className="w-full border-t border-dashed border-gray-200"></div>
-      <div className="flex w-full items-center justify-center px-4 py-2">
-        {quantity === 0 ? (
-          <button
-            onClick={handleIncrement}
-            className="flex items-center justify-center p-1 text-xs text-gray-900"
-          >
-            <img
-              src="/assets/icons/plus.png"
-              alt="add to cart"
-              className="mr-1 h-4 w-4"
-            />
-            <span>add to cart</span>
-          </button>
-        ) : (
-          <div className="flex items-center justify-center">
-            <button
-              onClick={handleDecrement}
-              className="p-1 text-xs text-gray-900"
-            >
-              <img
-                src="/assets/icons/minus.png"
-                alt="Decrease"
-                className="h-4 w-4"
-              />
-            </button>
-            <span className="mx-2 text-xs">{quantity}</span>
+        {/* Bottom Section: Quantity Counter */}
+        <div className="w-full border-t border-dashed border-gray-200"></div>
+        <div className="flex w-full items-center justify-center px-4 py-2">
+          {quantity === 0 ? (
             <button
               onClick={handleIncrement}
-              className="p-1 text-xs text-gray-900"
+              className="flex items-center justify-center p-1 text-xs text-gray-900"
             >
               <img
                 src="/assets/icons/plus.png"
-                alt="Increase"
-                className="h-4 w-4"
+                alt="add to cart"
+                className="mr-1 h-4 w-4"
               />
+              <span>add to cart</span>
             </button>
-          </div>
-        )}
+          ) : (
+            <div className="flex items-center justify-center">
+              <button
+                onClick={handleDecrement}
+                className="p-1 text-xs text-gray-900"
+              >
+                <img
+                  src="/assets/icons/minus.png"
+                  alt="Decrease"
+                  className="h-4 w-4"
+                />
+              </button>
+              <span className="mx-2 text-xs">{quantity}</span>
+              <button
+                onClick={handleIncrement}
+                className="p-1 text-xs text-gray-900"
+              >
+                <img
+                  src="/assets/icons/plus.png"
+                  alt="Increase"
+                  className="h-4 w-4"
+                />
+              </button>
+            </div>
+          )}
+        </div>
       </div>
 
       <MyDrawer
@@ -119,13 +121,38 @@ function ProductCard({
             <br />
             <br />
             <div className={Styles.container}>
-              <button onClick={handleDecrement}>
-                <img src="/assets/icons/minus.png" alt="Decrease" />
-              </button>
-              <span className={Styles.quantity}>{quantity}</span>
-              <button onClick={handleIncrement}>
-                <img src="/assets/icons/plus.png" alt="Increase" />
-              </button>
+              <div className="flex items-center justify-center gap-2 pr-4">
+                <button onClick={handleDecrement}>
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    viewBox="0 0 24 24"
+                    fill="currentColor"
+                    className="h-8 w-8"
+                  >
+                    <path
+                      fillRule="evenodd"
+                      d="M12 2.25c-5.385 0-9.75 4.365-9.75 9.75s4.365 9.75 9.75 9.75 9.75-4.365 9.75-9.75S17.385 2.25 12 2.25Zm3 10.5a.75.75 0 0 0 0-1.5H9a.75.75 0 0 0 0 1.5h6Z"
+                      clipRule="evenodd"
+                    />
+                  </svg>
+                </button>
+                <span className={Styles.quantity}>{quantity}</span>
+                <button onClick={handleIncrement}>
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    viewBox="0 0 24 24"
+                    fill="currentColor"
+                    className="h-8 w-8"
+                  >
+                    <path
+                      fillRule="evenodd"
+                      d="M12 2.25c-5.385 0-9.75 4.365-9.75 9.75s4.365 9.75 9.75 9.75 9.75-4.365 9.75-9.75S17.385 2.25 12 2.25ZM12.75 9a.75.75 0 0 0-1.5 0v2.25H9a.75.75 0 0 0 0 1.5h2.25V15a.75.75 0 0 0 1.5 0v-2.25H15a.75.75 0 0 0 0-1.5h-2.25V9Z"
+                      clipRule="evenodd"
+                    />
+                  </svg>
+                </button>
+              </div>
+
               <button className={Styles.CartBtn}>
                 <span className={Styles.IconContainer}>
                   <svg
@@ -141,14 +168,10 @@ function ProductCard({
                 <p className={Styles.text}>Add to Cart</p>
               </button>
             </div>
-            
           </div>
-          
         </div>
- 
       </MyDrawer>
-      
-    </div>
+    </>
   );
 }
 

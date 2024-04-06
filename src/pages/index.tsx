@@ -1,6 +1,5 @@
 import Image from "next/image";
 import { api } from "~/utils/api";
-import "bootstrap/dist/css/bootstrap.min.css";
 
 import Navbar from "~/components/Navbar/Navbar";
 import { useState } from "react";

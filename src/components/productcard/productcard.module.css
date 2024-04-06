@@ -30,7 +30,8 @@
 .content{
     padding: 16px; 
     display: flex;
-}
+    max-height: 70vh;
+  }
 
 
 .content img{
@@ -42,6 +43,7 @@
     padding-left: 15px;
     padding-right: 15px;
     font-weight: bold;
+
 }
 
 
