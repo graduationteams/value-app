@@ -1,30 +1,30 @@
 import React from "react";
-import styles from "./onb.module.css";
-export default function onboarding() {
+import styles from "./onb.module.css"; // Assuming you have a CSS module for styling
+
+export default function Onboarding() {
   return (
     <div className={styles.container}>
-      <div className={styles.onb}>
-        <img src="/images/Address11.jpg" alt="" className="img1" />
-      </div>
+      <img src="/images/Address11.jpg" alt="" />
       <br />
-      
-      <div className={styles.onb2}>
-        <p className={styles.onp2}>All you need <br />from wholesaler in one platform</p>
-      </div>
       <br />
-      <div className={styles.onb3}>
-        <p className={styles.onp3}>
-          we combine many wholesalers and warehouses <br /> in one platform to be easy
-          and more fast to you
-        </p>
-      </div>
-
+      <p className={styles.title}>
+      All you need from  wholesaler in one <span className={styles.highlight}>platform</span>
+      </p>
       
-      <div className={styles.Btonb3}>
-      <button className={styles.Obtn1} onClick={() => { window.location.href = '../Onboarding2/onboarding2' }}>Next</button>
-        
-        <button className={styles.Obtn2}>Skip</button>
+      <p className={styles.subtitle}>
+      we combine many wholesalers and warehouses in one platform to be easy and more fast to you
+      </p>
+      <br />
+      <br />
+      <br />
+      <br />
+      <button className={styles.op1}>
+        next
+      </button>
+      <br />
+      <button className={styles.op2}>
+        skip
+      </button>
       </div>
-    </div>
   );
 }

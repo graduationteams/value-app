@@ -7,38 +7,34 @@ export default function Onboarding() {
 
   return (
     <div className={styles.container}>
-      <div className={styles.onb}>
-        <img src="/images/Delivering1.png" alt="" className="img2" />
-      </div>
-      <br />
+    <img src="/images/Delivering1.png" alt="" className="img2" />
 
-      <div className={styles.onb2}>
-        <p className={styles.onp2}>
+    <br />
+    <p className={styles.title}>
           Your lovely products <br />
           but with less prices for U!
         </p>
-      </div>
-      <br />
-      <div className={styles.onb3}>
-        <p className={styles.onb3}>
-          we try to make the experience fully active so <br />
-          the deal is to cut the prices from wholesalers <br />
-          to the best
-        </p>
-      </div>
 
-      <div className={styles.Btonb3}>
+
+    <br />
+    <p className={styles.subtitle}>
+    we try to make the experience fully active so 
+    the deal is to cut the prices from wholesalers 
+    to the best </p>
+    <br />
+    <br />
+
         <button
-          className={styles.Obtn1}
+         className={styles.op1}
           onClick={() => {
             setIsCreateAccountOpen(true);
           }}
         >
           Create Account
         </button>
+        <br />
+        <button className={styles.op2}>Skip</button>
 
-        <button className={styles.Obtn2}>Skip</button>
-      </div>
 
       <AuthDrawer
         isOpen={isCreateAccountOpen}
