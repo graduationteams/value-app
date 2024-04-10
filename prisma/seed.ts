@@ -1,6 +1,6 @@
 import { PrismaClient } from "@prisma/client";
 import { hash } from "bcrypt";
-import { faker } from "@faker-js/faker/locale/ar";
+import { faker } from "@faker-js/faker/locale/en";
 import inquirer from "inquirer";
 
 const prisma = new PrismaClient({ log: ["query"] });

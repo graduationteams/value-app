@@ -1,5 +1,28 @@
-.title,.title2, .h2, .btn, .btn2, .rectangle, .addressLabel, .addressDescription, .addAddressContainer, .profileText{
+.title,.title2, .h2, .btn, .btn2, .rectangle, .rectangle2, .addressLabel, .addressDescription, .addAddressContainer, .profileText , .container{
   font-family: 'Montserrat-Arabic', sans-serif; /* Apply Montserrat-Arabic font */
+}
+
+
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+}
+.rectangle2 {
+  display: flex;
+  flex-direction: column;
+  max-width: 150%;
+  min-width: 90%;
+  height: 45px;
+  gap: 10px;
+  border: 2px solid #ccc;
+  border-radius: 10px;
+}
+.rectangle2 > p {
+  font-size: 18px;
+  margin-left: 2%;
+  margin-top: 2%;
 }
 
 
@@ -16,18 +39,22 @@
 
 
 .rectangle {
-  width: 9;
-  padding: 10px;
+  display: flex;
+  flex-direction: column;
+  max-width: 150%;
+  min-width: 90%;
+  gap: 10px;
   border: 2px solid #ccc;
   border-radius: 10px;
-  margin: 10px; 
-  text-align: left;
-  margin-right: 10%;
 }
+
+.rectangle > a{
+  margin-bottom: 2%;
+}
+
 
 .pfp {
   display: flex;
-  align-items: center; 
   margin-left: 20px;
   margin-top: 25px;
 }
@@ -40,21 +67,10 @@ font-size: 18px;
 
 .number{
   margin-left: 70px;
-  margin-top: -15px;
-  font-weight: bold;
+  margin-top: -25px;
   color: var(--color-B75);
 }
 
-.container {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-  border: 1.5px solid #e8e8e9;
-  width: 361px;
-  height: 102px;
-  margin-left: 10%;
-  border-radius: 10px;
-}
 
 .page {
   margin-left: 20px;
@@ -67,9 +83,7 @@ font-size: 18px;
   margin-top: -23px;
   
 }
-.container2 {
-  text-align: center; /* Center align the button */
-}
+
 
 .btn {
   display: inline-block; /* Make the button display inline */

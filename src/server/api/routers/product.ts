@@ -122,4 +122,24 @@ export const productRouter = createTRPCRouter({
         },
       });
     }),
+  search: protectedProcedure
+    .input(
+      z.object({
+        query: z.string().min(3),
+      }),
+    )
+    .query(async ({ input, ctx }) => {
+      return await ctx.db.product.findMany({
+        where: {
+          name: {
+            contains: `%${input.query}%`,
+            mode: "insensitive",
+          },
+        },
+        include: {
+          Store: true,
+          images: true,
+        },
+      });
+    }),
 });

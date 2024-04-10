@@ -1,226 +1,181 @@
-.onb, .onb2, .onb3, .Obtn1, .Obtn2, .inputtitle, .createAccount, .inputTitle, .inputField, .span {
-    font-family: 'Montserrat-Arabic', sans-serif; /* Apply Montserrat-Arabic font */
-  }
-  
-  
-  /* For image */
-  .onb {
-    display: flex;
-    justify-content: center;
-    width: 314.09px;
-    height: 234px;
-    left: 40px;
-    top: 171px;
-    margin-left: 500px;
-  }
-  
-  /* For Header */
-  .onb2 {
-    display: flex;
-    font-size: 25px;
-    font-weight: bold;
-    justify-content: center;
-  }
-  
-  /* For p */
-  .onb3 {
-    display: flex;
-    font-size: 18px;
-    justify-content: center;
-    color: var(--color-B75);
-  }
-  
-  .point {
-    margin-left: 623px;
-    padding-top: 30px;
-  }
-  
-  /* For buttons */
-  .Btonb3 {
-    display: flex;
-    gap: 30px;
-    padding-top: 30px;
-    justify-content: center;
-    flex-direction: column;
-  }
-  
-  .Obtn1 {
-    background-color: var(--color-P300);
-    width: 400px;
-    height: 45px;
-    border-radius: 10px;
-    margin-left: 39%;
-    color: aliceblue;
-    font-weight: bold;
-  }
-  
-  .Obtn2 {
-    background-color: var(--color-W50);
-    width: 400px;
-    height: 45px;
-    border-radius: 10px;
-    border: 1.5px solid var(--color-B50);
-    margin-left: 39%;
-    color:var(--color-B100);
-    font-weight: bold;
-  }
-  
-  
-  .tst {
-    display: flex;
-    align-items: center;
-    font-size: 18px;
-    color: var(--color-B75);
-    text-align: center;
-    margin: 10px 0px 20px;
-  }
-  
-  .tst .line {
-    flex: 1;
-    height: 1px;
-    background-color: var(--color-B75);
-  }
-  
-  .tst .span {
-    padding: 0 10px;
-    background: #fff;
-  }
-  
-  /* YourComponent.module.css */
-  
-  .formContainer {
-    width: 300px; /* Adjust width as needed */
-    margin: 0 auto; /* Center the form horizontally */
-  }
-  
-  .inputContainer {
-    margin-bottom: 20px;
-  }
-  
-  .inputTitle {
-    display: block;
-    font-weight: bold;
-    margin-bottom: 5px;
-  }
-  
-  .inputField {
-    width: 100%;
-    padding: 10px;
-    border: 1px solid #ccc;
-    border-radius: 10px;
-  }
-  
-  .createAccount{
-    background-color: var(--color-P300);
-    width: 400px;
-    height: 45px;
-    border-radius: 10px;
-    display: flex;
-    align-items: center;
-    justify-content: center;  color: aliceblue;
-    font-weight: bold;
-    margin: 0 auto;
-  }
-  
-  
-  .googlebutton {
-    background-color: var(--color-W50);
-    width: 400px;
-    height: 45px;
-    border: 1.5px solid var(--color-B50);
-    border-radius: 10px;
-    margin: 0 auto; /* Centering the button horizontally */
-    color: var(--color-B100);
-    font-weight: bold;
-    display: flex;
-    align-items: center;
-    justify-content: center; /* Centering the content horizontally */
-  }
-  
-  .googlebutton img {
-    width: 24px;
-    height: 24px;
-    margin-right: 8px; /* Adjusted margin to create space */
-  }
-  
-  .googlebutton .onb2 {
-    color: black;
-    font-size: 19px;
-    padding-left: 8px;
-  }
-  .signInLink {
-    color: black; /* Change color as desired */
-    text-decoration: none; /* Remove underline */
-  }
-  
-  .signInLink:hover {
-    text-decoration: underline; /* Add underline on hover */
-  }
-  
-  
-  @media screen and (max-width: 767px) {
-    .onb {
-      display: flex;
-      justify-content: center;
-      width: 314.09px;
-      height: 234px;
-      left: 40px;
-      top: 171px;
-      margin-left: 50px;
-      padding-top: 15px;
-    }
-  
-    /* For Header */
-    .onb2 {
-      display: flex;
-      font-size: 25px;
-      font-weight: bold;
-      justify-content: center;
-    }
-  
-    /* For p */
-    .onb3 {
-      display: flex;
-      font-size: 18px;
-      justify-content: center;
-      padding: 10px;
-    }
-  
-    .point {
-      margin-left: 238px;
-      padding-top: 30px;
-    }
-  
-    /* For buttons */
-    .Btonb3 {
-      display: flex;
-      gap: 30px;
-      padding-top: px;
-      justify-content: center;
-      flex-direction: column;
-      margin-right: 200px;
-    }
-  
-    .Obtn1 {
-      background-color: #32cd32;
-      width: 400px;
-      height: 45px;
-      border-radius: 10px;
-      margin-left: 20px;
-      color: aliceblue;
-      font-weight: bold;
-    }
-  
-    .Obtn2 {
-      background-color: white;
-      width: 400px;
-      height: 45px;
-      border-radius: 10px;
-      border: 1.5px solid #969292;
-      margin-left: 20px;
-      color: gray;
-      font-weight: bold;
-      margin-bottom: 30px;
-    }
-  }
-  
+.container, .drawercontainer{
+  font-family: 'Montserrat-Arabic', sans-serif; /* Apply Montserrat-Arabic font */
+}
+
+.container {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start; /* Align content at the top */
+  align-items: center;
+  height: 100vh;
+  padding-top: 50px; /* Padding from the top */
+  padding-left: 20px; /* Padding from the left */
+  padding-right: 20px; /* Padding from the right */
+}
+
+.title{
+font-size: 25px;
+font-weight: bold;
+}
+
+.subtitle{
+  color: var(--color-B75);
+  font-size: 100%;
+}
+
+.highlight{
+  background-color: var(--color-S300);
+  border-radius: 85%;
+}
+.op1{
+  background-color: var(--color-P300);
+  border-radius: 10px;
+  color: aliceblue;
+  max-width: 100%;
+  min-width: 80%;
+  max-height: 8%;
+  min-height: 5%;
+  transition: transform 0.9s ease; 
+}
+
+.op2{
+  background-color: var(--color-W50);
+  border-radius: 10px;
+  border: 2.5px solid var(--color-B50);
+  color: var(--color-B100);
+  max-width: 100%;
+  min-width: 80%;
+  max-height: 8%;
+  min-height: 5%;
+  transition: transform 0.9s ease; 
+
+}
+
+
+.op1:active {
+  transform: scale(1.1); /* Increase size when clicked */
+
+}
+
+
+.op2:active {
+  transform: scale(1.1); /* Increase size when clicked */
+}
+
+/*Drawer styling*/
+
+.separator {
+  display: grid;
+  grid-template-columns: 1fr 2fr 1fr;
+  color: #8B8E98;
+  margin: 5px;
+}
+
+.separator > p {
+  word-break: keep-all;
+  display: block;
+  text-align: center;
+  font-size: 15px;
+}
+
+.separator .line {
+  display: inline-block;
+  width: 80%;
+  height: 1px;
+  border: 0;
+  background-color: var(--color-B75);
+  margin-right: 5px;
+  margin-left: 10px;
+  margin-top: 10px;
+
+
+}
+
+
+.drawercontainer {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start; /* Align content at the top */
+  align-items: center;
+  padding-left: 20px; /* Padding from the left */
+  padding-right: 20px; /* Padding from the right */
+  padding-bottom: 10px;
+}
+
+
+
+/* YourComponent.module.css */
+
+.formContainer {
+  width: 300px; /* Adjust width as needed */
+}
+
+.inputContainer {
+  margin-bottom: 20px;
+}
+
+.inputTitle {
+  display: block;
+  font-weight: bold;
+  margin-bottom: 5px;
+}
+
+.inputField {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 10px;
+}
+
+.createAccount{
+  background-color: var(--color-P300);
+  max-width: 100%;
+  min-width: 80%;
+  height: 40px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;  color: aliceblue;
+  margin: 0 auto;
+}
+
+
+.googlebutton {
+  background-color: var(--color-W50);
+  max-width: 100%;
+  min-width: 80%;
+  height: 40px;
+  border: 1.5px solid var(--color-B50);
+  border-radius: 10px;
+  margin: 0 auto; /* Centering the button horizontally */
+  color: var(--color-B100);
+  font-weight: bold;
+  display: flex;
+  align-items: center;
+  justify-content: center; /* Centering the content horizontally */
+}
+
+.googlebutton img {
+  width: 24px;
+  height: 24px;
+  margin-right: 8px; /* Adjusted margin to create space */
+}
+
+.googlebutton .onb2 {
+  color: black;
+  font-size: 19px;
+  padding-left: 8px;
+}
+.signInLink {
+  color: black; /* Change color as desired */
+  text-decoration: none; /* Remove underline */
+}
+
+.signInLink:hover {
+  text-decoration: underline; /* Add underline on hover */
+}
+
+.subtitle2{
+  color: var(--color-B75);
+  font-size: 15px;
+}

@@ -38,23 +38,25 @@ export function AuthDrawer({
 
   return (
     <>
+    
       <MyDrawer
         isOpen={isOpen}
         onclose={() => {
           onClose();
         }}
       >
+        
         {drawerMode === "sign-up" ? (
-          <div>
-            <div className={styles.onb2}>
-              <p className={styles.onp2}>Sign Up</p>
-            </div>
-            <div className={styles.onb3}>
-              <p className={styles.onp3}>
+           <div className={styles.drawercontainer}>
+
+          
+              <p className={styles.title}>Sign Up</p>
+            
+              <p className={styles.subtitle}>
                 Simple, create your account to get started!
               </p>
-            </div>
-            <div className={styles.buttonContainer}>
+            
+           <br />
               <button
                 className={styles.googlebutton}
                 onClick={() => {
@@ -69,14 +71,18 @@ export function AuthDrawer({
                 />
                 <span className={styles.onb2}>Sign Up with Google</span>
               </button>
-            </div>
+              <br />
+                < div className={styles.separator}>
+                <div className={styles.line}></div>
+               <p>or sign up with e-mail</p>
+                <div className={styles.line}></div>
+                  </div>
 
-            <div className={styles.tst}>
-              <span className={styles.line}></span>
-              <span className={styles.span}>or sign up with e-mail</span>
-              <span className={styles.line}></span>
-            </div>
 
+             
+
+
+           <br />
             <div className={styles.formContainer}>
               <div className={styles.inputContainer}>
                 <label htmlFor="name" className={styles.inputTitle}>
@@ -132,8 +138,9 @@ export function AuthDrawer({
             >
               Create Account
             </button>
+            <br />
             <div className={styles.signInMessage}>
-              <p className={styles.onb3}>
+              <p className={styles.subtitle2}>
                 Already have an account?&nbsp;
                 <button
                   className={styles.signInLink}
@@ -147,12 +154,14 @@ export function AuthDrawer({
             </div>
           </div>
         ) : (
-          <div className="w-full px-2">
+
+
+
+          <div className={styles.drawercontainer}>
             {/* Content of the sign-in drawer */}
-            <div className={styles.onb2}>
-              <p className={styles.onp2}>Sign In</p>
-            </div>
-            <div className={styles.buttonContainer}>
+           
+              <p className={styles.title}>Sign In</p>
+          <br />
               <button
                 className={styles.googlebutton}
                 onClick={() => {
@@ -167,12 +176,16 @@ export function AuthDrawer({
                 />
                 <span className={styles.onb2}>Sign In with Google</span>
               </button>
-            </div>
-            <div className={styles.tst}>
-              <span className={styles.line}></span>
-              <span className={styles.span}>or sign in with e-mail</span>
-              <span className={styles.line}></span>
-            </div>
+
+                <br />
+              < div className={styles.separator}>
+                <div className={styles.line}></div>
+               <p>or sign in with e-mail</p>
+                <div className={styles.line}></div>
+                  </div>
+
+
+
             <div className={styles.formContainer}>
               <div className={styles.inputContainer}>
                 <label htmlFor="email" className={styles.inputTitle}>
@@ -202,7 +215,7 @@ export function AuthDrawer({
                 />
               </div>
             </div>
-            <button
+ <button
               className={styles.createAccount}
               onClick={() => {
                 void signIn("credentials", {
@@ -213,8 +226,9 @@ export function AuthDrawer({
             >
               Sign in
             </button>
+            <br />
             <div className={styles.signInMessage}>
-              <p className={styles.onb3}>
+              <p className={styles.subtitle2}>
                 Not a member?
                 <button
                   className={styles.signInLink}
@@ -227,6 +241,7 @@ export function AuthDrawer({
               </p>
             </div>
           </div>
+           
         )}
       </MyDrawer>
     </>
