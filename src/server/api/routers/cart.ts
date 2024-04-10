@@ -143,7 +143,7 @@
 
 import { z } from "zod";
 import { createTRPCRouter, protectedProcedure } from "../trpc";
-import fetch from "node-fetch"; // Ensure node-fetch is installed for server-side fetch operations
+import fetch from "node-fetch"; 
 
 export const cartRouter = createTRPCRouter({
   add: protectedProcedure
@@ -206,7 +206,7 @@ export const cartRouter = createTRPCRouter({
         });
       }
 
-      // Initialize an empty array for recommendations
+      
       let recommendations : any[] = [];
 
       // Asynchronously fetch recommendations after adding a product to the cart
@@ -225,7 +225,7 @@ export const cartRouter = createTRPCRouter({
         console.error('Error fetching recommendations:', error);
       });
 
-      // Response after adding the product to the cart, including recommendations
+      
       return {
         success: true,
         message: "Product added to cart successfully",
