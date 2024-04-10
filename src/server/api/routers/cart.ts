@@ -1,5 +1,149 @@
+// import { z } from "zod";
+// import { createTRPCRouter, protectedProcedure } from "../trpc";
+
+// export const cartRouter = createTRPCRouter({
+//   add: protectedProcedure
+//     .input(
+//       z.object({
+//         productId: z.string(),
+//       }),
+//     )
+//     .mutation(async ({ ctx, input }) => {
+//       const cart = await ctx.db.cart.findUnique({
+//         where: {
+//           userId: ctx.session.user.id,
+//         },
+//       });
+
+//       if (!cart) {
+//         return await ctx.db.cart.create({
+//           data: {
+//             userId: ctx.session.user.id,
+//             products: {
+//               create: {
+//                 productId: input.productId,
+//                 quantity: 1,
+//               },
+//             },
+//           },
+//           include: {
+//             products: true,
+//           },
+//         });
+//       }
+
+//       return await ctx.db.cart.update({
+//         where: {
+//           userId: ctx.session.user.id,
+//         },
+//         data: {
+//           products: {
+//             upsert: {
+//               where: {
+//                 product_cart_unique: {
+//                   productId: input.productId,
+//                   cartId: cart.id,
+//                 },
+//               },
+//               create: {
+//                 productId: input.productId,
+//                 quantity: 1,
+//               },
+//               update: {
+//                 quantity: {
+//                   increment: 1,
+//                 },
+//               },
+//             },
+//           },
+//         },
+//         include: {
+//           products: true,
+//         },
+//       });
+//     }),
+
+//   get: protectedProcedure.query(async ({ ctx }) => {
+//     return await ctx.db.cart.findUnique({
+//       where: {
+//         userId: ctx.session.user.id,
+//       },
+//       include: {
+//         products: true,
+//       },
+//     });
+//   }),
+
+//   decrement: protectedProcedure
+//     .input(
+//       z.object({
+//         productId: z.string(),
+//       }),
+//     )
+//     .mutation(async ({ ctx, input }) => {
+//       const cart = await ctx.db.cart.findUniqueOrThrow({
+//         where: {
+//           userId: ctx.session.user.id,
+//         },
+//       });
+
+//       const product = await ctx.db.cartProduct.findUniqueOrThrow({
+//         where: {
+//           product_cart_unique: {
+//             productId: input.productId,
+//             cartId: cart.id,
+//           },
+//         },
+//       });
+//       if (product.quantity <= 1) {
+//         return await ctx.db.cart.update({
+//           where: { userId: ctx.session.user.id },
+//           data: {
+//             products: {
+//               delete: {
+//                 product_cart_unique: {
+//                   cartId: cart.id,
+//                   productId: input.productId,
+//                 },
+//               },
+//             },
+//           },
+//           include: {
+//             products: true,
+//           },
+//         });
+//       }
+
+//       return await ctx.db.cart.update({
+//         where: { userId: ctx.session.user.id },
+//         data: {
+//           products: {
+//             update: {
+//               where: {
+//                 product_cart_unique: {
+//                   cartId: cart.id,
+//                   productId: input.productId,
+//                 },
+//               },
+//               data: {
+//                 quantity: {
+//                   decrement: 1,
+//                 },
+//               },
+//             },
+//           },
+//         },
+//         include: {
+//           products: true,
+//         },
+//       });
+//     }),
+// });
+
+
 import { z } from "zod";
 import { createTRPCRouter, protectedProcedure } from "../trpc";
+import fetch from "node-fetch"; // Ensure node-fetch is installed for server-side fetch operations
 
 export const cartRouter = createTRPCRouter({
   add: protectedProcedure
@@ -16,7 +160,7 @@ export const cartRouter = createTRPCRouter({
       });
 
       if (!cart) {
-        return await ctx.db.cart.create({
+        await ctx.db.cart.create({
           data: {
             userId: ctx.session.user.id,
             products: {
@@ -30,41 +174,67 @@ export const cartRouter = createTRPCRouter({
             products: true,
           },
         });
-      }
-
-      return await ctx.db.cart.update({
-        where: {
-          userId: ctx.session.user.id,
-        },
-        data: {
-          products: {
-            upsert: {
-              where: {
-                product_cart_unique: {
-                  productId: input.productId,
-                  cartId: cart.id,
+      } else {
+        await ctx.db.cart.update({
+          where: {
+            userId: ctx.session.user.id,
+          },
+          data: {
+            products: {
+              upsert: {
+                where: {
+                  product_cart_unique: {
+                    productId: input.productId,
+                    cartId: cart.id,
+                  },
                 },
-              },
-              create: {
-                productId: input.productId,
-                quantity: 1,
-              },
-              update: {
-                quantity: {
-                  increment: 1,
+                create: {
+                  productId: input.productId,
+                  quantity: 1,
+                },
+                update: {
+                  quantity: {
+                    increment: 1,
+                  },
                 },
               },
             },
           },
-        },
-        include: {
-          products: true,
-        },
+          include: {
+            products: true,
+          },
+        });
+      }
+
+      // Initialize an empty array for recommendations
+      let recommendations : any[] = [];
+
+      // Asynchronously fetch recommendations after adding a product to the cart
+      await fetch('https://recommendv-68e7e51ae774.herokuapp.com/recommendations', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ productId: input.productId }),
+      })
+      .then(response => response.json())
+      .then(fetchedRecommendations => {
+        // Assign the fetched recommendations to the variable
+        recommendations = fetchedRecommendations;
+        console.log('Fetched Recommendations:', recommendations);
+      })
+      .catch(error => {
+        console.error('Error fetching recommendations:', error);
       });
+
+      // Response after adding the product to the cart, including recommendations
+      return {
+        success: true,
+        message: "Product added to cart successfully",
+        recommendations: recommendations, // Include the recommendations in the response
+      };
     }),
 
   get: protectedProcedure.query(async ({ ctx }) => {
-    return await ctx.db.cart.findUnique({
+    const cart = await ctx.db.cart.findUnique({
       where: {
         userId: ctx.session.user.id,
       },
@@ -72,6 +242,7 @@ export const cartRouter = createTRPCRouter({
         products: true,
       },
     });
+    return cart;
   }),
 
   decrement: protectedProcedure
@@ -95,8 +266,9 @@ export const cartRouter = createTRPCRouter({
           },
         },
       });
+
       if (product.quantity <= 1) {
-        return await ctx.db.cart.update({
+        await ctx.db.cart.update({
           where: { userId: ctx.session.user.id },
           data: {
             products: {
@@ -112,30 +284,34 @@ export const cartRouter = createTRPCRouter({
             products: true,
           },
         });
-      }
-
-      return await ctx.db.cart.update({
-        where: { userId: ctx.session.user.id },
-        data: {
-          products: {
-            update: {
-              where: {
-                product_cart_unique: {
-                  cartId: cart.id,
-                  productId: input.productId,
+      } else {
+        await ctx.db.cart.update({
+          where: { userId: ctx.session.user.id },
+          data: {
+            products: {
+              update: {
+                where: {
+                  product_cart_unique: {
+                    cartId: cart.id,
+                    productId: input.productId,
+                  },
                 },
-              },
-              data: {
-                quantity: {
-                  decrement: 1,
+                data: {
+                  quantity: {
+                    decrement: 1,
+                  },
                 },
               },
             },
           },
-        },
-        include: {
-          products: true,
-        },
-      });
+          include: {
+            products: true,
+          },
+        });
+      }
+      return {
+        success: true,
+        message: "Product quantity decremented successfully",
+      };
     }),
 });
