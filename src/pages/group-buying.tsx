@@ -26,7 +26,7 @@ export default function Household() {
         </button>
         <br />
         <br />
-        <h1 className="pb-4">Household supplies </h1>
+        <h1 className="pb-4">Group Buying Products</h1>
       </div>
 
       <div className={styles.container}>

@@ -3,14 +3,14 @@ import { hash } from "bcrypt";
 import { faker } from "@faker-js/faker/locale/en";
 import inquirer from "inquirer";
 
-const prisma = new PrismaClient({ log: ["query"] });
+const prisma = new PrismaClient();
 
 // we need this to make sure that the random lang lat is in the area of Burydah to make it easier to test the map
 const BURYDAH_LANG_LAT_AREA = [
   [43.85729725328529, 26.391841766523566],
   [43.9184087034806, 26.247823472840608],
   [44.03307850328529, 26.312469212908553],
-  [43.958234142933726, 26.428740662093183],     
+  [43.958234142933726, 26.428740662093183],
 ] as [number, number][];
 
 function getRandomLangLat() {
@@ -406,4 +406,60 @@ const seed = async () => {
   );
 };
 
-void seed();
+const seedGroupBuy = async () => {
+  const category = await prisma.subcategory.findFirstOrThrow({
+    include: { Category: true },
+  });
+  const store = await prisma.store.findFirstOrThrow();
+
+  // temp data
+  const data: {
+    image: string[];
+    price: number;
+    name: string;
+  }[] = [];
+
+  for (const product of data) {
+    const quanity = faker.number.int({ min: 10, max: 100 });
+    const prod = await prisma.product.create({
+      data: {
+        name: product.name,
+        price: product.price,
+        description: "",
+        storeId: store.id,
+        subcategoryId: category.id,
+        group_buy_end: faker.date.future(),
+        is_group_buy: true,
+        required_qty: quanity,
+        images: {
+          createMany: {
+            data: product.image.map((url) => ({ url })),
+          },
+        },
+      },
+    });
+    const orderdQuanity = faker.number.int({ min: 1, max: quanity });
+    await prisma.order.create({
+      data: {
+        userId: "clun24jo600046rx398rlg9wu",
+        addressId: "clun24jo600056rx34kgavalq",
+        deliveryAmount: 30,
+        status: "PAID",
+        totalAmount: product.price * orderdQuanity + 30,
+        productOrder: {
+          create: {
+            price: product.price,
+            quantity: orderdQuanity,
+            productId: prod.id,
+          },
+        },
+      },
+    });
+  }
+};
+
+if (process.argv.includes("--group-buy")) {
+  void seedGroupBuy();
+} else {
+  void seed();
+}

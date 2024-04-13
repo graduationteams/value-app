@@ -8,7 +8,7 @@ export const productRouter = createTRPCRouter({
     .input(
       z.object({
         name: z.string().min(3),
-        description: z.string().min(3),
+        description: z.string(),
         price: z.number().positive(),
         images: z.array(z.string()),
         categoryID: z.string(),

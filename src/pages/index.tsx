@@ -221,7 +221,7 @@ export default function Home() {
         <h1>Group Buying</h1>
         <div className="flex flex-shrink-0 gap-2 overflow-scroll">
           {groupBuying.data?.map((product) => (
-            <div key={product.id} className="flex-shrink-0">
+            <div key={product.id} className="mt-auto flex-shrink-0">
               <ProductCard
                 id={product.id}
                 storeName={product.Store.name}
