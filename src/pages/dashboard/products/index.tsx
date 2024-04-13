@@ -30,6 +30,12 @@ import {
   DropdownMenuLabel,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { Progress } from "@/components/ui/progress";
+import {
+  HoverCard,
+  HoverCardContent,
+  HoverCardTrigger,
+} from "@/components/ui/hover-card";
 
 function Products() {
   const products = api.store.products.useQuery();
@@ -106,7 +112,11 @@ function Products() {
                     </TableCell>
                     <TableCell>
                       <Badge variant="outline">
-                        {product.status === "HIDDEN" ? "Draft" : "Active"}
+                        {product.is_group_buy
+                          ? product.group_buy_status
+                          : product.status === "HIDDEN"
+                            ? "Draft"
+                            : "Active"}
                       </Badge>
                     </TableCell>
                     <TableCell className="hidden md:table-cell">
@@ -119,9 +129,36 @@ function Products() {
                       }).format(product.price)}
                     </TableCell>
                     <TableCell className="hidden md:table-cell">
-                      {product.productOrder.reduce(
-                        (acc, curr) => acc + curr.quantity,
-                        0,
+                      {product.is_group_buy ? (
+                        <HoverCard>
+                          <HoverCardTrigger>
+                            <Progress
+                              value={
+                                (product.productOrder.reduce((acc, curr) => {
+                                  return acc + curr.quantity;
+                                }, 0) /
+                                  (product.required_qty ?? 1)) *
+                                100
+                              }
+                            />
+                          </HoverCardTrigger>
+                          <HoverCardContent>
+                            <div>
+                              <p>
+                                {product.productOrder.reduce(
+                                  (acc, curr) => acc + curr.quantity,
+                                  0,
+                                )}
+                                &nbsp; / {product.required_qty} Orders
+                              </p>
+                            </div>
+                          </HoverCardContent>
+                        </HoverCard>
+                      ) : (
+                        product.productOrder.reduce(
+                          (acc, curr) => acc + curr.quantity,
+                          0,
+                        )
                       )}
                     </TableCell>
                     <TableCell>
@@ -150,6 +187,7 @@ function Products() {
                           <DropdownMenuItem
                             onClick={() => {
                               if (updateProductStatus.isLoading) return;
+                              if (product.is_group_buy) return;
                               updateProductStatus.mutate({
                                 id: product.id,
                                 status:

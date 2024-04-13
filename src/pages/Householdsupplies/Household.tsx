@@ -14,19 +14,17 @@ export default function Household() {
 
   return (
     <>
-    <div className={styles.header}>
-      <br />
-      <br />
-    <button >
-            <img src="/assets/icons/back.png" alt="" />
-          </button>
-          <br />
-          <br />
-          <h1>Household supplies </h1>
-          <div className={styles.categoriesContainer}>
-            
+      <div className={styles.header}>
+        <br />
+        <br />
+        <button>
+          <img src="/assets/icons/back.png" alt="" />
+        </button>
+        <br />
+        <br />
+        <h1>Household supplies </h1>
+        <div className={styles.categoriesContainer}>
           <div className={styles.scrollablewrapper}>
-            
             <div className={styles.categories}>
               <button
                 className={`${styles.categoryButton} ${
@@ -79,143 +77,139 @@ export default function Household() {
             </div>
           </div>
           <br />
-
-          </div>
-    </div>
-
-
-  <div className={styles.container}>
-   
-      <div className={styles.productCardsContainer}>
-        <ProductCard
-          AdditionalInfo="Dishwasher"
-          Price={20}
-          productName="Fairy"
-          productImage="https://placehold.it/200x200"
-          StoreLogo="https://placehold.it/200x200"
-          storeName="StoreName"
-          id="1"
-        />
-        <ProductCard
-          AdditionalInfo="Dishwasher"
-          Price={20}
-          productName="Fairy"
-          productImage="https://placehold.it/200x200"
-          StoreLogo="https://placehold.it/200x200"
-          storeName="StoreName"
-          id="1"
-        />
-        <ProductCard
-          AdditionalInfo="Dishwasher"
-          Price={20}
-          productName="Fairy"
-          productImage="https://placehold.it/200x200"
-          StoreLogo="https://placehold.it/200x200"
-          storeName="StoreName"
-          id="1"
-        />
-        <ProductCard
-          AdditionalInfo="Dishwasher"
-          Price={20}
-          productName="Fairy"
-          productImage="https://placehold.it/200x200"
-          StoreLogo="https://placehold.it/200x200"
-          storeName="StoreName"
-          id="1"
-        />
-        <ProductCard
-          AdditionalInfo="Dishwasher"
-          Price={20}
-          productName="Fairy"
-          productImage="https://placehold.it/200x200"
-          StoreLogo="https://placehold.it/200x200"
-          storeName="StoreName"
-          id="1"
-        />
-        <ProductCard
-          AdditionalInfo="Dishwasher"
-          Price={20}
-          productName="Fairy"
-          productImage="https://placehold.it/200x200"
-          StoreLogo="https://placehold.it/200x200"
-          storeName="StoreName"
-          id="1"
-        />
-        <ProductCard
-          AdditionalInfo="Dishwasher"
-          Price={20}
-          productName="Fairy"
-          productImage="https://placehold.it/200x200"
-          StoreLogo="https://placehold.it/200x200"
-          storeName="StoreName"
-          id="1"
-        />
-        <ProductCard
-          AdditionalInfo="Dishwasher"
-          Price={20}
-          productName="Fairy"
-          productImage="https://placehold.it/200x200"
-          StoreLogo="https://placehold.it/200x200"
-          storeName="StoreName"
-          id="1"
-        />
-        <ProductCard
-          AdditionalInfo="Dishwasher"
-          Price={20}
-          productName="Fairy"
-          productImage="https://placehold.it/200x200"
-          StoreLogo="https://placehold.it/200x200"
-          storeName="StoreName"
-          id="1"
-        />
-        <ProductCard
-          AdditionalInfo="Dishwasher"
-          Price={20}
-          productName="Fairy"
-          productImage="https://placehold.it/200x200"
-          StoreLogo="https://placehold.it/200x200"
-          storeName="StoreName"
-          id="1"
-        />
-        <ProductCard
-          AdditionalInfo="Dishwasher"
-          Price={20}
-          productName="Fairy"
-          productImage="https://placehold.it/200x200"
-          StoreLogo="https://placehold.it/200x200"
-          storeName="StoreName"
-          id="1"
-        />
-        <ProductCard
-          AdditionalInfo="Dishwasher"
-          Price={20}
-          productName="Fairy"
-          productImage="https://placehold.it/200x200"
-          StoreLogo="https://placehold.it/200x200"
-          storeName="StoreName"
-          id="1"
-        />
-        <ProductCard
-          AdditionalInfo="Dishwasher"
-          Price={20}
-          productName="Fairy"
-          productImage="https://placehold.it/200x200"
-          StoreLogo="https://placehold.it/200x200"
-          storeName="StoreName"
-          id="1"
-        />
-        <ProductCard
-          AdditionalInfo="Dishwasher"
-          Price={20}
-          productName="Fairy"
-          productImage="https://placehold.it/200x200"
-          StoreLogo="https://placehold.it/200x200"
-          storeName="StoreName"
-          id="1"
-        />
+        </div>
       </div>
-    </div>
-    </>
 
+      <div className={styles.container}>
+        <div className={styles.productCardsContainer}>
+          <ProductCard
+            AdditionalInfo="Dishwasher"
+            Price={20}
+            productName="Fairy"
+            productImages={["https://placehold.it/200x200"]}
+            StoreLogo="https://placehold.it/200x200"
+            storeName="StoreName"
+            id="1"
+          />
+          <ProductCard
+            AdditionalInfo="Dishwasher"
+            Price={20}
+            productName="Fairy"
+            productImages={["https://placehold.it/200x200"]}
+            StoreLogo="https://placehold.it/200x200"
+            storeName="StoreName"
+            id="1"
+          />
+          <ProductCard
+            AdditionalInfo="Dishwasher"
+            Price={20}
+            productName="Fairy"
+            productImages={["https://placehold.it/200x200"]}
+            StoreLogo="https://placehold.it/200x200"
+            storeName="StoreName"
+            id="1"
+          />
+          <ProductCard
+            AdditionalInfo="Dishwasher"
+            Price={20}
+            productName="Fairy"
+            productImages={["https://placehold.it/200x200"]}
+            StoreLogo="https://placehold.it/200x200"
+            storeName="StoreName"
+            id="1"
+          />
+          <ProductCard
+            AdditionalInfo="Dishwasher"
+            Price={20}
+            productName="Fairy"
+            productImages={["https://placehold.it/200x200"]}
+            StoreLogo="https://placehold.it/200x200"
+            storeName="StoreName"
+            id="1"
+          />
+          <ProductCard
+            AdditionalInfo="Dishwasher"
+            Price={20}
+            productName="Fairy"
+            productImages={["https://placehold.it/200x200"]}
+            StoreLogo="https://placehold.it/200x200"
+            storeName="StoreName"
+            id="1"
+          />
+          <ProductCard
+            AdditionalInfo="Dishwasher"
+            Price={20}
+            productName="Fairy"
+            productImages={["https://placehold.it/200x200"]}
+            StoreLogo="https://placehold.it/200x200"
+            storeName="StoreName"
+            id="1"
+          />
+          <ProductCard
+            AdditionalInfo="Dishwasher"
+            Price={20}
+            productName="Fairy"
+            productImages={["https://placehold.it/200x200"]}
+            StoreLogo="https://placehold.it/200x200"
+            storeName="StoreName"
+            id="1"
+          />
+          <ProductCard
+            AdditionalInfo="Dishwasher"
+            Price={20}
+            productName="Fairy"
+            productImages={["https://placehold.it/200x200"]}
+            StoreLogo="https://placehold.it/200x200"
+            storeName="StoreName"
+            id="1"
+          />
+          <ProductCard
+            AdditionalInfo="Dishwasher"
+            Price={20}
+            productName="Fairy"
+            productImages={["https://placehold.it/200x200"]}
+            StoreLogo="https://placehold.it/200x200"
+            storeName="StoreName"
+            id="1"
+          />
+          <ProductCard
+            AdditionalInfo="Dishwasher"
+            Price={20}
+            productName="Fairy"
+            productImages={["https://placehold.it/200x200"]}
+            StoreLogo="https://placehold.it/200x200"
+            storeName="StoreName"
+            id="1"
+          />
+          <ProductCard
+            AdditionalInfo="Dishwasher"
+            Price={20}
+            productName="Fairy"
+            productImages={["https://placehold.it/200x200"]}
+            StoreLogo="https://placehold.it/200x200"
+            storeName="StoreName"
+            id="1"
+          />
+          <ProductCard
+            AdditionalInfo="Dishwasher"
+            Price={20}
+            productName="Fairy"
+            productImages={["https://placehold.it/200x200"]}
+            StoreLogo="https://placehold.it/200x200"
+            storeName="StoreName"
+            id="1"
+          />
+          <ProductCard
+            AdditionalInfo="Dishwasher"
+            Price={20}
+            productName="Fairy"
+            productImages={["https://placehold.it/200x200"]}
+            StoreLogo="https://placehold.it/200x200"
+            storeName="StoreName"
+            id="1"
+          />
+        </div>
+      </div>
+    </>
   );
 }

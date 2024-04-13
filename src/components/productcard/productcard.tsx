@@ -1,22 +1,34 @@
 import React, { useState } from "react";
 import { MyDrawer } from "../Bottomsheet/bottomsheet";
 import Styles from "./productcard.module.css";
+import useEmblaCarousel from "embla-carousel-react";
+import { Progress } from "../ui/progress";
+import { formatDistance, formatRelative } from "date-fns";
+
 function ProductCard({
   id,
   storeName,
   productName,
-  productImage,
+  productImages,
   AdditionalInfo,
   Price,
   StoreLogo,
+  groupBuyCurrentOrders,
+  groupBuyEndDateTime,
+  groupBuyRequiredOrders,
+  isGroupBuying = false,
 }: {
   id: string;
   storeName: string;
   productName: string;
-  productImage: string;
+  productImages: string[];
   AdditionalInfo: string;
   Price: number;
   StoreLogo: string;
+  isGroupBuying?: boolean;
+  groupBuyCurrentOrders?: number | undefined;
+  groupBuyEndDateTime?: Date;
+  groupBuyRequiredOrders?: number;
 }) {
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
   const [quantity, setQuantity] = useState(0);
@@ -33,14 +45,15 @@ function ProductCard({
     setQuantity((prevQuantity) => (prevQuantity > 0 ? prevQuantity - 1 : 0));
   };
 
+  const [emblaRef] = useEmblaCarousel({ loop: false });
   return (
     <>
-      <div className="h-58 bg-white flex w-40 flex-col items-center overflow-hidden rounded-lg font-sans shadow-lg">
+      <div className="h-58 bg-white mt-auto flex w-40 flex-col items-center overflow-hidden rounded-lg font-sans shadow-lg">
         <div className="w-full cursor-pointer" onClick={handleTopSectionClick}>
           {/* Top Section: Product Image and Information */}
           <img
             className="w-full object-cover"
-            src={productImage}
+            src={productImages[0] ?? "https://placehold.it/200x200"}
             alt="Product"
             style={{ height: "173px" }}
           />
@@ -52,7 +65,23 @@ function ProductCard({
               {Price} sar
             </div>
           </div>
+          {isGroupBuying ? (
+            <div className="px-4 pb-4">
+              <Progress
+                value={
+                  ((groupBuyCurrentOrders ?? 0) /
+                    (groupBuyRequiredOrders ?? 1)) *
+                  100
+                }
+              />
+              <p className="text-medium">
+                Ends in&nbsp;
+                {formatDistance(groupBuyEndDateTime ?? "", new Date(), {})}
+              </p>
+            </div>
+          ) : null}
         </div>
+
         {/* Bottom Section: Quantity Counter */}
         <div className="w-full border-t border-dashed border-gray-200"></div>
         <div className="flex w-full items-center justify-center px-4 py-2">
@@ -108,11 +137,23 @@ function ProductCard({
         </div>
         <div className={Styles.content}>
           <div className="w-full">
-            <img
-              className="w-full object-cover"
-              src={productImage}
-              alt="Product"
-            />
+            <div ref={emblaRef} className="overflow-hidden">
+              <div className="flex w-full gap-2">
+                {productImages.map((img, index) => (
+                  <div
+                    key={index}
+                    className="flex w-full min-w-0 flex-shrink-0 flex-grow-0 basis-full justify-center overflow-x-hidden"
+                  >
+                    <img
+                      src={img}
+                      alt="Product"
+                      className="max-h-60 max-w-60 object-contain"
+                    />
+                  </div>
+                ))}
+              </div>
+            </div>
+
             <br />
             <p className={Styles.bold}>{productName}</p>
             <p className={Styles.light}>{AdditionalInfo}</p>

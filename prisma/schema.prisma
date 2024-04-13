@@ -152,14 +152,24 @@ enum ProductStatus {
     VISIBLE
 }
 
+enum ProductGroupBuyStatus {
+    OPEN
+    FINISHED
+    CANCELLED
+}
+
 model Product {
-    id            String         @id @default(cuid())
-    name          String
-    status        ProductStatus  @default(VISIBLE)
-    description   String
-    price         Float
-    images        Image[]
-    // Removed direct relation to Category
+    id               String                @id @default(cuid())
+    name             String
+    status           ProductStatus         @default(VISIBLE)
+    description      String
+    price            Float
+    images           Image[]
+    is_group_buy     Boolean               @default(false)
+    required_qty     Int?
+    group_buy_status ProductGroupBuyStatus @default(OPEN)
+    group_buy_end    DateTime?
+
     subcategoryId String
     Subcategory   Subcategory    @relation(fields: [subcategoryId], references: [id])
     Store         Store          @relation(fields: [storeId], references: [id])
@@ -170,6 +180,7 @@ model Product {
 
 enum OrderStatus {
     CREATED
+    PAID
     CONFIRMED
     DELIVERED
     CANCELLED

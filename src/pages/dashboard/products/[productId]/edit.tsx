@@ -1,5 +1,5 @@
 import Image from "next/image";
-import { ChevronLeft, Upload } from "lucide-react";
+import { CalendarIcon, ChevronLeft, Upload } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -14,7 +14,6 @@ import { useRouter } from "next/router";
 import DashboardNav from "@/components/dashboard/DashboardNav";
 import { api, type RouterOutputs } from "@/utils/api";
 import { useState } from "react";
-import MultipleSelector, { type Option } from "@/components/ui/multiSelect";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -34,6 +33,14 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
+import { cn } from "@/lib/utils";
+import { format } from "date-fns";
+import { Calendar } from "@/components/ui/calendar";
 
 function EditProduct({
   product,
@@ -50,6 +57,11 @@ function EditProduct({
   const [newPrice, setNewPrice] = useState(product.price);
 
   const [deleteImageIndex, setDeleteImageDialog] = useState(-1);
+
+  const [requiredOrders, setRequiredOrders] = useState(product.required_qty);
+  const [endDate, setEndDate] = useState<Date | undefined>(
+    product.group_buy_end ?? undefined,
+  );
 
   const [images, setImages] = useState<
     { type: "url" | "base64"; value: string }[]
@@ -108,6 +120,8 @@ function EditProduct({
                         description: newDescription,
                         images: images,
                         price: newPrice,
+                        endDate: endDate,
+                        requiredOrders: requiredOrders ?? undefined,
                       });
                     }}
                   >
@@ -151,16 +165,7 @@ function EditProduct({
                             className="min-h-32"
                           />
                         </div>
-                      </div>
-                    </CardContent>
-                  </Card>
-                  <Card>
-                    <CardHeader>
-                      <CardTitle>Product Category</CardTitle>
-                    </CardHeader>
-                    <CardContent>
-                      <div className="grid gap-6 sm:grid-cols-3">
-                        <div className="col-span-2 grid gap-3">
+                        <div className="grid gap-3">
                           <Label htmlFor="category">Category</Label>
                           <Select
                             value={newCategory}
@@ -193,6 +198,65 @@ function EditProduct({
                               ))}
                             </SelectContent>
                           </Select>
+                        </div>
+                      </div>
+                    </CardContent>
+                  </Card>
+                  <Card>
+                    <CardHeader>
+                      <CardTitle>Group Buying</CardTitle>
+                    </CardHeader>
+                    <CardContent>
+                      <div className="grid gap-6 sm:grid-cols-3">
+                        <div className="col-span-2 grid gap-3">
+                          <Label htmlFor="requiredParticipants">
+                            Required Orders Count
+                          </Label>
+                          <Input
+                            id="requiredParticipants"
+                            type="number"
+                            className="w-full"
+                            disabled={!product.is_group_buy}
+                            value={requiredOrders ?? 0}
+                            onChange={(e) =>
+                              setRequiredOrders(Number(e.target.value))
+                            }
+                          />
+                        </div>
+                        <div className="col-span-2 grid gap-3">
+                          <Label>Group Buy End Date</Label>
+                          <Popover>
+                            <PopoverTrigger asChild>
+                              <Button
+                                variant={"outline"}
+                                className={cn(
+                                  "w-[280px] justify-start text-left font-normal",
+                                  !endDate && "text-gray-500",
+                                  !product.is_group_buy &&
+                                    "!pointer-events-auto cursor-not-allowed",
+                                )}
+                                disabled={!product.is_group_buy}
+                              >
+                                <CalendarIcon className="mr-2 h-4 w-4" />
+                                {endDate ? (
+                                  format(endDate, "PPP")
+                                ) : (
+                                  <span>Pick a date</span>
+                                )}
+                              </Button>
+                            </PopoverTrigger>
+                            <PopoverContent className="w-auto p-0">
+                              <Calendar
+                                mode="single"
+                                selected={endDate ?? undefined}
+                                onSelect={(date) => {
+                                  setEndDate(date);
+                                }}
+                                initialFocus
+                                disabled={{ before: new Date() }}
+                              />
+                            </PopoverContent>
+                          </Popover>
                         </div>
                       </div>
                     </CardContent>
@@ -254,7 +318,13 @@ function EditProduct({
                 </div>
               </div>
               <div className="flex items-center justify-center gap-2 md:hidden">
-                <Button variant="outline" size="sm">
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={() => {
+                    router.back();
+                  }}
+                >
                   Discard
                 </Button>
                 <Button
@@ -267,6 +337,8 @@ function EditProduct({
                       description: newDescription,
                       images: images,
                       price: newPrice,
+                      endDate: endDate,
+                      requiredOrders: requiredOrders ?? undefined,
                     });
                   }}
                 >

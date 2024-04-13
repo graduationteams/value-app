@@ -6,7 +6,7 @@ export default function EmblaCarousel() {
   const [emblaRef] = useEmblaCarousel({ loop: true });
 
   return (
-    <div className="min-h-32 overflow-x-hidden pt-4" ref={emblaRef}>
+    <div className="min-h-40 overflow-x-hidden pt-4" ref={emblaRef}>
       <div className="flex">
         <div className=" w-full min-w-0 flex-shrink-0 flex-grow-0 basis-full overflow-x-hidden">
           <Image

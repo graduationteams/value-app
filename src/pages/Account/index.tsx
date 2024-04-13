@@ -2,7 +2,6 @@ import React, { useState } from "react";
 import { MyDrawer } from "../../components/Bottomsheet/bottomsheet";
 import styles from "./AccountPage.module.css";
 import AdressSelector from "@/components/adress-selector";
-import Navbar from "@/components/Navbar/Navbar";
 
 export default function AccountPage() {
   const [isAccountInfoDrawerOpen, setIsAccountInfoDrawerOpen] = useState(false);
@@ -17,7 +16,6 @@ export default function AccountPage() {
   };
 
   return (
-    
     <div className={styles.container}>
       <br />
       <br />
@@ -28,19 +26,16 @@ export default function AccountPage() {
       <br />
 
       <div className={styles.rectangle}>
-
-        
         <div className={styles.pfp}>
           <img src="/images/pfp.png" alt="" />
           <p className={styles.profileText}>Sufian alfuraydi</p>
         </div>
         <p className={styles.number}>+966 51 123 1234</p>
-        </div>
+      </div>
 
       <br />
-      
-      <div className={styles.rectangle}>
 
+      <div className={styles.rectangle}>
         <a href="#" className={styles.page} onClick={handleAccountInfoClick}>
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -69,40 +64,38 @@ export default function AccountPage() {
           <h2 className={styles.h2}>Addresses</h2>
         </a>
 
-      {/* Drawer for Account Info */}
-      <MyDrawer
-        isOpen={isAccountInfoDrawerOpen}
-        onclose={() => setIsAccountInfoDrawerOpen(false)}
-      >
-        <div className={styles.drawerContent}>
-          <h1 className={styles.title}>Account info</h1>
-          <br />
-          <div className={styles.imageContainer}>
-            <img
-              src="/images/pfp.png"
-              alt=""
-              className={styles.centeredImage}
-            />
+        {/* Drawer for Account Info */}
+        <MyDrawer
+          isOpen={isAccountInfoDrawerOpen}
+          onclose={() => setIsAccountInfoDrawerOpen(false)}
+        >
+          <div className={styles.drawerContent}>
+            <h1 className={styles.title}>Account info</h1>
+            <br />
+            <div className={styles.imageContainer}>
+              <img
+                src="/images/pfp.png"
+                alt=""
+                className={styles.centeredImage}
+              />
+            </div>
+            <br />
+            <h2 className={styles.title2}>full name</h2>
+            <div className={styles.rectangle2}>
+              <p>Sufian</p>
+            </div>
+            <br />
+            <h2 className={styles.title2}>e-mail</h2>
+            <div className={styles.rectangle2}>
+              <p>sufian@gmail.com</p>
+            </div>
           </div>
-          <br />
-          <h2 className={styles.title2}>full name</h2>
-          <div className={styles.rectangle2}>
-            <p>Sufian</p>
-          </div>
-          <br />
-          <h2 className={styles.title2}>e-mail</h2>
-          <div className={styles.rectangle2}>
-            <p>sufian@gmail.com</p>
-          </div>
-        </div>
-      </MyDrawer>
+        </MyDrawer>
 
-      <AdressSelector
-        isAddressesDrawerOpen={isAddressesDrawerOpen}
-        setIsAddressesDrawerOpen={setIsAddressesDrawerOpen}
-      />
-
-    
+        <AdressSelector
+          isAddressesDrawerOpen={isAddressesDrawerOpen}
+          setIsAddressesDrawerOpen={setIsAddressesDrawerOpen}
+        />
       </div>
       <br />
       <div className={styles.rectangle}>
@@ -152,8 +145,6 @@ export default function AccountPage() {
           <h2 className={styles.btn2}>Log out</h2>
         </a>
       </div>
-      <Navbar />
-
     </div>
   );
 }

@@ -1,6 +1,7 @@
 import { z } from "zod";
 import { createTRPCRouter, protectedProcedure } from "../trpc";
 import { TRPCError } from "@trpc/server";
+import type { PrismaClient } from "@prisma/client";
 
 // TODO: calculate delivery amount based on the distance between the store and the user address
 const DELIVERY_AMOUNT = 30;
@@ -38,6 +39,24 @@ export const orderRouter = createTRPCRouter({
 
       let total = 0;
       for (const cartProduct of cart.products) {
+        if (cartProduct.product.is_group_buy) {
+          const participants =
+            (
+              await ctx.db.productOrder.aggregate({
+                where: {
+                  productId: cartProduct.productId,
+                },
+                _sum: { quantity: true },
+              })
+            )._sum.quantity ?? 0;
+          const tobuy = cartProduct.quantity;
+          if (participants + tobuy > (cartProduct.product.required_qty ?? 0)) {
+            throw new TRPCError({
+              code: "BAD_REQUEST",
+              message: "Cant buy more than required qty for group buy product",
+            });
+          }
+        }
         total += cartProduct.product.price * cartProduct.quantity;
       }
       const [order] = await ctx.db.$transaction([
@@ -83,10 +102,13 @@ export const orderRouter = createTRPCRouter({
       }),
     )
     .mutation(async ({ ctx, input }) => {
-      //this is route will be called as callback from the payment gateway after the payment is made
+      // this is route will be called as callback from the payment gateway after the payment is made
       const order = await ctx.db.order.findUnique({
         where: {
           id: input.orderID,
+        },
+        include: {
+          productOrder: { include: { product: true } },
         },
       });
       if (!order) {
@@ -104,17 +126,45 @@ export const orderRouter = createTRPCRouter({
 
       //TODO: confirm the payment from the payment gateway (for now we will just assume the payment is confirmed)
 
-      // TODO: assign a driver to the order and send a notification to the driver
-
-      const updatedOrder = await ctx.db.order.update({
+      await ctx.db.order.update({
         where: {
           id: input.orderID,
         },
         data: {
-          status: "CONFIRMED",
+          status: "PAID",
         },
       });
-      return updatedOrder;
+
+      let isGroupBuy = false;
+
+      for (const productOrder of order.productOrder) {
+        if (productOrder.product.is_group_buy) {
+          isGroupBuy = true;
+          const participants =
+            (
+              await ctx.db.productOrder.aggregate({
+                where: {
+                  productId: productOrder.productId,
+                },
+                _sum: { quantity: true },
+              })
+            )._sum.quantity ?? 0;
+          if (participants >= (productOrder.product.required_qty ?? 0)) {
+            // update all the product orders to confirmed
+            await confirmGroupBuy(productOrder.productId, ctx.db);
+          }
+        }
+      }
+      if (!isGroupBuy) {
+        return ctx.db.order.update({
+          where: {
+            id: input.orderID,
+          },
+          data: {
+            status: "CONFIRMED",
+          },
+        });
+      }
     }),
   confirmDelivery: protectedProcedure
     .input(
@@ -215,3 +265,40 @@ export const orderRouter = createTRPCRouter({
       });
     }),
 });
+
+async function confirmGroupBuy(productID: string, db: PrismaClient) {
+  const orders = await db.productOrder.findMany({
+    where: {
+      productId: productID,
+      product: {
+        is_group_buy: true,
+      },
+    },
+    include: {
+      order: true,
+      product: true,
+    },
+  });
+  if (orders.length === 0) {
+    return;
+  }
+  const ordersSum = orders.reduce((acc, order) => {
+    return acc + order.quantity;
+  }, 0);
+
+  if (ordersSum < (orders[0]!.product.required_qty ?? 0)) {
+    return;
+  }
+
+  await db.order.updateMany({
+    where: {
+      id: {
+        in: orders.map((order) => order.orderId),
+      },
+      status: "PAID",
+    },
+    data: {
+      status: "CONFIRMED",
+    },
+  });
+}

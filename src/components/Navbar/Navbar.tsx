@@ -11,6 +11,8 @@ const Navbar = () => {
   const router = useRouter();
   const isActive = (href: string) => router.pathname === href;
 
+  if (!["/", "/basket", "/orders", "/Account"].includes(router.pathname))
+    return null;
   return (
     <div className="fixed bottom-0 h-16 w-full bg-[#FFFFFF] px-4">
       <nav className="grid grid-cols-4 gap-4 py-2">

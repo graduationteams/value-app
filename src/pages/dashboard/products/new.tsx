@@ -1,5 +1,5 @@
 import Image from "next/image";
-import { ChevronLeft, Upload } from "lucide-react";
+import { CalendarIcon, ChevronLeft, Upload } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -14,7 +14,7 @@ import { useRouter } from "next/router";
 import DashboardNav from "@/components/dashboard/DashboardNav";
 import { api, type RouterOutputs } from "@/utils/api";
 import { useState } from "react";
-import MultipleSelector, { type Option } from "@/components/ui/multiSelect";
+
 import {
   AlertDialog,
   AlertDialogAction,
@@ -34,6 +34,14 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
+import { cn } from "@/lib/utils";
+import { format } from "date-fns";
+import { Calendar } from "@/components/ui/calendar";
 
 function NewProduct({
   categories,
@@ -46,6 +54,8 @@ function NewProduct({
   const [Description, setDescription] = useState("");
   const [Category, setCategory] = useState<string>("");
   const [Price, setPrice] = useState(0);
+  const [requiredOrders, setRequiredOrders] = useState(0);
+  const [endDate, setEndDate] = useState<Date | undefined>();
 
   const [deleteImageIndex, setDeleteImageDialog] = useState(-1);
 
@@ -58,6 +68,37 @@ function NewProduct({
       void router.push("/dashboard/products");
     },
   });
+
+  function onSave() {
+    if (!Name || !Description || !Category || !Price || !images.length) {
+      alert("Please fill in all fields");
+      return;
+    }
+    let isGroupBuying = false;
+    if (requiredOrders > 0 || endDate) {
+      isGroupBuying = true;
+    }
+
+    if (requiredOrders > 0 && !endDate) {
+      alert("end date is required for group buying product");
+      return;
+    }
+    if (endDate && requiredOrders <= 0) {
+      alert("required orders is required for group buying product");
+      return;
+    }
+
+    createProduct.mutate({
+      categoryID: Category,
+      description: Description,
+      images: images.map((image) => image.value), // since all images are base64 on creation
+      name: Name,
+      price: Price,
+      isGroupBuying: isGroupBuying,
+      requiredParticipants: isGroupBuying ? requiredOrders : undefined,
+      endDate: isGroupBuying ? endDate : undefined,
+    });
+  }
 
   return (
     <>
@@ -91,18 +132,7 @@ function NewProduct({
                   >
                     Discard
                   </Button>
-                  <Button
-                    size="sm"
-                    onClick={() => {
-                      createProduct.mutate({
-                        categoryID: Category,
-                        description: Description,
-                        images: images.map((image) => image.value), // since all images are base64 on creation
-                        name: Name,
-                        price: Price,
-                      });
-                    }}
-                  >
+                  <Button size="sm" onClick={onSave}>
                     Save Product
                   </Button>
                 </div>
@@ -141,16 +171,7 @@ function NewProduct({
                             className="min-h-32"
                           />
                         </div>
-                      </div>
-                    </CardContent>
-                  </Card>
-                  <Card>
-                    <CardHeader>
-                      <CardTitle>Product Category</CardTitle>
-                    </CardHeader>
-                    <CardContent>
-                      <div className="grid gap-6 sm:grid-cols-3">
-                        <div className="col-span-2 grid gap-3">
+                        <div className="grid gap-3">
                           <Label htmlFor="category">Category</Label>
                           <Select
                             value={Category}
@@ -183,6 +204,61 @@ function NewProduct({
                               ))}
                             </SelectContent>
                           </Select>
+                        </div>
+                      </div>
+                    </CardContent>
+                  </Card>
+                  <Card>
+                    <CardHeader>
+                      <CardTitle>Group Buying</CardTitle>
+                    </CardHeader>
+                    <CardContent>
+                      <div className="grid gap-6 sm:grid-cols-3">
+                        <div className="col-span-2 grid gap-3">
+                          <Label htmlFor="requiredParticipants">
+                            Required Orders Count
+                          </Label>
+                          <Input
+                            id="requiredParticipants"
+                            type="number"
+                            className="w-full"
+                            value={requiredOrders}
+                            onChange={(e) =>
+                              setRequiredOrders(Number(e.target.value))
+                            }
+                          />
+                        </div>
+                        <div className="col-span-2 grid gap-3">
+                          <Label>Group Buy End Date</Label>
+                          <Popover>
+                            <PopoverTrigger asChild>
+                              <Button
+                                variant={"outline"}
+                                className={cn(
+                                  "w-[280px] justify-start text-left font-normal",
+                                  !endDate && "text-gray-500",
+                                )}
+                              >
+                                <CalendarIcon className="mr-2 h-4 w-4" />
+                                {endDate ? (
+                                  format(endDate, "PPP")
+                                ) : (
+                                  <span>Pick a date</span>
+                                )}
+                              </Button>
+                            </PopoverTrigger>
+                            <PopoverContent className="w-auto p-0">
+                              <Calendar
+                                mode="single"
+                                selected={endDate ?? undefined}
+                                onSelect={(date) => {
+                                  setEndDate(date);
+                                }}
+                                initialFocus
+                                disabled={{ before: new Date() }}
+                              />
+                            </PopoverContent>
+                          </Popover>
                         </div>
                       </div>
                     </CardContent>
@@ -244,10 +320,18 @@ function NewProduct({
                 </div>
               </div>
               <div className="flex items-center justify-center gap-2 md:hidden">
-                <Button variant="outline" size="sm">
+                <Button
+                  variant="outline"
+                  onClick={() => {
+                    router.back();
+                  }}
+                  size="sm"
+                >
                   Discard
                 </Button>
-                <Button size="sm">Save Product</Button>
+                <Button onClick={onSave} size="sm">
+                  Save Product
+                </Button>
               </div>
             </div>
           </main>
