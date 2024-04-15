@@ -1,0 +1,63 @@
+.header, .container, .checkout{
+    font-family: 'Montserrat-Arabic', sans-serif; /* Apply Montserrat-Arabic font */
+  }
+
+.header{
+    padding-left: 35px;
+    padding-right: 35px;
+    padding-top:45px ;
+    display: flex;
+    justify-content: space-between;
+}
+
+.header > h2{
+    font-size: 24px;
+    font-weight: bold;
+}
+
+.Location{
+    max-width: 50%;
+    min-width: 40%;
+    height: 25px;
+    gap: 10px;
+    border: 1px solid #ccc;
+    border-radius: 20px;
+    font-weight: bold;
+}
+
+.rotate {
+    display: inline-block;
+    transform: rotate(90deg); 
+}
+.container {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start; /* Align content at the top */
+    align-items: center;
+    padding-left: 20px; /* Padding from the left */
+    padding-right: 20px; /* Padding from the right */
+  }
+
+  .productCardsContainer {
+    display: grid;
+    grid-gap: 20px;
+    padding-bottom: 80px;
+    padding-top: 20px;
+  }
+
+
+
+  .checkout{
+    background-color: var(--color-P300);
+    border-radius: 25px;
+    color: aliceblue;
+    max-width: 100%;
+    min-width: 65%;
+    height: 45px;
+    transition: transform 0.9s ease; 
+    position: fixed;
+    bottom: 20px; /* Adjust the distance from the bottom */
+    left: 50%; /* Center horizontally */
+    transform: translateX(-50%);
+      
+  }

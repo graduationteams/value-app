@@ -21,8 +21,10 @@
 }
 .rectangle2 > p {
   font-size: 18px;
-  margin-left: 2%;
-  margin-top: 2%;
+  vertical-align: middle;
+  padding-top: 5px;
+  padding-left: 5px;
+  position: relative;
 }
 
 
@@ -217,3 +219,5 @@ font-size: 18px;
   margin-top: 4px;
   font-size: 15px
 }
+
+
