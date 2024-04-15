@@ -80,6 +80,7 @@ model User {
     password      String?
     emailVerified DateTime?
     image         String?
+    phone         String?
     userType      userType  @default(USER)
     addresses     Address[]
     accounts      Account[]
@@ -143,6 +144,8 @@ model Subcategory {
 model Category {
     id            String        @id @default(cuid())
     name          String
+    image         String
+    image_width   Int?
     subcategories Subcategory[]
     categoryType  CategoryType
 }

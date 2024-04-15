@@ -18,6 +18,8 @@
   gap: 10px;
   border: 2px solid #ccc;
   border-radius: 10px;
+  padding-left: 10px;
+  font-size: 18px;
 }
 .rectangle2 > p {
   font-size: 18px;
@@ -25,6 +27,10 @@
   padding-top: 5px;
   padding-left: 5px;
   position: relative;
+}
+
+.rectangle2:disabled {
+  background-color: rgb(235, 235, 228);
 }
 
 
@@ -36,18 +42,17 @@
 .title2 {
   font-weight: bold;
   font-size: 18px;
-  margin-left: 2%;
 }
 
 
 .rectangle {
   display: flex;
-  flex-direction: column;
   max-width: 150%;
   min-width: 90%;
   gap: 10px;
   border: 2px solid #ccc;
   border-radius: 10px;
+  padding: 10px;
 }
 
 .rectangle > a{
@@ -57,19 +62,15 @@
 
 .pfp {
   display: flex;
-  margin-left: 20px;
-  margin-top: 25px;
+  flex-direction: column;
 }
 
 .profileText {
-margin-left: 10px;
 font-weight: bold;
 font-size: 18px;
 }
 
 .number{
-  margin-left: 70px;
-  margin-top: -25px;
   color: var(--color-B75);
 }
 
@@ -111,11 +112,11 @@ font-size: 18px;
   display: flex;
   flex-direction: column;
   padding: 20px;
+  align-items: center;
+  max-height: 80vh;
+  overflow: scroll;
 }
 
-.title {
-  margin-left: 10px; /* Adjust as needed */
-}
 
 .imageContainer {
   display: flex;
@@ -125,7 +126,6 @@ font-size: 18px;
 .centeredImage {
   width: 70px;
   height: 70px;
-  margin-left: -20px;
 }
 
 

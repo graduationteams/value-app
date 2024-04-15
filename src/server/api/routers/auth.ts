@@ -1,9 +1,9 @@
 import { TRPCError } from "@trpc/server";
-import { hash } from "bcrypt";
+import { compare, hash } from "bcrypt";
 import Cookies from "cookies";
 import { randomUUID } from "crypto";
 import { z } from "zod";
-import { env } from "~/env";
+
 import {
   createTRPCRouter,
   protectedProcedure,
@@ -76,6 +76,9 @@ export const authRouter = createTRPCRouter({
       z.object({
         name: z.string().min(3).nullish(),
         profilePicture: z.string().nullish(),
+        currentPassword: z.string().nullish(),
+        phoneNumber: z.string().nullish(),
+        newPassword: z.string().nullish(),
       }),
     )
     .mutation(async ({ input, ctx }) => {
@@ -83,6 +86,58 @@ export const authRouter = createTRPCRouter({
       if (input.profilePicture) {
         imageUrl = await upload_base64_image(input.profilePicture);
       }
+
+      if (input.phoneNumber) {
+        // validate phone number 10 digits starting with 05
+        if (!/05\d{8}/.test(input.phoneNumber)) {
+          throw new TRPCError({
+            code: "BAD_REQUEST",
+            message: "Invalid phone number",
+          });
+        }
+      }
+
+      let password: string | undefined = undefined;
+      if (input.currentPassword && input.newPassword) {
+        if (input.newPassword.length < 8) {
+          throw new TRPCError({
+            code: "BAD_REQUEST",
+            message: "Password must be at least 8 characters",
+          });
+        }
+        const user = await ctx.db.user.findUnique({
+          where: {
+            id: ctx.session.user.id,
+          },
+        });
+
+        if (!user) {
+          throw new TRPCError({
+            code: "NOT_FOUND",
+            message: "User not found",
+          });
+        }
+        if (!user.password) {
+          throw new TRPCError({
+            code: "BAD_REQUEST",
+            message: "User has no password",
+          });
+        }
+
+        const passwordMatch = await compare(
+          input.currentPassword,
+          user.password,
+        );
+
+        if (!passwordMatch) {
+          throw new TRPCError({
+            code: "BAD_REQUEST",
+            message: "Invalid password",
+          });
+        }
+        password = await hash(input.newPassword, 10);
+      }
+
       return await ctx.db.user.update({
         where: {
           id: ctx.session.user.id,
@@ -90,6 +145,8 @@ export const authRouter = createTRPCRouter({
         data: {
           name: input.name ?? undefined,
           image: imageUrl,
+          password: password,
+          phone: input.phoneNumber,
         },
       });
     }),

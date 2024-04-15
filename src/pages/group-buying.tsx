@@ -1,5 +1,5 @@
 import React from "react";
-import styles from "./Householdsupplies/Household.module.css";
+import styles from "./category/Household.module.css";
 
 import ProductCard from "~/components/productcard/productcard";
 import { ChevronLeft } from "lucide-react";

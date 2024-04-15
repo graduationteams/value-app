@@ -8,6 +8,7 @@
     padding-top:45px ;
     display: flex;
     justify-content: space-between;
+    align-items: center;
 }
 
 .header > h2{
@@ -34,20 +35,22 @@
     flex-direction: column;
     justify-content: flex-start; /* Align content at the top */
     align-items: center;
-    padding-left: 20px; /* Padding from the left */
-    padding-right: 20px; /* Padding from the right */
   }
 
-  .productCardsContainer {
+.productCardsContainer {
     display: grid;
+    grid-template-columns: repeat(auto-fill,minmax(160px,1fr));
     grid-gap: 20px;
     padding-bottom: 80px;
     padding-top: 20px;
+    width: 100%;
+    padding-left: 20px;
+    justify-items: center;
   }
 
 
 
-  .checkout{
+.checkout{
     background-color: var(--color-P300);
     border-radius: 25px;
     color: aliceblue;
@@ -55,9 +58,4 @@
     min-width: 65%;
     height: 45px;
     transition: transform 0.9s ease; 
-    position: fixed;
-    bottom: 20px; /* Adjust the distance from the bottom */
-    left: 50%; /* Center horizontally */
-    transform: translateX(-50%);
-      
   }

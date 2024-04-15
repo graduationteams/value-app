@@ -147,6 +147,7 @@ const seed = async () => {
         regular: [
           {
             name: "Household Supplies",
+            image: "/images/tide.png",
             subcategories: [
               { name: "Cleaning Supplies" },
               { name: "Kitchen Essentials" },
@@ -157,6 +158,8 @@ const seed = async () => {
           },
           {
             name: "Food and Groceries",
+            width: 45,
+            image: "/images/food.png",
             subcategories: [
               { name: "Fresh Produce" },
               { name: "Canned Goods" },
@@ -167,6 +170,9 @@ const seed = async () => {
           },
           {
             name: "Personal Care and Hygiene",
+
+            image: "/images/personal.png",
+
             subcategories: [
               { name: "Skin Care" },
               { name: "Hair Care" },
@@ -177,6 +183,7 @@ const seed = async () => {
           },
           {
             name: "Electronics and Accessories",
+            image: "/images/headset.png",
             subcategories: [
               { name: "Computers and Laptops" },
               { name: "Mobile Phones and Accessories" },
@@ -187,6 +194,8 @@ const seed = async () => {
           },
           {
             name: "Medical Supplies",
+            image: "/images/panadol.png",
+
             subcategories: [
               { name: "First Aid Kits" },
               { name: "Medications" },
@@ -199,6 +208,8 @@ const seed = async () => {
         farms: [
           {
             name: "Dates",
+            image: "/images/dates.png",
+            width: 66,
             subcategories: [
               { name: "Fresh Dates" },
               { name: "Dried Dates" },
@@ -209,6 +220,8 @@ const seed = async () => {
           },
           {
             name: "Fruits and Vegetables",
+            image: "/images/vegetables.png",
+            width: 78,
             subcategories: [
               { name: "Fresh Fruits" },
               { name: "Fresh Vegetables" },
@@ -219,6 +232,8 @@ const seed = async () => {
           },
           {
             name: "Dairy Products",
+            image: "/images/milk.png",
+            width: 62,
             subcategories: [
               { name: "Milk and Cream" },
               { name: "Cheese and Yogurt" },
@@ -229,6 +244,8 @@ const seed = async () => {
           },
           {
             name: "Processed Goods",
+            image: "/images/peanutbutter.png",
+            width: 56,
             subcategories: [
               { name: "Canned Foods" },
               { name: "Packaged Snacks" },
@@ -239,6 +256,8 @@ const seed = async () => {
           },
           {
             name: "Crops and Grains",
+            image: "/images/crops.png",
+            width: 76,
             subcategories: [
               { name: "Wheat and Barley" },
               { name: "Rice and Corn" },
@@ -263,6 +282,8 @@ const seed = async () => {
                   })),
                 },
               },
+              image: category.image,
+              image_width: category.width,
             },
           });
         }

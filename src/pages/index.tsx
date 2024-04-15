@@ -17,62 +17,7 @@ import { useRouter } from "next/router";
 import ProductCard from "@/components/productcard/productcard";
 import { ArrowBigRight } from "lucide-react";
 import Link from "next/link";
-
-// Todo: This is a mock data for the categories, it should be fetched from the backend
-const categories: Record<
-  string,
-  Array<{ name: string; image: string; width?: number }>
-> = {
-  regular: [
-    {
-      name: "Household Supplies",
-      image: "/images/tide.png",
-    },
-    {
-      name: "Food and Groceries",
-      image: "/images/food.png",
-    },
-    {
-      name: "Personal Care and Hygiene",
-      image: "/images/personal.png",
-    },
-    {
-      name: "Electronics and Accessories",
-      image: "/images/headset.png",
-    },
-    {
-      name: "Medical Supplies",
-      image: "/images/panadol.png",
-    },
-  ],
-  farms: [
-    {
-      name: "Dates",
-      image: "/images/dates.png",
-      width: 66,
-    },
-    {
-      name: "Fruits and Vegetables",
-      image: "/images/vegetables.png",
-      width: 78,
-    },
-    {
-      name: "Dairy Products",
-      image: "/images/milk.png",
-      width: 62,
-    },
-    {
-      name: "Processed Goods",
-      image: "/images/peanutbutter.png",
-      width: 56,
-    },
-    {
-      name: "Crops and Grains",
-      image: "/images/crops.png",
-      width: 76,
-    },
-  ],
-};
+import type { CategoryType } from "@prisma/client";
 
 export default function Home() {
   const session = useSession();
@@ -86,7 +31,8 @@ export default function Home() {
     },
   );
 
-  const [selectedCategory, setSelectedCategory] = useState("regular");
+  const [selectedCategory, setSelectedCategory] =
+    useState<CategoryType>("REGULAR");
 
   const [adressSelectorOpen, setAdressSelectorOpen] = useState(false);
 
@@ -99,6 +45,8 @@ export default function Home() {
   const router = useRouter();
 
   const groupBuying = api.product.getGroupBuy.useQuery({ take: 5 });
+
+  const categories = api.categories.all.useQuery();
 
   // to test uncomment this :
   // const { data: categoriesData, isLoading, isError } = api.categories.getByType.useQuery( { categoryType: 'FARM' });
@@ -154,46 +102,58 @@ export default function Home() {
       </div>
 
       <div className="grid h-16 grid-cols-2 gap-4">
-        {Object.keys(categories).map((categoryType) => (
-          <div
-            onClick={() => setSelectedCategory(categoryType)}
-            className={cn(
-              "flex cursor-pointer justify-between rounded-lg border-2 bg-black-B50 px-2",
-              selectedCategory === categoryType &&
-                selectedCategory === "regular" &&
-                "border-secondary-S300 bg-white-W50 text-secondary-S300",
-              selectedCategory === categoryType &&
-                selectedCategory === "farms" &&
-                "border-[#DBA45F] bg-white-W50 text-[#DBA45F]",
-            )}
-            key={categoryType}
-          >
-            <p className="mb-0 self-end pb-2">{categoryType}</p>
-            <div className="flex justify-center pr-4 pt-1">
-              <Image
-                alt={categoryType + " icon"}
-                style={{
-                  objectFit: "contain",
-                }}
-                height={0}
-                width={categoryType === "regular" ? 56 : 34}
-                src={
-                  "/images/" +
-                  (categoryType === "regular" ? "convenience.png" : "farm.png")
-                }
-              />
+        {categories.data
+          ?.map((e) => e.categoryType)
+          .filter((value, index, self) => self.indexOf(value) === index)
+          .map((categoryType) => (
+            <div
+              onClick={() => setSelectedCategory(categoryType)}
+              className={cn(
+                "flex cursor-pointer justify-between rounded-lg border-2 bg-black-B50 px-2",
+                selectedCategory === categoryType &&
+                  selectedCategory === "REGULAR" &&
+                  "border-secondary-S300 bg-white-W50 text-secondary-S300",
+                selectedCategory === categoryType &&
+                  selectedCategory === "FARM" &&
+                  "border-[#DBA45F] bg-white-W50 text-[#DBA45F]",
+              )}
+              key={categoryType}
+            >
+              <p className="mb-0 self-end pb-2">
+                {categoryType === "REGULAR" ? "Grocery" : "Farm"}
+              </p>
+              <div className="flex justify-center pr-4 pt-1">
+                <Image
+                  alt={categoryType + " icon"}
+                  style={{
+                    objectFit: "contain",
+                  }}
+                  height={0}
+                  width={categoryType === "REGULAR" ? 56 : 34}
+                  src={
+                    "/images/" +
+                    (categoryType === "REGULAR"
+                      ? "convenience.png"
+                      : "farm.png")
+                  }
+                />
+              </div>
             </div>
-          </div>
-        ))}
+          ))}
       </div>
 
       <div className="grid grid-cols-3 gap-2" ref={categoriesParent}>
-        {(categories[selectedCategory] ?? []).map((category) => (
-          <div
+        {(
+          categories.data?.filter(
+            (category) => category.categoryType === selectedCategory,
+          ) ?? []
+        ).map((category) => (
+          <Link
+            href={`/category/${category.name}`}
             key={category.name}
             className={cn(
               "flex h-28 min-w-28 flex-col justify-between rounded-lg bg-secondary-S50",
-              selectedCategory === "farms" && "bg-[#F4EADD]",
+              selectedCategory === "FARM" && "bg-[#F4EADD]",
             )}
           >
             <p className="mb-0 px-2 pt-2 text-small font-medium">
@@ -208,18 +168,16 @@ export default function Home() {
                   overflow: "hidden",
                 }}
                 src={category.image}
-                width={
-                  category.name == "Food and Groceries" ? 45 : category.width
-                }
+                width={category.image_width ?? undefined}
               />
             </div>
-          </div>
+          </Link>
         ))}
       </div>
       <EmblaCarousel />
       <div>
         <h1>Group Buying</h1>
-        <div className="flex flex-shrink-0 gap-2 overflow-scroll">
+        <div className="flex min-h-56 flex-shrink-0 gap-2 overflow-scroll">
           {groupBuying.data?.map((product) => (
             <div key={product.id} className="mt-auto flex-shrink-0">
               <ProductCard
@@ -242,7 +200,7 @@ export default function Home() {
           ))}
           <Link
             href={"/group-buying"}
-            className="h-58 bg-white flex w-40 flex-shrink-0 cursor-pointer flex-col items-center justify-center overflow-hidden rounded-lg border-t border-dashed border-gray-200 bg-black-B50 text-center font-sans shadow-lg"
+            className="bg-white flex h-60 w-40 flex-shrink-0 cursor-pointer flex-col items-center justify-center overflow-hidden rounded-lg border-t border-dashed border-gray-200 bg-black-B50 text-center font-sans shadow-lg"
           >
             <ArrowBigRight />
             <div>Discover more products</div>

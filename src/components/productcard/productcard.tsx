@@ -4,6 +4,8 @@ import Styles from "./productcard.module.css";
 import useEmblaCarousel from "embla-carousel-react";
 import { Progress } from "../ui/progress";
 import { formatDistance, formatRelative } from "date-fns";
+import { api } from "@/utils/api";
+import { useSession } from "next-auth/react";
 
 function ProductCard({
   id,
@@ -31,18 +33,92 @@ function ProductCard({
   groupBuyRequiredOrders?: number;
 }) {
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
-  const [quantity, setQuantity] = useState(0);
+
+  const utils = api.useUtils();
+
+  const session = useSession();
+
+  const cart = api.cart.get.useQuery(undefined, {
+    enabled: session.status === "authenticated",
+  });
+
+  const addToCart = api.cart.add.useMutation({
+    onSettled: () => {
+      void cart.refetch();
+    },
+    onMutate: async (productId) => {
+      const prev = utils.cart.get.getData();
+      utils.cart.get.setData(undefined, (old) => {
+        const product = old?.products.find(
+          (p) => p.productId === productId.productId,
+        );
+        if (product) {
+          product.quantity = product.quantity + 1;
+        } else {
+          old?.products.push({
+            productId: productId.productId,
+            quantity: 1,
+            cartId: old?.id,
+            id: "fake-id",
+            createdAt: new Date(),
+            updatedAt: new Date(),
+            //@ts-expect-error :))
+            product: {} as unknown,
+          });
+        }
+
+        return old;
+      });
+      return { prev };
+    },
+  });
+  const decrementFromCart = api.cart.decrement.useMutation({
+    onSettled: () => {
+      void cart.refetch();
+    },
+    onMutate: async (productId) => {
+      const prev = utils.cart.get.getData();
+      utils.cart.get.setData(undefined, (old) => {
+        if (!old) return old;
+        const product = old.products.find(
+          (p) => p.productId === productId.productId,
+        );
+        if (product) {
+          product.quantity = product.quantity - 1;
+          if (product.quantity === 0) {
+            old.products = old?.products.filter(
+              (p) => p.productId !== productId.productId,
+            );
+          }
+        }
+        return old;
+      });
+      return { prev };
+    },
+  });
+
+  const quantity =
+    cart.data?.products.find((product) => product.productId === id)?.quantity ??
+    0;
 
   const handleTopSectionClick = () => {
     setIsDrawerOpen(true);
   };
 
   const handleIncrement = () => {
-    setQuantity((prevQuantity) => prevQuantity + 1);
+    if (session.status === "unauthenticated") {
+      alert("must be Logged in to add to cart");
+      return;
+    }
+    addToCart.mutate({ productId: id });
   };
 
   const handleDecrement = () => {
-    setQuantity((prevQuantity) => (prevQuantity > 0 ? prevQuantity - 1 : 0));
+    if (session.status === "unauthenticated") {
+      alert("must be Logged in to add to cart");
+      return;
+    }
+    decrementFromCart.mutate({ productId: id });
   };
 
   const [emblaRef] = useEmblaCarousel({ loop: false });

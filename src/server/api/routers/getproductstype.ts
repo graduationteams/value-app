@@ -2,17 +2,6 @@
 import { createTRPCRouter, publicProcedure } from "~/server/api/trpc";
 import { z } from "zod";
 export const categoriesRouter = createTRPCRouter({
-  getByType: publicProcedure
-    .input(z.object({ categoryType: z.enum(["FARM", "REGULAR"]) }))
-    .query(async ({ input, ctx }) => {
-      const { categoryType } = input;
-      const categories = await ctx.db.category.findMany({
-        where: {
-          categoryType,
-        },
-      });
-      return categories;
-    }),
   all: publicProcedure.query(async ({ ctx }) => {
     const categories = await ctx.db.category.findMany();
     return categories;
@@ -25,4 +14,16 @@ export const categoriesRouter = createTRPCRouter({
     });
     return subcategories;
   }),
+  subcategory: publicProcedure
+    .input(z.object({ categoryName: z.string().optional() }))
+    .query(async ({ input, ctx }) => {
+      const subcategory = await ctx.db.subcategory.findMany({
+        where: {
+          Category: {
+            name: input.categoryName,
+          },
+        },
+      });
+      return subcategory;
+    }),
 });

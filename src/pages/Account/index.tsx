@@ -2,6 +2,9 @@ import React, { useState } from "react";
 import { MyDrawer } from "../../components/Bottomsheet/bottomsheet";
 import styles from "./AccountPage.module.css";
 import AdressSelector from "@/components/adress-selector";
+import { signOut, useSession } from "next-auth/react";
+import Image from "next/image";
+import { api } from "@/utils/api";
 
 export default function AccountPage() {
   const [isAccountInfoDrawerOpen, setIsAccountInfoDrawerOpen] = useState(false);
@@ -15,6 +18,8 @@ export default function AccountPage() {
     setIsAddressesDrawerOpen(true);
   };
 
+  const session = useSession();
+
   return (
     <div className={styles.container}>
       <br />
@@ -25,17 +30,24 @@ export default function AccountPage() {
       <br />
       <br />
 
-      <div className={styles.rectangle}>
-        <div className={styles.pfp}>
-          <img src="/images/pfp.png" alt="" />
-          <p className={styles.profileText}>Sufian alfuraydi</p>
+      <div className={`${styles.rectangle} items-center`}>
+        <div>
+          <Image
+            src={session.data?.user.image ?? "/images/pfp.png"}
+            alt="profile picture"
+            height={70}
+            width={70}
+          />
         </div>
-        <p className={styles.number}>+966 51 123 1234</p>
+        <div className={styles.pfp}>
+          <p className={styles.profileText}>{session.data?.user.name}</p>
+          <p className={styles.number}>{session.data?.user.phone}</p>
+        </div>
       </div>
 
       <br />
 
-      <div className={styles.rectangle}>
+      <div className={`${styles.rectangle} flex-col !p-0`}>
         <a href="#" className={styles.page} onClick={handleAccountInfoClick}>
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -63,42 +75,6 @@ export default function AccountPage() {
           </svg>
           <h2 className={styles.h2}>Addresses</h2>
         </a>
-
-        {/* Drawer for Account Info */}
-        <MyDrawer
-          isOpen={isAccountInfoDrawerOpen}
-          onclose={() => setIsAccountInfoDrawerOpen(false)}
-        >
-          <div className={styles.drawerContent}>
-            <h1 className={styles.title}>Account info</h1>
-            <br />
-            <div className={styles.imageContainer}>
-              <img
-                src="/images/pfp.png"
-                alt=""
-                className={styles.centeredImage}
-              />
-            </div>
-            <br />
-            <h2 className={styles.title2}>full name</h2>
-            <div className={styles.rectangle2}>
-              <p>Sufian</p>
-            </div>
-            <br />
-            <h2 className={styles.title2}>e-mail</h2>
-            <div className={styles.rectangle2}>
-              <p>sufian@gmail.com</p>
-            </div>
-          </div>
-        </MyDrawer>
-
-        <AdressSelector
-          isAddressesDrawerOpen={isAddressesDrawerOpen}
-          setIsAddressesDrawerOpen={setIsAddressesDrawerOpen}
-        />
-      </div>
-      <br />
-      <div className={styles.rectangle}>
         <a href="#" className={styles.page}>
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -113,6 +89,28 @@ export default function AccountPage() {
           </svg>
           <h2 className={styles.h2}>About Value</h2>
         </a>
+        {/* Drawer for Account Info */}
+        <MyDrawer
+          isOpen={isAccountInfoDrawerOpen && session.status === "authenticated"}
+          onclose={() => setIsAccountInfoDrawerOpen(false)}
+        >
+          <AccountInfoModel
+            onclose={() => {
+              setIsAccountInfoDrawerOpen(false);
+              void session.update();
+            }}
+          />
+        </MyDrawer>
+
+        <AdressSelector
+          isAddressesDrawerOpen={
+            isAddressesDrawerOpen && session.status === "authenticated"
+          }
+          setIsAddressesDrawerOpen={setIsAddressesDrawerOpen}
+        />
+      </div>
+      <br />
+      {/* <div className={`${styles.rectangle} flex-col !p-0`}>
         <a href="#" className={styles.page}>
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -127,10 +125,15 @@ export default function AccountPage() {
           </svg>
           <h2 className={styles.h2}>Language</h2>
         </a>
-      </div>
+      </div> */}
       <br />
       <div className={styles.container2}>
-        <a href="#" className={styles.btn}>
+        <button
+          className={styles.btn}
+          onClick={() => {
+            void signOut();
+          }}
+        >
           <svg
             xmlns="http://www.w3.org/2000/svg"
             width="23"
@@ -143,8 +146,155 @@ export default function AccountPage() {
             <path d="M3 8.812a5 5 0 0 1 2.578-4.375l-.485-.874A6 6 0 1 0 11 3.616l-.501.865A5 5 0 1 1 3 8.812" />
           </svg>
           <h2 className={styles.btn2}>Log out</h2>
-        </a>
+        </button>
       </div>
+    </div>
+  );
+}
+
+function AccountInfoModel({ onclose }: { onclose: () => void }) {
+  const session = useSession();
+
+  const [name, setName] = useState(session.data?.user.name ?? "");
+  const [phone, setPhone] = useState(session.data?.user.phone ?? "");
+
+  const editAccount = api.auth.edit.useMutation({
+    onSuccess: () => {
+      onclose();
+    },
+  });
+
+  const [image, setImage] = useState(session.data?.user.image);
+  const [currentPassword, setCurrentPassword] = useState("");
+  const [newPassword, setNewPassword] = useState("");
+  const [confirmNewPassword, setConfirmNewPassword] = useState("");
+
+  return (
+    <div className={styles.drawerContent}>
+      <h1 className={styles.title}>Account info</h1>
+      <br />
+      <form
+        className="flex w-full flex-col"
+        onSubmit={(e) => {
+          e.preventDefault();
+          if (newPassword !== confirmNewPassword) {
+            alert("Passwords do not match");
+            return;
+          }
+          if (newPassword !== "" && currentPassword === "") {
+            alert("Please enter your current password");
+            return;
+          }
+          editAccount.mutate({
+            profilePicture:
+              image === session.data?.user.image ? undefined : image,
+            name,
+            phoneNumber: phone,
+            currentPassword,
+            newPassword,
+          });
+        }}
+      >
+        <div className={styles.imageContainer}>
+          <div className="flex w-full items-center justify-center">
+            <label htmlFor="file-input" className="h-16 w-16">
+              <Image
+                src={image ?? "/images/pfp.png"}
+                alt=""
+                className={styles.centeredImage}
+                width={70}
+                height={70}
+              />
+            </label>
+            <input
+              id="file-input"
+              type="file"
+              className="hidden"
+              onChange={(e) => {
+                const file = e.target.files?.[0];
+                if (!file) {
+                  return;
+                }
+                const reader = new FileReader();
+                reader.onload = (e) => {
+                  setImage(e.target?.result as string);
+                };
+                reader.readAsDataURL(file);
+              }}
+            />
+          </div>
+        </div>
+        <br />
+        <h2 className={styles.title2}>Full Name</h2>
+        <input
+          className={styles.rectangle2}
+          type="text"
+          value={name}
+          onChange={(e) => setName(e.target.value)}
+        />
+        <br />
+        <h2 className={styles.title2}>Phone Number</h2>
+        <input
+          className={styles.rectangle2}
+          type="tel"
+          value={phone}
+          minLength={10}
+          maxLength={10}
+          pattern="05\d{8}"
+          onChange={(e) => setPhone(e.target.value)}
+        />
+        <br />
+        <h2 className={styles.title2}>E-mail</h2>
+        <input
+          className={styles.rectangle2}
+          type="email"
+          autoComplete="email"
+          value={session.data?.user.email ?? ""}
+          disabled
+        />
+        <br />
+
+        {session.data?.user.isPassword ? (
+          <>
+            <h2 className={styles.title2}>Current Password</h2>
+            <input
+              className={styles.rectangle2}
+              type="password"
+              autoComplete="current-password"
+              value={currentPassword}
+              onChange={(e) => setCurrentPassword(e.target.value)}
+            />
+            <br />
+            <h2 className={styles.title2}>New Password</h2>
+            <input
+              className={styles.rectangle2}
+              type="password"
+              autoComplete="new-password"
+              minLength={8}
+              value={newPassword}
+              onChange={(e) => setNewPassword(e.target.value)}
+            />
+            <br />
+            <h2 className={styles.title2}>Confirm New Password</h2>
+            <input
+              className={styles.rectangle2}
+              type="password"
+              autoComplete="new-password"
+              minLength={8}
+              value={confirmNewPassword}
+              onChange={(e) => setConfirmNewPassword(e.target.value)}
+            />
+            <br />
+          </>
+        ) : null}
+
+        <button
+          type="submit"
+          className="h-12 w-full rounded-3xl bg-primary-P300 text-center text-white-W50 disabled:opacity-50"
+        >
+          Save
+        </button>
+      </form>
     </div>
   );
 }

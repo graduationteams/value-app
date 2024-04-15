@@ -27,11 +27,14 @@ declare module "next-auth" {
     user: DefaultSession["user"] & {
       id: string;
       userType: PUser["userType"];
+      phone: PUser["phone"];
+      isPassword: boolean;
     };
   }
-
   interface User {
     userType: PUser["userType"];
+    password: PUser["password"];
+    phone: PUser["phone"];
   }
 }
 
@@ -48,14 +51,18 @@ export const authOptions: (
 
   return {
     callbacks: {
-      session: ({ session, user }) => ({
-        ...session,
-        user: {
-          ...session.user,
-          id: user.id,
-          userType: user.userType,
-        },
-      }),
+      session: ({ session, user }) => {
+        return {
+          ...session,
+          user: {
+            ...session.user,
+            id: user.id,
+            userType: user.userType,
+            isPassword: user.password !== null,
+            phone: user.phone,
+          },
+        };
+      },
       async signIn({ user }) {
         // Check if this sign in callback is being called in the credentials authentication flow. If so, use the next-auth adapter to create a session entry in the database (SignIn is called after authorize so we can safely assume the user is valid and already authenticated).
         if (
@@ -127,7 +134,6 @@ export const authOptions: (
         },
         async authorize(credentials) {
           if (!credentials) return null;
-          console.log(credentials);
           // verifying if credential email exists on db
           const user = await db.user.findUnique({
             where: {
@@ -144,7 +150,10 @@ export const authOptions: (
           );
           if (!isPasswordValid) return null;
 
-          return user;
+          return {
+            ...user,
+            isPassword: user.password !== null,
+          };
         },
       }),
       /**

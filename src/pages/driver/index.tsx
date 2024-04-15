@@ -31,7 +31,7 @@ export default function Driver() {
     currentDelivery.isLoading
   ) {
     return (
-      <div className="flex h-screen flex-col items-center justify-center bg-[#FAFBFC]">
+      <div className="mb-20 flex h-screen flex-col items-center justify-center bg-[#FAFBFC]">
         <div className="mb-2 h-32 w-32 animate-spin rounded-full border-b-2 border-t-2 border-gray-900" />
         Loading...
       </div>
@@ -39,7 +39,7 @@ export default function Driver() {
   }
   if (session.data?.user.userType !== "DRIVER") {
     return (
-      <div className="flex h-screen flex-col items-center justify-center bg-[#FAFBFC]">
+      <div className="mb-20 flex h-screen flex-col items-center justify-center bg-[#FAFBFC]">
         Not a driver
       </div>
     );
@@ -47,7 +47,7 @@ export default function Driver() {
 
   if (location.error !== null || !location.longitude || !location.latitude) {
     return (
-      <div className="flex h-screen flex-col items-center justify-center bg-[#FAFBFC]">
+      <div className="mb-20 flex h-screen flex-col items-center justify-center bg-[#FAFBFC]">
         <p className="text-center text-2xl text-red-500">
           Cant get your location, please enable location services and refresh{" "}
           <br />
@@ -71,7 +71,7 @@ function Available_Orders({ location }: { location: [number, number] }) {
 
   if (avalibleOrders.isLoading) {
     return (
-      <div className="flex h-screen flex-col items-center justify-center bg-[#FAFBFC]">
+      <div className="mb-20 flex h-screen flex-col items-center justify-center bg-[#FAFBFC]">
         <div className="mb-2 h-32 w-32 animate-spin rounded-full border-b-2 border-t-2 border-gray-900" />
         Loading...
       </div>
@@ -79,7 +79,7 @@ function Available_Orders({ location }: { location: [number, number] }) {
   }
 
   return (
-    <div className="flex h-screen flex-col bg-[#FAFBFC]">
+    <div className="mb-20 flex h-screen flex-col bg-[#FAFBFC]">
       <p className="px-2 py-5 text-h3 font-bold text-black-B300">
         Available Orders
       </p>
@@ -223,7 +223,7 @@ function CurrentDelivery({
   }
 
   return (
-    <div className="h-screen w-screen bg-[#FAFBFC]">
+    <div className="mb-20 min-h-screen w-screen bg-[#FAFBFC]">
       <p className="px-2 py-5 text-h3 font-bold text-black-B300">
         Current Delivery
       </p>

@@ -96,7 +96,9 @@ export const cartRouter = createTRPCRouter({
         userId: ctx.session.user.id,
       },
       include: {
-        products: true,
+        products: {
+          include: { product: { include: { images: true, Store: true } } },
+        },
       },
     });
     return cart;

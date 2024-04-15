@@ -17,6 +17,10 @@ import { cn } from "@/lib/utils";
 
 const routes = [
   {
+    name: "Home",
+    href: "/",
+  },
+  {
     name: "Dashboard",
     href: "/dashboard",
   },

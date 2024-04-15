@@ -38,17 +38,29 @@ export const productsRouter = createTRPCRouter({
 
   // Fetch products by subcategory ID
   getBySubcategory: publicProcedure
-    .input(z.object({ subcategoryId: z.string() }))
+    .input(
+      z.object({
+        subcategoryId: z.string().optional(),
+        categoryName: z.string().optional(),
+      }),
+    )
     .query(async ({ input, ctx }) => {
       const { subcategoryId } = input;
       const products = await ctx.db.product.findMany({
         where: {
-          subcategoryId: subcategoryId,
+          Subcategory: {
+            id: subcategoryId,
+            Category: {
+              name: input.categoryName,
+            },
+          },
           status: "VISIBLE",
+          is_group_buy: false,
         },
         include: {
           images: true,
           Subcategory: true,
+          Store: true,
         },
       });
       return products;
