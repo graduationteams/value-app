@@ -58,14 +58,11 @@ const Navbar = () => {
             },
           )}
         >
-          {count && count > 0 && (
+          {count && count > 0 ? (
             <span className="absolute -mt-2 ml-6 flex h-4 w-4 items-center justify-center rounded-full bg-red-500 text-small text-white-W50">
-              {cart.data?.products.reduce(
-                (acc, product) => acc + product.quantity,
-                0,
-              )}
+              {count}
             </span>
-          )}
+          ) : null}
           <Basket />
           <span className="text-xs">Basket</span>
         </Link>

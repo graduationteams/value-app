@@ -33,7 +33,7 @@ export default function AccountPage() {
       <div className={`${styles.rectangle} items-center`}>
         <div>
           <Image
-            src={session.data?.user.image ?? "/images/pfp.png"}
+            src={session.data?.user.picture ?? "/images/pfp.png"}
             alt="profile picture"
             height={70}
             width={70}
@@ -130,8 +130,8 @@ export default function AccountPage() {
       <div className={styles.container2}>
         <button
           className={styles.btn}
-          onClick={() => {
-            void signOut();
+          onClick={async () => {
+            await signOut({ redirect: false, callbackUrl: "/" });
           }}
         >
           <svg
@@ -164,7 +164,7 @@ function AccountInfoModel({ onclose }: { onclose: () => void }) {
     },
   });
 
-  const [image, setImage] = useState(session.data?.user.image);
+  const [image, setImage] = useState(session.data?.user.picture);
   const [currentPassword, setCurrentPassword] = useState("");
   const [newPassword, setNewPassword] = useState("");
   const [confirmNewPassword, setConfirmNewPassword] = useState("");
@@ -187,7 +187,7 @@ function AccountInfoModel({ onclose }: { onclose: () => void }) {
           }
           editAccount.mutate({
             profilePicture:
-              image === session.data?.user.image ? undefined : image,
+              image === session.data?.user.picture ? undefined : image,
             name,
             phoneNumber: phone,
             currentPassword,

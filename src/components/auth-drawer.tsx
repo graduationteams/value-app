@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import styles from "../pages/Onboarding1/onb.module.css";
 import MyDrawer from "./Bottomsheet/bottomsheet";
 import Image from "next/image";
-import { signIn } from "next-auth/react";
+import { signIn, useSession } from "next-auth/react";
 import { api } from "@/utils/api";
 
 export function AuthDrawer({
@@ -26,63 +26,60 @@ export function AuthDrawer({
   const [signUpPassword, setSignUpPassword] = useState("");
 
   const signup = api.auth.register.useMutation({
-    onSuccess: () => {
+    onSuccess: async () => {
       onClose();
       // after registration, we should automatically sign in the user
-      void signIn("credentials", {
+      await signIn("credentials", {
         email: signUpEmail,
         password: signUpPassword,
       });
     },
   });
 
+  const session = useSession();
+
   return (
     <>
-    
       <MyDrawer
-        isOpen={isOpen}
+        isOpen={isOpen && session.status !== "authenticated"}
         onclose={() => {
           onClose();
         }}
       >
-        
         {drawerMode === "sign-up" ? (
-           <div className={styles.drawercontainer}>
+          <div className={styles.drawercontainer}>
+            <p className={styles.title}>Sign Up</p>
 
-          
-              <p className={styles.title}>Sign Up</p>
-            
-              <p className={styles.subtitle}>
-                Simple, create your account to get started!
-              </p>
-            
-           <br />
-              <button
-                className={styles.googlebutton}
-                onClick={() => {
-                  void signIn("google");
-                }}
-              >
-                <Image
-                  src="/images/googlelogo.png"
-                  alt="Google Logo"
-                  width={24}
-                  height={24}
-                />
-                <span className={styles.onb2}>Sign Up with Google</span>
-              </button>
-              <br />
-                < div className={styles.separator}>
-                <div className={styles.line}></div>
-               <p>or sign up with e-mail</p>
-                <div className={styles.line}></div>
-                  </div>
+            <p className={styles.subtitle}>
+              Simple, create your account to get started!
+            </p>
 
+            <br />
+            <button
+              className={styles.googlebutton}
+              onClick={async () => {
+                await signIn("google", {
+                  callbackUrl: "/",
+                  redirect: false,
+                });
+              }}
+            >
+              <Image
+                src="/images/googlelogo.png"
+                alt="Google Logo"
+                width={24}
+                height={24}
+              />
+              <span className={styles.onb2}>Sign Up with Google</span>
+            </button>
+            <br />
+            <div className={styles.separator}>
+              <div className={styles.line}></div>
+              <p>or sign up with e-mail</p>
+              <div className={styles.line}></div>
+            </div>
 
-             
-
-
-           <br />
+            <br />
             <div className={styles.formContainer}>
               <div className={styles.inputContainer}>
                 <label htmlFor="name" className={styles.inputTitle}>
@@ -154,37 +151,35 @@ export function AuthDrawer({
             </div>
           </div>
         ) : (
-
-
-
           <div className={styles.drawercontainer}>
             {/* Content of the sign-in drawer */}
-           
-              <p className={styles.title}>Sign In</p>
-          <br />
-              <button
-                className={styles.googlebutton}
-                onClick={() => {
-                  void signIn("google");
-                }}
-              >
-                <Image
-                  src="/images/googlelogo.png"
-                  alt="Google Logo"
-                  width={24}
-                  height={24}
-                />
-                <span className={styles.onb2}>Sign In with Google</span>
-              </button>
 
-                <br />
-              < div className={styles.separator}>
-                <div className={styles.line}></div>
-               <p>or sign in with e-mail</p>
-                <div className={styles.line}></div>
-                  </div>
+            <p className={styles.title}>Sign In</p>
+            <br />
+            <button
+              className={styles.googlebutton}
+              onClick={async () => {
+                await signIn("google", {
+                  callbackUrl: "/",
+                  redirect: false,
+                });
+              }}
+            >
+              <Image
+                src="/images/googlelogo.png"
+                alt="Google Logo"
+                width={24}
+                height={24}
+              />
+              <span className={styles.onb2}>Sign In with Google</span>
+            </button>
 
-
+            <br />
+            <div className={styles.separator}>
+              <div className={styles.line}></div>
+              <p>or sign in with e-mail</p>
+              <div className={styles.line}></div>
+            </div>
 
             <div className={styles.formContainer}>
               <div className={styles.inputContainer}>
@@ -215,12 +210,14 @@ export function AuthDrawer({
                 />
               </div>
             </div>
- <button
+            <button
               className={styles.createAccount}
-              onClick={() => {
-                void signIn("credentials", {
+              onClick={async () => {
+                await signIn("credentials", {
                   email: signInEmail,
                   password: signInPassword,
+                  callbackUrl: "/",
+                  redirect: false,
                 });
               }}
             >
@@ -241,7 +238,6 @@ export function AuthDrawer({
               </p>
             </div>
           </div>
-           
         )}
       </MyDrawer>
     </>
