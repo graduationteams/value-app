@@ -8,9 +8,6 @@ import {
 } from "next-auth";
 import GoogleProvider from "next-auth/providers/google";
 import CredentialProvider from "next-auth/providers/credentials";
-import { randomUUID } from "crypto";
-import Cookies from "cookies";
-import { decode, encode } from "next-auth/jwt";
 
 import { env } from "~/env";
 import { db } from "~/server/db";
@@ -29,12 +26,17 @@ declare module "next-auth" {
       userType: PUser["userType"];
       phone: PUser["phone"];
       isPassword: boolean;
+      picture: PUser["image"];
     };
   }
-  interface User {
+}
+
+declare module "next-auth/jwt" {
+  interface JWT {
+    id: string;
     userType: PUser["userType"];
-    password: PUser["password"];
     phone: PUser["phone"];
+    isPassword: boolean;
   }
 }
 
@@ -46,87 +48,68 @@ declare module "next-auth" {
 export const authOptions: (
   req: NextApiRequest,
   res: NextApiResponse,
-) => NextAuthOptions = (req, res) => {
+) => NextAuthOptions = () => {
   const adapter = PrismaAdapter(db);
 
   return {
+    session: {
+      strategy: "jwt",
+    },
     callbacks: {
-      session: ({ session, user }) => {
+      jwt: async ({ token }) => {
+        console.log("jwt callback", token);
+
+        const user = await db.user.findUnique({
+          where: {
+            id: token.sub,
+          },
+        });
+        if (!user) throw new Error("User not found");
+
+        return {
+          ...token,
+          userType: user.userType,
+          email: user.email,
+          id: user.id,
+          isPassword: user.password !== null,
+          phone: user.phone,
+          picture: user.image,
+        };
+      },
+      session: ({ session, token }) => {
+        console.log("session", session);
+
         return {
           ...session,
           user: {
             ...session.user,
-            id: user.id,
-            userType: user.userType,
-            isPassword: user.password !== null,
-            phone: user.phone,
+            id: token.id,
+            userType: token.userType,
+            isPassword: token.password !== null,
+            phone: token.phone,
+            picture: token.picture,
           },
         };
-      },
-      async signIn({ user }) {
-        // Check if this sign in callback is being called in the credentials authentication flow. If so, use the next-auth adapter to create a session entry in the database (SignIn is called after authorize so we can safely assume the user is valid and already authenticated).
-        if (
-          req.query.nextauth?.includes("callback") &&
-          req.query.nextauth?.includes("credentials") &&
-          req.method === "POST"
-        ) {
-          if (user) {
-            const sessionToken = randomUUID();
-            const sessionMaxAge = 60 * 60 * 24 * 30; //30Days
-            const sessionExpiry = new Date(Date.now() + sessionMaxAge * 1000);
-
-            await adapter.createSession?.({
-              sessionToken: sessionToken,
-              userId: user.id,
-              expires: sessionExpiry,
-            });
-
-            const cookies = new Cookies(req, res);
-
-            cookies.set("next-auth.session-token", sessionToken, {
-              expires: sessionExpiry,
-            });
-          }
-        }
-
-        return true;
-      },
-    },
-    jwt: {
-      encode: async ({ token, secret, maxAge }) => {
-        if (
-          req.query.nextauth?.includes("callback") &&
-          req.query.nextauth.includes("credentials") &&
-          req.method === "POST"
-        ) {
-          const cookies = new Cookies(req, res);
-          const cookie = cookies.get("next-auth.session-token");
-          if (cookie) return cookie;
-          else return "";
-        }
-        // Revert to default behaviour when not in the credentials provider callback flow
-        return encode({ token, secret, maxAge });
-      },
-      decode: async ({ token, secret }) => {
-        if (
-          req.query.nextauth?.includes("callback") &&
-          req.query.nextauth.includes("credentials") &&
-          req.method === "POST"
-        ) {
-          return null;
-        }
-
-        // Revert to default behaviour when not in the credentials provider callback flow
-        return decode({ token, secret });
       },
     },
     adapter,
     providers: [
       GoogleProvider({
+        id: "google",
         clientId: env.GOOGLE_CLIENT_ID,
         clientSecret: env.GOOGLE_CLIENT_SECRET,
+        httpOptions: { timeout: 40000 },
+        authorization: {
+          params: {
+            prompt: "consent",
+            access_type: "offline",
+            response_type: "code",
+          },
+        },
+        checks: ["none"],
       }),
       CredentialProvider({
+        id: "credentials",
         name: "CredentialProvider",
         credentials: {
           email: { label: "Email", type: "text", placeholder: "jsmith" },

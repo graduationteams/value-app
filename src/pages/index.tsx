@@ -18,6 +18,36 @@ import ProductCard from "@/components/productcard/productcard";
 import { ArrowBigRight } from "lucide-react";
 import Link from "next/link";
 import type { CategoryType } from "@prisma/client";
+import { createServerSideHelpers } from "@trpc/react-query/server";
+import { appRouter } from "@/server/api/root";
+import { db } from "@/server/db";
+import SuperJSON from "superjson";
+
+export async function getServerSideProps() {
+  const helpers = createServerSideHelpers({
+    router: appRouter,
+    ctx: {
+      db: db,
+      session: null,
+      // we use req and res for register only so we can ignore them here for now
+
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-explicit-any
+      req: null as any,
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-explicit-any
+      res: null as any,
+    },
+    transformer: SuperJSON,
+  });
+
+  await helpers.categories.all.prefetch();
+  await helpers.product.getGroupBuy.prefetch({ take: 5 });
+
+  return {
+    props: {
+      trpcState: helpers.dehydrate(),
+    },
+  };
+}
 
 export default function Home() {
   const session = useSession();
@@ -182,16 +212,16 @@ export default function Home() {
             <div key={product.id} className="mt-auto flex-shrink-0">
               <ProductCard
                 id={product.id}
-                storeName={product.Store.name}
+                storeName={product.storeName}
                 productName={product.name}
-                productImages={product.images.map((image) => image.url) ?? []}
+                productImages={product.images}
                 AdditionalInfo={product.description
                   .split(" ")
                   .slice(0, 5)
                   .join(" ")}
                 Price={product.price}
-                StoreLogo={product.Store.Logo}
-                groupBuyCurrentOrders={product.currentOrders}
+                StoreLogo={product.Logo}
+                groupBuyCurrentOrders={product.currentorders}
                 groupBuyEndDateTime={product.group_buy_end ?? undefined}
                 groupBuyRequiredOrders={product.required_qty ?? undefined}
                 isGroupBuying={product.is_group_buy}
@@ -200,7 +230,7 @@ export default function Home() {
           ))}
           <Link
             href={"/group-buying"}
-            className="bg-white flex h-60 w-40 flex-shrink-0 cursor-pointer flex-col items-center justify-center overflow-hidden rounded-lg border-t border-dashed border-gray-200 bg-black-B50 text-center font-sans shadow-lg"
+            className="bg-white flex min-h-72 w-40 flex-shrink-0 cursor-pointer flex-col items-center justify-center overflow-hidden rounded-lg border-t border-dashed border-gray-200 bg-black-B50 text-center font-sans shadow-lg"
           >
             <ArrowBigRight />
             <div>Discover more products</div>

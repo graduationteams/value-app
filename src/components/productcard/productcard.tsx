@@ -159,8 +159,8 @@ function ProductCard({
             <div className="px-4 pb-4">
               <Progress
                 value={
-                  ((groupBuyCurrentOrders ?? 0) /
-                    (groupBuyRequiredOrders ?? 1)) *
+                  ((Number(groupBuyCurrentOrders) ?? 0) /
+                    (Number(groupBuyRequiredOrders) ?? 1)) *
                   100
                 }
               />

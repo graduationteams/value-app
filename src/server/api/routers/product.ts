@@ -172,27 +172,91 @@ export const productRouter = createTRPCRouter({
         .optional(),
     )
     .query(async ({ ctx, input }) => {
-      return (
-        await ctx.db.product.findMany({
-          where: {
-            status: "VISIBLE",
-            is_group_buy: true,
-            group_buy_status: "OPEN",
-          },
-          include: {
-            productOrder: true,
-            Store: true,
-            images: true,
-          },
-          take: input?.take,
-        })
-      ).map((product) => ({
-        ...product,
-        currentOrders: product.productOrder.reduce(
-          (acc, curr) => acc + curr.quantity,
-          0,
-        ),
-        productOrder: undefined,
-      }));
+      const productsRaw = await ctx.db.$queryRaw<
+        {
+          currentorders: number;
+          id: string;
+          name: string;
+          description: string;
+          price: number;
+          storeId: string;
+          status: string;
+          subcategoryId: string;
+          group_buy_end: string;
+          group_buy_status: string;
+          is_group_buy: boolean;
+          required_qty: number;
+          url: string;
+          storeName: string;
+          Logo: string;
+        }[]
+      >`
+        SELECT SUM(po.quantity) AS currentOrders,
+        p.id,
+        p.name,
+        description,
+        p.price,
+        "storeId",
+        status,
+        "subcategoryId",
+        group_buy_end,
+        group_buy_status,
+        is_group_buy,
+        required_qty,
+        i.url,
+        S.name AS storeName,
+        S."Logo"
+  FROM "Product" p
+  JOIN "productOrder" po ON p.id = po."productId"
+  JOIN "Image" I ON p.id = I."productId"
+  JOIN "Store" S ON S.id = p."storeId"
+  WHERE p.id IN
+      (SELECT id
+      FROM "Product"
+      WHERE status = 'VISIBLE'
+        AND is_group_buy = TRUE
+        AND group_buy_status = 'OPEN'
+      ORDER BY id
+      LIMIT ${input?.take ?? 999999999999})
+  GROUP BY p.id,
+          p.name,
+          i.url,
+          S.name,
+          S."Logo"
+  ORDER BY p.id;
+      `;
+      const products: Record<
+        string,
+        {
+          currentorders: number;
+          id: string;
+          name: string;
+          description: string;
+          price: number;
+          storeId: string;
+          status: string;
+          subcategoryId: string;
+          group_buy_end: Date;
+          group_buy_status: string;
+          is_group_buy: boolean;
+          required_qty: number;
+          images: string[];
+          storeName: string;
+          Logo: string;
+        }
+      > = {};
+      for (const product of productsRaw) {
+        const prod = products[product.id];
+        if (prod) {
+          prod.images.push(product.url);
+        } else {
+          products[product.id] = {
+            ...product,
+            images: [product.url],
+            group_buy_end: new Date(product.group_buy_end),
+          };
+        }
+      }
+      return Object.values(products);
     }),
 });
