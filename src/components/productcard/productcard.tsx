@@ -33,6 +33,7 @@ function ProductCard({
   groupBuyRequiredOrders?: number;
 }) {
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
+  const [recommendations, setRecommendations] = useState([]);
 
   const utils = api.useUtils();
 
@@ -103,6 +104,7 @@ function ProductCard({
 
   const handleTopSectionClick = () => {
     setIsDrawerOpen(true);
+     fetchRecommendations(); 
   };
 
   const handleIncrement = () => {
@@ -121,6 +123,18 @@ function ProductCard({
     decrementFromCart.mutate({ productId: id });
   };
 
+  //unvtion to fetch recommended products
+  const fetchRecommendations = async () => {
+    try {
+      const response = await fetch(`https://recommendv-68e7e51ae774.herokuapp.com/recommendations/${id}`);
+      const data = await response.json();
+      setRecommendations(data);
+    } catch (error) {
+      console.error("Failed to fetch recommendations:", error);
+    }
+  };
+
+ 
   const [emblaRef] = useEmblaCarousel({ loop: false });
   return (
     <>
@@ -289,7 +303,7 @@ function ProductCard({
         </div>
       </MyDrawer>
     </>
-  );
+  ); 
 }
 
 export default ProductCard;
