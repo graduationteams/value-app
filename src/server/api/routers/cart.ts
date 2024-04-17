@@ -62,31 +62,11 @@ export const cartRouter = createTRPCRouter({
         });
       }
 
-      let recommendations: string[] = [];
-
-      // Asynchronously fetch recommendations after adding a product to the cart
-      await fetch(
-        "https://recommendv-68e7e51ae774.herokuapp.com/recommendations",
-        {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ productId: input.productId }),
-        },
-      )
-        .then((response) => response.json())
-        .then((fetchedRecommendations) => {
-          // Assign the fetched recommendations to the variable
-          recommendations = fetchedRecommendations as string[];
-          console.log("Fetched Recommendations:", recommendations);
-        })
-        .catch((error) => {
-          console.error("Error fetching recommendations:", error);
-        });
+       
 
       return {
         success: true,
         message: "Product added to cart successfully",
-        recommendations: recommendations, // Include the recommendations in the response
       };
     }),
 

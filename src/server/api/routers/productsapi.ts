@@ -65,4 +65,27 @@ export const productsRouter = createTRPCRouter({
       });
       return products;
     }),
+
+    // get BY ID
+    getByIds: publicProcedure
+    .input(z.object({
+      ids: z.array(z.string()), // Array of product IDs expected
+    }))
+    .query(async ({ input, ctx }) => {
+      const { ids } = input;
+      const products = await ctx.db.product.findMany({
+        where: {
+          id: {
+            in: ids, // Using Prisma's `in` query to find products with IDs in the given array
+          },
+          status: "VISIBLE",
+        },
+        include: {
+          images: true,
+          Subcategory: true,
+          Store: true,
+        },
+      });
+      return products;
+    }),
 });
