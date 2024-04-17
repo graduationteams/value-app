@@ -42,16 +42,16 @@ export default function Household() {
             <ProductCard
               key={product.id}
               id={product.id}
-              storeName={product.Store.name}
+              storeName={product.storeName}
               productName={product.name}
-              productImages={product.images.map((image) => image.url) ?? []}
+              productImages={product.images}
               AdditionalInfo={product.description
                 .split(" ")
                 .slice(0, 5)
                 .join(" ")}
               Price={product.price}
-              StoreLogo={product.Store.Logo}
-              groupBuyCurrentOrders={product.currentOrders}
+              StoreLogo={product.Logo}
+              groupBuyCurrentOrders={product.currentorders}
               groupBuyRequiredOrders={product.required_qty ?? undefined}
               groupBuyEndDateTime={product.group_buy_end ?? undefined}
               isGroupBuying={product.is_group_buy}

@@ -3,7 +3,11 @@ import { createTRPCRouter, publicProcedure } from "~/server/api/trpc";
 import { z } from "zod";
 export const categoriesRouter = createTRPCRouter({
   all: publicProcedure.query(async ({ ctx }) => {
-    const categories = await ctx.db.category.findMany();
+    const categories = await ctx.db.category.findMany({
+      orderBy: {
+        id: "asc",
+      },
+    });
     return categories;
   }),
   subcategories: publicProcedure.query(async ({ ctx }) => {
