@@ -2,15 +2,20 @@
 
 import { useState } from "react";
 import { MyDrawer } from "../components/Bottomsheet/bottomsheet";
+import { api } from "@/utils/api";
 
 export default function Test() {
   const [isAddressopen, setIsAddressOpen] = useState(false);
   const [isMapOpen, setIsMapOpen] = useState(false);
 
+  const cart = api.cart.add.useMutation();
+
   return (
     <div>
       <button
         onClick={() => {
+          cart.mutate({ productId: "cluxci6vx00ayos28iruulsff" });
+          return;
           setIsMapOpen(true);
           setIsAddressOpen(false); // Close the first drawer
         }}
@@ -27,7 +32,7 @@ export default function Test() {
         Open Address
       </button>
       <br />
-     
+
       <MyDrawer
         isOpen={isAddressopen}
         onclose={() => {
@@ -36,7 +41,7 @@ export default function Test() {
       >
         <div className="text-red-600">
           <h1>Address</h1>
-          <div className="Signint w-[393px] h-[400px] relative bg-gray-50 rounded-tl-xl rounded-tr-xl">
+          <div className="Signint relative h-[400px] w-[393px] rounded-tl-xl rounded-tr-xl bg-gray-50">
             <button
               onClick={() => {
                 setIsMapOpen(true); // Open the second drawer

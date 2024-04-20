@@ -62,8 +62,6 @@ export const cartRouter = createTRPCRouter({
         });
       }
 
-       
-
       return {
         success: true,
         message: "Product added to cart successfully",

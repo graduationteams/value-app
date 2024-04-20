@@ -5,16 +5,19 @@ import { api } from "@/utils/api";
 import { useSession } from "next-auth/react";
 import { useAdressStore } from "@/zustand/store";
 import AdressSelector from "@/components/adress-selector";
+import { useRouter } from "next/router";
 
 export default function Cart() {
-  const cart = api.cart.get.useQuery();
+  const session = useSession();
+  const cart = api.cart.get.useQuery(undefined, {
+    enabled: session.status === "authenticated",
+  });
 
   const total =
     cart.data?.products.reduce(
       (prev, curr) => prev + curr.quantity * curr.product.price,
       0,
     ) ?? 0;
-  const session = useSession();
 
   const selectedAdress = useAdressStore((state) => state.selectedAdress);
 
@@ -26,6 +29,8 @@ export default function Cart() {
   );
 
   const [openAdressSelector, setOpenAdressSelector] = useState(false);
+
+  const router = useRouter();
 
   return (
     <div className="mb-20">
@@ -64,7 +69,16 @@ export default function Cart() {
         </div>
       </section>
       <section className="flex items-center justify-center">
-        <button className={styles.checkout}>
+        <button
+          onClick={() => {
+            if (selectedAdress == null) {
+              setOpenAdressSelector(true);
+              return;
+            }
+            void router.push("/checkout");
+          }}
+          className={styles.checkout}
+        >
           Checkout&nbsp;
           {new Intl.NumberFormat("en", {
             style: "currency",

@@ -24,7 +24,10 @@ const Navbar = () => {
   );
 
   if (
-    !["/", "/cart", "/orders", "/Account", "/driver"].includes(router.pathname)
+    !["/", "/cart", "/orders", "/Account", "/driver"].includes(
+      router.pathname,
+    ) &&
+    !router.pathname.startsWith("/orders/")
   )
     return null;
   return (

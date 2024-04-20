@@ -79,7 +79,7 @@ export default function Home() {
   const categories = api.categories.all.useQuery();
 
   useEffect(() => {
-    if (session.status === "unauthenticated") {
+    if (session.status === "unauthenticated" && selectedAdress != null) {
       setSelectedAdress(null);
     }
   });

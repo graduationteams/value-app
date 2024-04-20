@@ -28,6 +28,8 @@ NEXTAUTH_SECRET="Pa17nNbqBHmxHUujDxFe5c1wGLTEA2isjDSGFOjz0T8="
 NEXTAUTH_URL="http://localhost:3000"
 IMGBB_API_KEY="81c3dfe81e04895bc6e8be7460e46166"
 NEXT_PUBLIC_MAPBOX_API_TOKEN="pk.eyJ1IjoibmFzZXIxMjMiLCJhIjoiY2xoNnRyenV0MDlsdDNtcWo5dmh5bHVibSJ9.KHjE4n9wqAVKTdIfLqlgNw"
+MOYASER_SECRET_KEY="sk_test_ZkYNHtk7k2j4ppFLKgihd7ghK4dsJ6688zcHarQn"
+MOYASER_SECRET_Token="6Q5ffI211ByWOAsu0mJwrelmDuJBU6FDufCxMJqpCK8="
 ```
 5. run prisma push to create the database schema
 ```bash

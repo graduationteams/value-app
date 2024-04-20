@@ -70,7 +70,10 @@ export default function OrderPage() {
       <div className="pt-4">
         <div className="flex flex-col gap-6 rounded-md border border-black-B50 bg-white-W50 p-4 shadow-md">
           {order.data.productOrder.map((productOrder) => (
-            <div key={productOrder.productId} className="flex gap-4">
+            <div
+              key={productOrder.productId}
+              className="flex grow items-end gap-4"
+            >
               <Image
                 src={productOrder.product.images[0]!.url}
                 alt="product"
@@ -85,16 +88,19 @@ export default function OrderPage() {
                   {productOrder.quantity} x {productOrder.price} SAR
                 </p>
               </div>
-              <div className="flex flex-col items-center justify-center text-center">
+              <div className="flex grow flex-col items-end gap-2">
                 <Image
                   alt="store logo"
                   src={productOrder.product.Store.Logo}
                   width={40}
                   height={40}
-                  className="h-auto w-auto rounded"
+                  className="rounded"
                 />
                 <p className="text-black-B200">
-                  {productOrder.product.Store.name}
+                  {productOrder.product.Store.name
+                    .split(" ")
+                    .slice(0, 1)
+                    .join(" ")}
                 </p>
               </div>
             </div>

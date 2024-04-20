@@ -31,6 +31,8 @@ export const env = createEnv({
     GOOGLE_CLIENT_ID: z.string(),
     GOOGLE_CLIENT_SECRET: z.string(),
     IMGBB_API_KEY: z.string(),
+    MOYASER_SECRET_KEY: z.string(),
+    MOYASER_SECRET_Token: z.string(),
   },
 
   /**
@@ -55,6 +57,8 @@ export const env = createEnv({
     GOOGLE_CLIENT_SECRET: process.env.GOOGLE_CLIENT_SECRET,
     IMGBB_API_KEY: process.env.IMGBB_API_KEY,
     NEXT_PUBLIC_MAPBOX_API_TOKEN: process.env.NEXT_PUBLIC_MAPBOX_API_TOKEN,
+    MOYASER_SECRET_KEY: process.env.MOYASER_SECRET_KEY,
+    MOYASER_SECRET_Token: process.env.MOYASER_SECRET_Token,
   },
   /**
    * Run `build` or `dev` with `SKIP_ENV_VALIDATION` to skip env validation. This is especially
