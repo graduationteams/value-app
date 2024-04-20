@@ -42,10 +42,12 @@ export const productsRouter = createTRPCRouter({
       z.object({
         subcategoryId: z.string().optional(),
         categoryName: z.string().optional(),
+        cursor: z.string().nullish(),
       }),
     )
     .query(async ({ input, ctx }) => {
       const { subcategoryId } = input;
+      const limit = 10;
       const products = await ctx.db.product.findMany({
         where: {
           Subcategory: {
@@ -62,15 +64,31 @@ export const productsRouter = createTRPCRouter({
           Subcategory: true,
           Store: true,
         },
+        take: limit + 1,
+        cursor: input.cursor ? { id: input.cursor } : undefined,
+        orderBy: {
+          id: "asc",
+        },
       });
-      return products;
+      let nextCursor: string | undefined = undefined;
+      if (products.length > limit) {
+        const nextItem = products.pop();
+        nextCursor = nextItem!.id;
+      }
+
+      return {
+        products,
+        nextCursor,
+      };
     }),
 
-    // get BY ID
-    getByIds: publicProcedure
-    .input(z.object({
-      ids: z.array(z.string()), // Array of product IDs expected
-    }))
+  // get BY ID
+  getByIds: publicProcedure
+    .input(
+      z.object({
+        ids: z.array(z.string()), // Array of product IDs expected
+      }),
+    )
     .query(async ({ input, ctx }) => {
       const { ids } = input;
       const products = await ctx.db.product.findMany({

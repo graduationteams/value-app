@@ -1,7 +1,7 @@
 import Image from "next/image";
 import { api } from "~/utils/api";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import MapPin from "~/components/icons/map-pin";
 import Map from "@/components/icons/map";
 import Search from "@/components/icons/search";
@@ -52,7 +52,7 @@ export async function getServerSideProps() {
 export default function Home() {
   const session = useSession();
 
-  const selectedAdress = useAdressStore((state) => state.selectedAdress);
+  const { selectedAdress, setSelectedAdress } = useAdressStore();
 
   const adress = api.address.get.useQuery(
     { id: selectedAdress ?? "" },
@@ -78,8 +78,11 @@ export default function Home() {
 
   const categories = api.categories.all.useQuery();
 
-  // to test uncomment this :
-  // const { data: categoriesData, isLoading, isError } = api.categories.getByType.useQuery( { categoryType: 'FARM' });
+  useEffect(() => {
+    if (session.status === "unauthenticated") {
+      setSelectedAdress(null);
+    }
+  });
 
   return (
     <main className="mb-20 flex min-h-screen flex-col gap-3 bg-[#FAFBFC] px-4 pt-4 font-montserrat">

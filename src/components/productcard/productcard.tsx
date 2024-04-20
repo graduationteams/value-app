@@ -104,7 +104,7 @@ function ProductCard({
 
   const handleTopSectionClick = () => {
     setIsDrawerOpen(true);
-     fetchRecommendations(); 
+    void fetchRecommendations();
   };
 
   const handleIncrement = () => {
@@ -126,15 +126,18 @@ function ProductCard({
   //unvtion to fetch recommended products
   const fetchRecommendations = async () => {
     try {
-      const response = await fetch(`https://recommendv-68e7e51ae774.herokuapp.com/recommendations/${id}`);
+      const response = await fetch(
+        `https://recommendv-68e7e51ae774.herokuapp.com/recommendations/${id}`,
+      );
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
       const data = await response.json();
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
       setRecommendations(data);
     } catch (error) {
       console.error("Failed to fetch recommendations:", error);
     }
   };
 
- 
   const [emblaRef] = useEmblaCarousel({ loop: false });
   return (
     <>
@@ -303,7 +306,7 @@ function ProductCard({
         </div>
       </MyDrawer>
     </>
-  ); 
+  );
 }
 
 export default ProductCard;

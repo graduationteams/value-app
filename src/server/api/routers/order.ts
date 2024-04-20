@@ -206,22 +206,56 @@ export const orderRouter = createTRPCRouter({
         },
       });
     }),
-  getUserOrders: protectedProcedure.query(async ({ ctx }) => {
-    return await ctx.db.order.findMany({
-      where: {
-        userId: ctx.session.user.id,
-      },
-      include: {
-        address: true,
-        driver: true,
-        productOrder: {
-          include: {
-            product: true,
+  getUserOrders: protectedProcedure
+    .input(
+      z.object({
+        cursor: z.string().nullish(),
+      }),
+    )
+    .query(async ({ ctx, input }) => {
+      const limit = 10;
+      const orders = await ctx.db.order.findMany({
+        orderBy: [
+          {
+            createdAt: "desc",
+          },
+          {
+            id: "desc",
+          },
+        ],
+        take: limit + 1,
+        cursor: input.cursor ? { id: input.cursor } : undefined,
+
+        where: {
+          userId: ctx.session.user.id,
+        },
+        include: {
+          productOrder: {
+            select: {
+              product: {
+                select: {
+                  images: {
+                    select: {
+                      url: true,
+                    },
+                  },
+                },
+              },
+            },
           },
         },
-      },
-    });
-  }),
+      });
+      let nextCursor: string | undefined = undefined;
+      if (orders.length > limit) {
+        const nextItem = orders.pop();
+        nextCursor = nextItem!.id;
+      }
+
+      return {
+        orders,
+        nextCursor,
+      };
+    }),
   cancel: protectedProcedure
     .input(
       z.object({
@@ -261,6 +295,41 @@ export const orderRouter = createTRPCRouter({
         },
         data: {
           status: "CANCELLED",
+        },
+      });
+    }),
+  byId: protectedProcedure
+    .input(
+      z.object({
+        orderID: z.string(),
+      }),
+    )
+    .query(async ({ ctx, input }) => {
+      return ctx.db.order.findUnique({
+        where: {
+          id: input.orderID,
+          userId: ctx.session.user.id,
+        },
+        include: {
+          address: true,
+          productOrder: {
+            select: {
+              productId: true,
+              quantity: true,
+              price: true,
+              product: {
+                select: {
+                  name: true,
+                  Store: true,
+                  images: {
+                    select: {
+                      url: true,
+                    },
+                  },
+                },
+              },
+            },
+          },
         },
       });
     }),
