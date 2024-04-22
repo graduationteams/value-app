@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unsafe-assignment */
 import React, { useState } from "react";
 import { MyDrawer } from "../Bottomsheet/bottomsheet";
 import Styles from "./productcard.module.css";
@@ -33,9 +34,8 @@ function ProductCard({
   groupBuyRequiredOrders?: number;
 }) {
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
-  const [recommendations, setRecommendations] = useState([]);
+  const [recommendations, setRecommendations] = useState<string[]>([]);
   const [showRecommendations, setShowRecommendations] = useState(false);
-
 
   const utils = api.useUtils();
 
@@ -45,11 +45,14 @@ function ProductCard({
     enabled: session.status === "authenticated",
   });
 
-  const recommendationsQuery = api.products.getByIds.useQuery({
-    ids: recommendations,
-  }, {
-    enabled: recommendations.length > 0
-  });
+  const recommendationsQuery = api.products.getByIds.useQuery(
+    {
+      ids: recommendations,
+    },
+    {
+      enabled: recommendations.length > 0,
+    },
+  );
 
   const addToCart = api.cart.add.useMutation({
     onSettled: () => {
@@ -112,8 +115,8 @@ function ProductCard({
 
   const handleTopSectionClick = () => {
     setIsDrawerOpen(true);
-     fetchRecommendations();
-     setShowRecommendations(true) 
+    void fetchRecommendations();
+    setShowRecommendations(true);
   };
 
   const handleIncrement = () => {
@@ -132,49 +135,54 @@ function ProductCard({
     decrementFromCart.mutate({ productId: id });
   };
 
- 
-
-
-const fetchRecommendations = async () => {
+  const fetchRecommendations = async () => {
     if (!id) {
-        console.error("Product ID is undefined.");
-        return;
+      console.error("Product ID is undefined.");
+      return;
     }
 
     const url = `https://recommendv-68e7e51ae774.herokuapp.com/recommendations/`;
-    console.log("Fetching recommendations from URL:", url, "with product_id:", id);
+    console.log(
+      "Fetching recommendations from URL:",
+      url,
+      "with product_id:",
+      id,
+    );
 
     try {
-        const response = await fetch(url, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                
-            },
-            body: JSON.stringify({ product_id: id }),
-        });
+      const response = await fetch(url, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ product_id: id }),
+      });
 
-        if (!response.ok) {
-            throw new Error(`HTTP error! Status: ${response.status}`);
-        }
+      if (!response.ok) {
+        throw new Error(`HTTP error! Status: ${response.status}`);
+      }
 
-        const data = await response.json();
-        console.log("Response status:", response.status);
-        console.log("Data received:", data);
+      const data = (await response.json()) as
+        | {
+            recommended_product_ids: string[];
+          }
+        | undefined;
+      console.log("Response status:", response.status);
+      console.log("Data received:", data);
 
-        if (data && data.recommended_product_ids) {
-            setRecommendations(data.recommended_product_ids);
-            setShowRecommendations(true);
-        } else {
-            console.error('No recommendations found or bad response:', data);
-            setShowRecommendations(true);
-        }
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+      if (data?.recommended_product_ids) {
+        setRecommendations(data.recommended_product_ids ?? []);
+        setShowRecommendations(true);
+      } else {
+        console.error("No recommendations found or bad response:", data);
+        setShowRecommendations(true);
+      }
     } catch (error) {
-        console.error("Failed to fetch recommendations:", error);
-        setShowRecommendations(false);
+      console.error("Failed to fetch recommendations:", error);
+      setShowRecommendations(false);
     }
-};
-
+  };
 
   const [emblaRef] = useEmblaCarousel({ loop: false });
   return (
@@ -255,8 +263,6 @@ const fetchRecommendations = async () => {
           )}
         </div>
       </div>
-
-
 
       <MyDrawer
         isOpen={isDrawerOpen}
@@ -343,26 +349,31 @@ const fetchRecommendations = async () => {
               </button>
             </div>
             {showRecommendations && recommendationsQuery.data && (
-    <div>
-      <h2 className={Styles.recommendationsTitle}>Recommended products</h2>
-      <div className={Styles.recommendationsContainer}>
-        {recommendationsQuery.data.map((product) => (
-         !product.is_group_buy &&product.price < Price && ( 
-        <ProductCard
-          key={product.id}
-          id={product.id}
-          storeName={product.Store.name}
-          productName={product.name}
-          productImages={product.images.map(img => img.url)}
-          AdditionalInfo={product.description}
-          Price={product.price}
-          StoreLogo={product.Store.Logo}
-          isGroupBuying={product.is_group_buy}
-        />)
-      ))}
-    </div>
-  </div>
-)}
+              <div>
+                <h2 className={Styles.recommendationsTitle}>
+                  Recommended products
+                </h2>
+                <div className={Styles.recommendationsContainer}>
+                  {recommendationsQuery.data.map(
+                    (product) =>
+                      !product.is_group_buy &&
+                      product.price < Price && (
+                        <ProductCard
+                          key={product.id}
+                          id={product.id}
+                          storeName={product.Store.name}
+                          productName={product.name}
+                          productImages={product.images.map((img) => img.url)}
+                          AdditionalInfo={product.description}
+                          Price={product.price}
+                          StoreLogo={product.Store.Logo}
+                          isGroupBuying={product.is_group_buy}
+                        />
+                      ),
+                  )}
+                </div>
+              </div>
+            )}
           </div>
         </div>
       </MyDrawer>

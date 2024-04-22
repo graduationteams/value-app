@@ -6,16 +6,11 @@ import { usePastSearchesStore } from "@/zustand/store";
 import { useEffect, useState } from "react";
 import { X as XOutline } from "lucide-react";
 import { useRouter } from "next/router";
-import Lottie from 'lottie-react';
-
-
-
-
- 
+import Lottie from "lottie-react";
 
 export default function SearchScreen() {
   const [search, setSearch] = useState("");
-const [animationData, setAnimationData] = useState(null);
+  const [animationData, setAnimationData] = useState(null);
   const { addPastSearch, pastSearches, removePastSearch } =
     usePastSearchesStore();
 
@@ -29,12 +24,15 @@ const [animationData, setAnimationData] = useState(null);
   );
 
   const router = useRouter();
-  
-    useEffect(() => {
+
+  useEffect(() => {
     fetch("/loader.json")
-      .then(response => response.json())
-      .then(data => setAnimationData(data))
-      .catch(error => console.error('Error loading the animation data:', error));
+      .then((response) => response.json())
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
+      .then((data) => setAnimationData(data))
+      .catch((error) =>
+        console.error("Error loading the animation data:", error),
+      );
   }, []);
   function onclose() {
     router.back();
@@ -83,7 +81,14 @@ const [animationData, setAnimationData] = useState(null);
         <div className="grow">
           {search.length > 2 && searchData.isLoading ? (
             <div className="flex items-center justify-center">
-              {animationData && <Lottie animationData={animationData} loop autoplay style={{ width: 100, height: 100 }} />}
+              {animationData && (
+                <Lottie
+                  animationData={animationData}
+                  loop
+                  autoplay
+                  style={{ width: 100, height: 100 }}
+                />
+              )}
             </div>
           ) : search.length > 2 && searchData.data?.length === 0 ? (
             <p className="text-center">No products found</p>
