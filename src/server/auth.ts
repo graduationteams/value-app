@@ -57,8 +57,6 @@ export const authOptions: (
     },
     callbacks: {
       jwt: async ({ token }) => {
-        console.log("jwt callback", token);
-
         const user = await db.user.findUnique({
           where: {
             id: token.sub,
@@ -77,8 +75,6 @@ export const authOptions: (
         };
       },
       session: ({ session, token }) => {
-        console.log("session", session);
-
         return {
           ...session,
           user: {

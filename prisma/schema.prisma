@@ -218,6 +218,7 @@ model Order {
 
     createdAt DateTime @default(now())
     updatedAt DateTime @updatedAt
+    Payment   Payment?
 }
 
 model Store {
@@ -233,4 +234,17 @@ model Store {
     products Product[]
 
     @@unique([sellerId])
+}
+
+model Payment {
+    id          String   @id
+    order       Order    @relation(fields: [orderId], references: [id])
+    orderId     String
+    amount      Float
+    status      String
+    description String
+    createdAt   DateTime @default(now())
+    updatedAt   DateTime @updatedAt
+
+    @@unique([orderId])
 }

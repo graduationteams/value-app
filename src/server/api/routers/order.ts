@@ -1,7 +1,8 @@
 import { z } from "zod";
-import { createTRPCRouter, protectedProcedure } from "../trpc";
+import { createTRPCRouter, protectedProcedure, publicProcedure } from "../trpc";
 import { TRPCError } from "@trpc/server";
 import type { PrismaClient } from "@prisma/client";
+import { getPayment } from "@/utils/moyasar";
 
 // TODO: calculate delivery amount based on the distance between the store and the user address
 const DELIVERY_AMOUNT = 30;
@@ -95,7 +96,7 @@ export const orderRouter = createTRPCRouter({
 
       return order;
     }),
-  confirm: protectedProcedure
+  confirm: publicProcedure
     .input(
       z.object({
         orderID: z.string(),
@@ -109,6 +110,7 @@ export const orderRouter = createTRPCRouter({
         },
         include: {
           productOrder: { include: { product: true } },
+          Payment: true,
         },
       });
       if (!order) {
@@ -124,7 +126,29 @@ export const orderRouter = createTRPCRouter({
         });
       }
 
-      //TODO: confirm the payment from the payment gateway (for now we will just assume the payment is confirmed)
+      if (!order.Payment) {
+        throw new TRPCError({
+          code: "BAD_REQUEST",
+          message: "Order has no payment, can't confirm order",
+        });
+      }
+      const payment = await getPayment(order.Payment.id);
+      if (!payment) {
+        throw new TRPCError({
+          code: "BAD_REQUEST",
+          message: "Error confirming payment",
+        });
+      }
+
+      if (
+        payment.amount !== order.totalAmount * 100 ||
+        payment.status !== "paid"
+      ) {
+        throw new TRPCError({
+          code: "BAD_REQUEST",
+          message: "Payment amount or status mismatch",
+        });
+      }
 
       await ctx.db.order.update({
         where: {
@@ -206,22 +230,56 @@ export const orderRouter = createTRPCRouter({
         },
       });
     }),
-  getUserOrders: protectedProcedure.query(async ({ ctx }) => {
-    return await ctx.db.order.findMany({
-      where: {
-        userId: ctx.session.user.id,
-      },
-      include: {
-        address: true,
-        driver: true,
-        productOrder: {
-          include: {
-            product: true,
+  getUserOrders: protectedProcedure
+    .input(
+      z.object({
+        cursor: z.string().nullish(),
+      }),
+    )
+    .query(async ({ ctx, input }) => {
+      const limit = 10;
+      const orders = await ctx.db.order.findMany({
+        orderBy: [
+          {
+            createdAt: "desc",
+          },
+          {
+            id: "desc",
+          },
+        ],
+        take: limit + 1,
+        cursor: input.cursor ? { id: input.cursor } : undefined,
+
+        where: {
+          userId: ctx.session.user.id,
+        },
+        include: {
+          productOrder: {
+            select: {
+              product: {
+                select: {
+                  images: {
+                    select: {
+                      url: true,
+                    },
+                  },
+                },
+              },
+            },
           },
         },
-      },
-    });
-  }),
+      });
+      let nextCursor: string | undefined = undefined;
+      if (orders.length > limit) {
+        const nextItem = orders.pop();
+        nextCursor = nextItem!.id;
+      }
+
+      return {
+        orders,
+        nextCursor,
+      };
+    }),
   cancel: protectedProcedure
     .input(
       z.object({
@@ -261,6 +319,41 @@ export const orderRouter = createTRPCRouter({
         },
         data: {
           status: "CANCELLED",
+        },
+      });
+    }),
+  byId: protectedProcedure
+    .input(
+      z.object({
+        orderID: z.string(),
+      }),
+    )
+    .query(async ({ ctx, input }) => {
+      return ctx.db.order.findUnique({
+        where: {
+          id: input.orderID,
+          userId: ctx.session.user.id,
+        },
+        include: {
+          address: true,
+          productOrder: {
+            select: {
+              productId: true,
+              quantity: true,
+              price: true,
+              product: {
+                select: {
+                  name: true,
+                  Store: true,
+                  images: {
+                    select: {
+                      url: true,
+                    },
+                  },
+                },
+              },
+            },
+          },
         },
       });
     }),

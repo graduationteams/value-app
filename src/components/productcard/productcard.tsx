@@ -176,7 +176,6 @@ const fetchRecommendations = async () => {
 };
 
 
- 
   const [emblaRef] = useEmblaCarousel({ loop: false });
   return (
     <>
@@ -368,7 +367,7 @@ const fetchRecommendations = async () => {
         </div>
       </MyDrawer>
     </>
-  ); 
+  );
 }
 
 export default ProductCard;

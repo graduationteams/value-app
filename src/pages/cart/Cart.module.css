@@ -51,14 +51,15 @@
 
 
 .checkout {
-    position: fixed; 
-    bottom: 20px;    
-    right: 20px;      
+   position: fixed; 
+    bottom: 75px;    /* Increased from 20px to 40px to move it up a little */
+    left: 50%;       /* Center horizontally */
+    transform: translateX(-50%); /* Center the element by its width */
     background-color: var(--color-P300);
     border-radius: 25px;
     color: aliceblue;
-    width: 65%;      
+    width: 65%;
     height: 45px;
     transition: transform 0.9s ease;
-    z-index: 1000;    
+    z-index: 1000;   
 }

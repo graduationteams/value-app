@@ -1,9 +1,10 @@
-import React, { useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import styles from "./Household.module.css";
 
 import ProductCard from "~/components/productcard/productcard";
-import { api } from "@/utils/api";
+import { api, type RouterOutputs } from "@/utils/api";
 import { useRouter } from "next/router";
+import { useInView } from "react-intersection-observer";
 
 export default function Household() {
   const router = useRouter();
@@ -14,10 +15,15 @@ export default function Household() {
     string | undefined
   >();
 
-  const products = api.products.getBySubcategory.useQuery({
-    categoryName: category as string,
-    subcategoryId: selectedSubcategory,
-  });
+  const products = api.products.getBySubcategory.useInfiniteQuery(
+    {
+      categoryName: category as string,
+      subcategoryId: selectedSubcategory,
+    },
+    {
+      getNextPageParam: (lastPage) => lastPage.nextCursor,
+    },
+  );
 
   const subcategories = api.categories.subcategory.useQuery({
     categoryName: category as string,
@@ -26,6 +32,39 @@ export default function Household() {
   const handleButtonClick = (subcategoryId: string | undefined = undefined) => {
     setSelectedSubcategory(subcategoryId);
   };
+
+  const productsData = useMemo(
+    () =>
+      (products.data?.pages ?? []).reduce<
+        RouterOutputs["products"]["getBySubcategory"]["products"]
+      >((acc, curr) => {
+        acc.push(...curr.products);
+
+        return acc;
+      }, []),
+    [products.data],
+  );
+
+  const { ref, inView } = useInView();
+
+  useEffect(() => {
+    if (
+      inView &&
+      productsData.length > 0 &&
+      !products.isLoading &&
+      !products.isFetchingNextPage &&
+      products.hasNextPage
+    ) {
+      void products.fetchNextPage();
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [
+    inView,
+    products.hasNextPage,
+    products.isFetchingNextPage,
+    products.isLoading,
+    productsData.length,
+  ]);
 
   return (
     <>
@@ -74,7 +113,7 @@ export default function Household() {
 
       <div className={styles.container}>
         <div className={styles.productCardsContainer}>
-          {products.data?.map((product) => (
+          {productsData?.map((product) => (
             <ProductCard
               key={product.id}
               id={product.id}
@@ -90,6 +129,14 @@ export default function Household() {
             />
           ))}
         </div>
+        {productsData.length > 0 ? (
+          <div className="py-8">
+            <div
+              ref={ref}
+              className="h-12 w-12 animate-spin rounded-full border-b-2 border-t-2 border-gray-900"
+            />
+          </div>
+        ) : null}
       </div>
     </>
   );
