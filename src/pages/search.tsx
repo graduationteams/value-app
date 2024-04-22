@@ -3,13 +3,19 @@ import { X } from "@/components/icons/X";
 import ProductCard from "@/components/productcard/productcard";
 import { api } from "@/utils/api";
 import { usePastSearchesStore } from "@/zustand/store";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { X as XOutline } from "lucide-react";
 import { useRouter } from "next/router";
+import Lottie from 'lottie-react';
+
+
+
+
+ 
 
 export default function SearchScreen() {
   const [search, setSearch] = useState("");
-
+const [animationData, setAnimationData] = useState(null);
   const { addPastSearch, pastSearches, removePastSearch } =
     usePastSearchesStore();
 
@@ -23,6 +29,13 @@ export default function SearchScreen() {
   );
 
   const router = useRouter();
+  
+    useEffect(() => {
+    fetch("/loader.json")
+      .then(response => response.json())
+      .then(data => setAnimationData(data))
+      .catch(error => console.error('Error loading the animation data:', error));
+  }, []);
   function onclose() {
     router.back();
   }
@@ -70,7 +83,7 @@ export default function SearchScreen() {
         <div className="grow">
           {search.length > 2 && searchData.isLoading ? (
             <div className="flex items-center justify-center">
-              <div className="h-32 w-32 animate-spin self-center rounded-full border-b-2 border-t-2 border-gray-900" />
+              {animationData && <Lottie animationData={animationData} loop autoplay style={{ width: 100, height: 100 }} />}
             </div>
           ) : search.length > 2 && searchData.data?.length === 0 ? (
             <p className="text-center">No products found</p>

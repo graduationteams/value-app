@@ -50,12 +50,15 @@
 
 
 
-.checkout{
+.checkout {
+    position: fixed; 
+    bottom: 20px;    
+    right: 20px;      
     background-color: var(--color-P300);
     border-radius: 25px;
     color: aliceblue;
-    max-width: 100%;
-    min-width: 65%;
+    width: 65%;      
     height: 45px;
-    transition: transform 0.9s ease; 
-  }
+    transition: transform 0.9s ease;
+    z-index: 1000;    
+}

@@ -111,4 +111,31 @@
   .CartBtn:active {
     transform: scale(0.95);
     transition-duration: .5s;
-  }
+  }  
+
+  
+
+.recommendationsTitle {
+  font-size: 1.2rem;
+  margin-bottom: 1rem;
+  text-align: center; 
+  font-family: 'Montserrat-Arabic', sans-serif;
+}
+
+.recommendationsContainer {
+  display: flex;
+  overflow-x: auto;
+  gap: 16px;
+  padding: 1rem;
+  margin-bottom: 2rem;
+}
+
+
+.recommendationsContainer > div {
+  scroll-snap-align: start;
+}
+
+.myDrawerClass {
+  overflow: hidden; 
+}
+

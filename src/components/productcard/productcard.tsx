@@ -34,6 +34,8 @@ function ProductCard({
 }) {
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
   const [recommendations, setRecommendations] = useState([]);
+  const [showRecommendations, setShowRecommendations] = useState(false);
+
 
   const utils = api.useUtils();
 
@@ -41,6 +43,12 @@ function ProductCard({
 
   const cart = api.cart.get.useQuery(undefined, {
     enabled: session.status === "authenticated",
+  });
+
+  const recommendationsQuery = api.products.getByIds.useQuery({
+    ids: recommendations,
+  }, {
+    enabled: recommendations.length > 0
   });
 
   const addToCart = api.cart.add.useMutation({
@@ -104,7 +112,8 @@ function ProductCard({
 
   const handleTopSectionClick = () => {
     setIsDrawerOpen(true);
-     fetchRecommendations(); 
+     fetchRecommendations();
+     setShowRecommendations(true) 
   };
 
   const handleIncrement = () => {
@@ -123,16 +132,49 @@ function ProductCard({
     decrementFromCart.mutate({ productId: id });
   };
 
-  //unvtion to fetch recommended products
-  const fetchRecommendations = async () => {
-    try {
-      const response = await fetch(`https://recommendv-68e7e51ae774.herokuapp.com/recommendations/${id}`);
-      const data = await response.json();
-      setRecommendations(data);
-    } catch (error) {
-      console.error("Failed to fetch recommendations:", error);
+ 
+
+
+const fetchRecommendations = async () => {
+    if (!id) {
+        console.error("Product ID is undefined.");
+        return;
     }
-  };
+
+    const url = `https://recommendv-68e7e51ae774.herokuapp.com/recommendations/`;
+    console.log("Fetching recommendations from URL:", url, "with product_id:", id);
+
+    try {
+        const response = await fetch(url, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                
+            },
+            body: JSON.stringify({ product_id: id }),
+        });
+
+        if (!response.ok) {
+            throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+
+        const data = await response.json();
+        console.log("Response status:", response.status);
+        console.log("Data received:", data);
+
+        if (data && data.recommended_product_ids) {
+            setRecommendations(data.recommended_product_ids);
+            setShowRecommendations(true);
+        } else {
+            console.error('No recommendations found or bad response:', data);
+            setShowRecommendations(true);
+        }
+    } catch (error) {
+        console.error("Failed to fetch recommendations:", error);
+        setShowRecommendations(false);
+    }
+};
+
 
  
   const [emblaRef] = useEmblaCarousel({ loop: false });
@@ -214,6 +256,8 @@ function ProductCard({
           )}
         </div>
       </div>
+
+
 
       <MyDrawer
         isOpen={isDrawerOpen}
@@ -299,6 +343,27 @@ function ProductCard({
                 <p className={Styles.text}>Add to Cart</p>
               </button>
             </div>
+            {showRecommendations && recommendationsQuery.data && (
+    <div>
+      <h2 className={Styles.recommendationsTitle}>Recommended products</h2>
+      <div className={Styles.recommendationsContainer}>
+        {recommendationsQuery.data.map((product) => (
+         !product.is_group_buy &&product.price < Price && ( 
+        <ProductCard
+          key={product.id}
+          id={product.id}
+          storeName={product.Store.name}
+          productName={product.name}
+          productImages={product.images.map(img => img.url)}
+          AdditionalInfo={product.description}
+          Price={product.price}
+          StoreLogo={product.Store.Logo}
+          isGroupBuying={product.is_group_buy}
+        />)
+      ))}
+    </div>
+  </div>
+)}
           </div>
         </div>
       </MyDrawer>
