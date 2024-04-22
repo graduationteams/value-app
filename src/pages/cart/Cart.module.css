@@ -52,7 +52,7 @@
 
 .checkout {
    position: fixed; 
-    bottom: 75px;    /* Increased from 20px to 40px to move it up a little */
+    bottom: 100px;    /* Increased from 20px to 40px to move it up a little */
     left: 50%;       /* Center horizontally */
     transform: translateX(-50%); /* Center the element by its width */
     background-color: var(--color-P300);
