@@ -1,4 +1,5 @@
 import AdressSelector from "@/components/adress-selector";
+import { DELIVERY_COST } from "@/lib/constants";
 import { api } from "@/utils/api";
 import { useAdressStore } from "@/zustand/store";
 import { ChevronLeft } from "lucide-react";
@@ -140,7 +141,7 @@ export default function Checkout() {
             {new Intl.NumberFormat("ar", {
               style: "currency",
               currency: "SAR",
-            }).format(30)}
+            }).format(DELIVERY_COST)}
           </p>
         </div>
         <div className="flex w-full justify-between">
@@ -152,7 +153,7 @@ export default function Checkout() {
             }).format(
               cart.data.products.reduce(
                 (acc, item) => acc + item.product.price * item.quantity,
-                30,
+                DELIVERY_COST,
               ),
             )}
           </p>

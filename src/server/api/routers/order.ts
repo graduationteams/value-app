@@ -3,9 +3,7 @@ import { createTRPCRouter, protectedProcedure, publicProcedure } from "../trpc";
 import { TRPCError } from "@trpc/server";
 import type { PrismaClient } from "@prisma/client";
 import { getPayment } from "@/utils/moyasar";
-
-// TODO: calculate delivery amount based on the distance between the store and the user address
-const DELIVERY_AMOUNT = 30;
+import { DELIVERY_COST } from "@/lib/constants";
 
 /* 
   order flow 
@@ -64,8 +62,8 @@ export const orderRouter = createTRPCRouter({
         ctx.db.order.create({
           data: {
             status: "CREATED",
-            deliveryAmount: DELIVERY_AMOUNT,
-            totalAmount: total + DELIVERY_AMOUNT,
+            deliveryAmount: DELIVERY_COST,
+            totalAmount: total + DELIVERY_COST,
             address: {
               connect: {
                 id: input.addressID,

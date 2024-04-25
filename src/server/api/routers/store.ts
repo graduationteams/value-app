@@ -2,6 +2,7 @@ import { z } from "zod";
 import { createTRPCRouter, protectedProcedure, publicProcedure } from "../trpc";
 import { TRPCError } from "@trpc/server";
 import { upload_base64_image } from "~/utils/upload";
+import { STORE_DISTENCE_LIMIT_IN_KM } from "@/lib/constants";
 
 export const storeRouter = createTRPCRouter({
   get: publicProcedure
@@ -475,7 +476,7 @@ export const storeRouter = createTRPCRouter({
           logo: string;
           dist_km: number;
         }>
-      >`select * from nearby_Stores(${input.lat},${input.long});`;
+      >`select * from nearby_Stores(${input.lat},${input.long}) where dist_km <= ${STORE_DISTENCE_LIMIT_IN_KM};`;
       return stores;
     }),
 });

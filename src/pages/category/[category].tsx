@@ -5,6 +5,7 @@ import ProductCard from "~/components/productcard/productcard";
 import { api, type RouterOutputs } from "@/utils/api";
 import { useRouter } from "next/router";
 import { useInView } from "react-intersection-observer";
+import { useGeolocation } from "@/hooks/use-geolocation";
 
 export default function Household() {
   const router = useRouter();
@@ -15,10 +16,14 @@ export default function Household() {
     string | undefined
   >();
 
+  const location = useGeolocation();
+
   const products = api.products.getBySubcategory.useInfiniteQuery(
     {
       categoryName: category as string,
       subcategoryId: selectedSubcategory,
+      latitude: location.latitude ?? undefined,
+      longitude: location.longitude ?? undefined,
     },
     {
       getNextPageParam: (lastPage) => lastPage.nextCursor,

@@ -39,22 +39,24 @@ function Map({
   const currentLocation = useGeolocation();
 
   useEffect(() => {
+    const nMap = new mapbox.Map({
+      container: "map",
+      style: "mapbox://styles/mapbox/streets-v11",
+      center: initialCenter,
+      zoom: 9,
+      accessToken: env.NEXT_PUBLIC_MAPBOX_API_TOKEN,
+    })
     setMap(
-      new mapbox.Map({
-        container: "map",
-        style: "mapbox://styles/mapbox/streets-v11",
-        center: initialCenter,
-        zoom: 9,
-        accessToken: env.NEXT_PUBLIC_MAPBOX_API_TOKEN,
-      }),
+      nMap
     );
+    nMap.getCanvas().setAttribute("data-vaul-no-drag", "true");
+
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {
     if (!map || !selectMarker) return;
 
-    map.getCanvas().setAttribute("data-vaul-no-drag", "true");
 
     const marker = new mapbox.Marker({
       color: "red",
