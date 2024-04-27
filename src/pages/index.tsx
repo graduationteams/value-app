@@ -194,14 +194,15 @@ export default function Home() {
             </p>
             <div className="self-end overflow-hidden">
               {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img
+              <Image
                 alt={category.name + " icon"}
                 style={{
                   objectFit: "contain",
                   overflow: "hidden",
                 }}
                 src={category.image}
-                width={category.image_width ?? undefined}
+                width={category.image_width ?? 40}
+                height={40}
               />
             </div>
           </Link>
