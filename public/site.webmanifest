@@ -6,7 +6,7 @@
   "icons": [
     {
       "src": "/valueico.png",
-      "sizes": "192x192 ",
+      "sizes": "180x180",
       "type": "image/png",
       "purpose": "any"
     },
@@ -18,7 +18,7 @@
     }
 
   ],
-  "theme_color": "#11262b",
+  "theme_color": "#ffffff",
   "background_color": "#ffffff",
   "display": "standalone"
 }
