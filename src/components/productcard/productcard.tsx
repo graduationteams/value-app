@@ -192,7 +192,7 @@ function ProductCard({
         <div className="w-full cursor-pointer" onClick={handleTopSectionClick}>
           {/* Top Section: Product Image and Information */}
           <Image
-            className="object-cover"
+            className="max-h-40 object-contain"
             src={productImages[0] ?? "https://placehold.it/200x200"}
             alt="Product"
             height={173}

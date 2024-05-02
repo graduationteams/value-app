@@ -246,6 +246,10 @@ export const productRouter = createTRPCRouter({
         }
       > = {};
       for (const product of productsRaw) {
+        const end = new Date(product.group_buy_end);
+        if (end < new Date()) {
+          continue;
+        }
         const prod = products[product.id];
         if (prod) {
           prod.images.push(product.url);
@@ -253,7 +257,7 @@ export const productRouter = createTRPCRouter({
           products[product.id] = {
             ...product,
             images: [product.url],
-            group_buy_end: new Date(product.group_buy_end),
+            group_buy_end: end,
           };
         }
       }
