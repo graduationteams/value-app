@@ -22,14 +22,15 @@ docker run --name value-app-postgres -e POSTGRES_PASSWORD=password -e POSTGRES_D
 4. create .env file in the root of the project and add the following
 ```bash
 DATABASE_URL="postgresql://postgres:password@localhost:5432/value-app"
-GOOGLE_CLIENT_ID="354269438319-0cbp494k0k8bpni739m81lbh05sv1od3.apps.googleusercontent.com"
-GOOGLE_CLIENT_SECRET="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"
-NEXTAUTH_SECRET="Pa17nNbqBHmxHUujDxFe5c1wGLTEA2isjDSGFOjz0T8="
+GOOGLE_CLIENT_ID="GOOGLE_CLIENT_ID"
+GOOGLE_CLIENT_SECRET="GOOGLE_CLIENT_SECRET"
+NEXTAUTH_SECRET="NEXTAUTH_SECRET"
 NEXTAUTH_URL="http://localhost:3000"
-IMGBB_API_KEY="81c3dfe81e04895bc6e8be7460e46166"
+IMGBB_API_KEY="IMGBB_API_KEY"
 NEXT_PUBLIC_MAPBOX_API_TOKEN="pk.eyJ1IjoibmFzZXIxMjMiLCJhIjoiY2xoNnRyenV0MDlsdDNtcWo5dmh5bHVibSJ9.KHjE4n9wqAVKTdIfLqlgNw"
-MOYASER_SECRET_KEY="sk_test_ZkYNHtk7k2j4ppFLKgihd7ghK4dsJ6688zcHarQn"
-MOYASER_SECRET_Token="6Q5ffI211ByWOAsu0mJwrelmDuJBU6FDufCxMJqpCK8="
+MOYASER_SECRET_KEY="MOYASER_SECRET_KEY"
+MOYASER_SECRET_Token="MOYASER_SECRET_Token"
+STORE_DISTENCE_LIMIT_IN_KM=30
 ```
 5. run prisma push to create the database schema
 ```bash

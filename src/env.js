@@ -33,6 +33,7 @@ export const env = createEnv({
     IMGBB_API_KEY: z.string(),
     MOYASER_SECRET_KEY: z.string(),
     MOYASER_SECRET_Token: z.string(),
+    STORE_DISTENCE_LIMIT_IN_KM: z.coerce.number(),
   },
 
   /**
@@ -59,6 +60,7 @@ export const env = createEnv({
     NEXT_PUBLIC_MAPBOX_API_TOKEN: process.env.NEXT_PUBLIC_MAPBOX_API_TOKEN,
     MOYASER_SECRET_KEY: process.env.MOYASER_SECRET_KEY,
     MOYASER_SECRET_Token: process.env.MOYASER_SECRET_Token,
+    STORE_DISTENCE_LIMIT_IN_KM: process.env.STORE_DISTENCE_LIMIT_IN_KM,
   },
   /**
    * Run `build` or `dev` with `SKIP_ENV_VALIDATION` to skip env validation. This is especially
