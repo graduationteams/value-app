@@ -10,7 +10,7 @@ import { useGeolocation } from "@/hooks/use-geolocation";
 export default function Household() {
   const router = useRouter();
 
-  const { category } = router.query;
+  const { category, categoryType } = router.query;
 
   const [selectedSubcategory, setSelectedSubcategory] = useState<
     string | undefined
@@ -73,7 +73,12 @@ export default function Household() {
 
   return (
     <>
-      <div className={styles.header}>
+      <div
+        className={styles.header}
+        style={{
+          backgroundColor: categoryType === "FARM" ? "#F4EADD" : undefined,
+        }}
+      >
         <br />
         <br />
         <button

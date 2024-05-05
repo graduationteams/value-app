@@ -182,7 +182,7 @@ export default function Home() {
           ) ?? []
         ).map((category) => (
           <Link
-            href={`/category/${category.name}`}
+            href={`/category/${category.name}?categoryType=${selectedCategory}`}
             key={category.name}
             className={cn(
               "flex h-28 min-w-28 flex-col justify-between rounded-lg bg-secondary-S50",

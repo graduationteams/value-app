@@ -155,7 +155,9 @@ function OrderCard({
       <div className="flex w-full flex-col gap-4 p-2">
         <div className="flex gap-2">
           <p className="text-black-B75">order Number </p>
-          <p className="text-black-B200">123456</p>
+          <p className="text-black-B200">
+            {order.id.slice(order.id.length - 5, order.id.length)}
+          </p>
         </div>
         <div className="flex items-center justify-between gap-4">
           <p>
