@@ -1,7 +1,7 @@
 // src/server/api/routers/products.ts
 import { createTRPCRouter, publicProcedure } from "~/server/api/trpc";
 import { z } from "zod";
-import { STORE_DISTENCE_LIMIT_IN_KM } from "@/lib/constants";
+import { STORE_DISTENCE_LIMIT_IN_KM } from "@/lib/constants.server";
 
 export const productsRouter = createTRPCRouter({
   // Fetch all products

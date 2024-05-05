@@ -2,7 +2,7 @@ import { z } from "zod";
 import { createTRPCRouter, protectedProcedure, publicProcedure } from "../trpc";
 import { TRPCError } from "@trpc/server";
 import { upload_base64_image } from "~/utils/upload";
-import { STORE_DISTENCE_LIMIT_IN_KM } from "@/lib/constants";
+import { STORE_DISTENCE_LIMIT_IN_KM } from "@/lib/constants.server";
 
 export const storeRouter = createTRPCRouter({
   get: publicProcedure
