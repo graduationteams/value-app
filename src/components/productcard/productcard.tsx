@@ -234,11 +234,11 @@ function ProductCard({
               <Image
                 src="/assets/icons/plus.png"
                 alt="add to cart"
-                className="mr-1 h-4 w-4"
+                className="mr-1 h-4 w-4 object-contain"
                 width={16}
                 height={16}
               />
-              <span>add to cart</span>
+              <span className="text-nowrap">add to cart</span>
             </button>
           ) : (
             <div className="flex items-center justify-center">
@@ -356,32 +356,36 @@ function ProductCard({
                 <p className={Styles.text}>Add to Cart</p>
               </button>
             </div>
-            {showRecommendations && recommendationsQuery.data && (
-              <div>
-                <h2 className={Styles.recommendationsTitle}>
-                  Recommended products
-                </h2>
-                <div className={Styles.recommendationsContainer}>
-                  {recommendationsQuery.data.map(
-                    (product) =>
-                      !product.is_group_buy &&
-                      product.price < Price && (
-                        <ProductCard
-                          key={product.id}
-                          id={product.id}
-                          storeName={product.Store.name}
-                          productName={product.name}
-                          productImages={product.images.map((img) => img.url)}
-                          AdditionalInfo={product.description}
-                          Price={product.price}
-                          StoreLogo={product.Store.Logo}
-                          isGroupBuying={product.is_group_buy}
-                        />
-                      ),
-                  )}
+            {showRecommendations &&
+              recommendationsQuery.data &&
+              recommendationsQuery.data.some(
+                (product) => product.price < Price && !product.is_group_buy,
+              ) && (
+                <div>
+                  <h2 className={Styles.recommendationsTitle}>
+                    Recommended products
+                  </h2>
+                  <div className={Styles.recommendationsContainer}>
+                    {recommendationsQuery.data.map(
+                      (product) =>
+                        !product.is_group_buy &&
+                        product.price < Price && (
+                          <ProductCard
+                            key={product.id}
+                            id={product.id}
+                            storeName={product.Store.name}
+                            productName={product.name}
+                            productImages={product.images.map((img) => img.url)}
+                            AdditionalInfo={product.description}
+                            Price={product.price}
+                            StoreLogo={product.Store.Logo}
+                            isGroupBuying={product.is_group_buy}
+                          />
+                        ),
+                    )}
+                  </div>
                 </div>
-              </div>
-            )}
+              )}
           </div>
         </div>
       </MyDrawer>
