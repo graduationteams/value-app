@@ -6,20 +6,13 @@ import { useQuery } from "@tanstack/react-query";
 import React from "react";
 import { AddressLocator } from "./address-locator";
 import { useSession } from "next-auth/react";
+import { getAdress } from "@/utils/mapbox";
 
 const AdressDescription = ({ lang, lat }: { lang: string; lat: string }) => {
   const { data: address, isLoading } = useQuery({
     queryKey: ["adresss", lang + lat],
     queryFn: async () => {
-      const res = await fetch(
-        `https://api.mapbox.com/geocoding/v5/mapbox.places/${lang},${lat}.json?access_token=${process.env.NEXT_PUBLIC_MAPBOX_API_TOKEN}&types=address&language=ar`,
-      );
-      if (!res.ok) {
-        throw new Error("Network response was not ok");
-      }
-      return res.json() as Promise<{
-        features?: Array<{ place_name_ar?: string }>;
-      }>;
+      return await getAdress(lang, lat);
     },
   });
 

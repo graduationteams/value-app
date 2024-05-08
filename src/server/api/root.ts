@@ -1,15 +1,15 @@
-import { postRouter } from "~/server/api/routers/post";
-import { createTRPCRouter } from "~/server/api/trpc";
-import { categoriesRouter } from "~/server/api/routers/getproductstype";
+import { postRouter } from "./routers/post";
+import { createTRPCRouter } from "./trpc";
+import { categoriesRouter } from "./routers/getproductstype";
 import { authRouter } from "./routers/auth";
 import { productRouter } from "./routers/product";
 import { storeRouter } from "./routers/store";
-import { addCategoryRouter } from "~/server/api/routers/addcategory";
+import { addCategoryRouter } from "./routers/addcategory";
 import { orderRouter } from "./routers/order";
 import { cartRouter } from "./routers/cart";
 import { addressRouter } from "./routers/adrress";
 import { driverRouter } from "./routers/driver";
-import {  productsRouter} from "./routers/productsapi";
+import { productsRouter } from "./routers/productsapi";
 /**
  * This is the primary router for your server.
  *
