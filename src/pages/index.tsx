@@ -1,4 +1,3 @@
-import Image from "next/image";
 import { api } from "~/utils/api";
 
 import { useEffect, useState } from "react";
@@ -156,7 +155,7 @@ export default function Home() {
                 {categoryType === "REGULAR" ? "Grocery" : "Farm"}
               </p>
               <div className="flex justify-center pr-4 pt-1">
-                <Image
+                <img
                   alt={categoryType + " icon"}
                   style={{
                     objectFit: "contain",
@@ -194,7 +193,7 @@ export default function Home() {
             </p>
             <div className="self-end overflow-hidden">
               {/* eslint-disable-next-line @next/next/no-img-element */}
-              <Image
+              <img
                 alt={category.name + " icon"}
                 style={{
                   objectFit: "contain",

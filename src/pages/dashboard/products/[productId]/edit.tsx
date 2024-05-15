@@ -277,7 +277,7 @@ function EditProduct({
                                 setDeleteImageDialog(i);
                               }}
                             >
-                              <Image
+                              <img
                                 alt="Product image"
                                 className="aspect-square w-full rounded-md object-cover"
                                 height="120"

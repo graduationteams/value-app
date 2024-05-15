@@ -44,7 +44,7 @@ export default function DashboardNav() {
           className="flex items-center gap-2 text-lg font-semibold md:text-base"
         >
           <div className="h-6 w-6">
-            <Image src="/favicon.ico" alt="Value app" width="24" height="24" />
+            <img src="/favicon.ico" alt="Value app" width="24" height="24" />
           </div>
 
           <span className="sr-only">Value app</span>
@@ -77,12 +77,7 @@ export default function DashboardNav() {
               href="#"
               className="flex items-center gap-2 text-lg font-semibold"
             >
-              <Image
-                src="/favicon.ico"
-                alt="Value app"
-                width="24"
-                height="24"
-              />
+              <img src="/favicon.ico" alt="Value app" width="24" height="24" />
               <span className="sr-only">Value app</span>
             </Link>
             {routes.map((route) => (

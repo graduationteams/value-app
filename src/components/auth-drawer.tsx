@@ -64,7 +64,7 @@ export function AuthDrawer({
                 });
               }}
             >
-              <Image
+              <img
                 src="/images/googlelogo.png"
                 alt="Google Logo"
                 width={24}
@@ -165,7 +165,7 @@ export function AuthDrawer({
                 });
               }}
             >
-              <Image
+              <img
                 src="/images/googlelogo.png"
                 alt="Google Logo"
                 width={24}

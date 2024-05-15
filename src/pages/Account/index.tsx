@@ -32,7 +32,7 @@ export default function AccountPage() {
 
       <div className={`${styles.rectangle} items-center`}>
         <div>
-          <Image
+          <img
             src={session.data?.user.picture ?? "/images/pfp.png"}
             alt="profile picture"
             height={70}
@@ -198,7 +198,7 @@ function AccountInfoModel({ onclose }: { onclose: () => void }) {
         <div className={styles.imageContainer}>
           <div className="flex w-full items-center justify-center">
             <label htmlFor="file-input" className="h-16 w-16">
-              <Image
+              <img
                 src={image ?? "/images/pfp.png"}
                 alt=""
                 className={styles.centeredImage}

@@ -81,7 +81,7 @@ function OrderCard({
         </div>
         <div className="flex items-center gap-4">
           {order.productOrder.slice(0, 2).map((productOrder) => (
-            <Image
+            <img
               key={productOrder.product.images[0]?.url}
               src={productOrder.product.images[0]!.url}
               alt="product"

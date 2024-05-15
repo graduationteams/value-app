@@ -74,7 +74,7 @@ export default function OrderPage() {
               key={productOrder.productId}
               className="flex grow items-end gap-4"
             >
-              <Image
+              <img
                 src={productOrder.product.images[0]!.url}
                 alt="product"
                 width={57}
@@ -89,7 +89,7 @@ export default function OrderPage() {
                 </p>
               </div>
               <div className="flex grow flex-col items-end gap-2">
-                <Image
+                <img
                   alt="store logo"
                   src={productOrder.product.Store.Logo}
                   width={40}

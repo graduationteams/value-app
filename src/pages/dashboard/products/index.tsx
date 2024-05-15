@@ -96,7 +96,7 @@ function Products() {
                 {products.data?.map((product) => (
                   <TableRow key={product.id}>
                     <TableCell className="hidden sm:table-cell">
-                      <Image
+                      <img
                         alt="Product image"
                         className="aspect-square rounded-md object-cover"
                         height="64"

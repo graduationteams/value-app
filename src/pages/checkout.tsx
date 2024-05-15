@@ -4,7 +4,6 @@ import { api } from "@/utils/api";
 import { useAdressStore } from "@/zustand/store";
 import { ChevronLeft } from "lucide-react";
 import { useSession } from "next-auth/react";
-import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
@@ -99,7 +98,7 @@ export default function Checkout() {
         <div className="flex flex-col gap-3">
           {cart.data.products.map((item) => (
             <div key={item.id} className="flex gap-3">
-              <Image
+              <img
                 width={112}
                 height={112}
                 src={item.product.images[0]?.url ?? "/no-image.png"}

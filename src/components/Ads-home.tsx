@@ -9,7 +9,7 @@ export default function EmblaCarousel() {
     <div className="min-h-40 overflow-x-hidden pt-4" ref={emblaRef}>
       <div className="flex">
         <div className=" w-full min-w-0 flex-shrink-0 flex-grow-0 basis-full overflow-x-hidden">
-          <Image
+          <img
             src="/images/Ad.png"
             alt="slide 1"
             width={519}
@@ -18,7 +18,7 @@ export default function EmblaCarousel() {
           />
         </div>
         <div className=" w-full min-w-0 flex-shrink-0 flex-grow-0 basis-full overflow-x-hidden">
-          <Image
+          <img
             src="/images/Ad.png"
             alt="slide 1"
             width={519}

@@ -191,7 +191,7 @@ function ProductCard({
       <div className="h-58 bg-white mt-auto flex w-40 flex-col items-center overflow-hidden rounded-lg font-sans shadow-lg">
         <div className="w-full cursor-pointer" onClick={handleTopSectionClick}>
           {/* Top Section: Product Image and Information */}
-          <Image
+          <img
             className="max-h-40 object-contain"
             src={productImages[0] ?? "https://placehold.it/200x200"}
             alt="Product"
@@ -231,7 +231,7 @@ function ProductCard({
               onClick={handleIncrement}
               className="flex items-center justify-center p-1 text-xs text-gray-900"
             >
-              <Image
+              <img
                 src="/assets/icons/plus.png"
                 alt="add to cart"
                 className="mr-1 h-4 w-4 object-contain"
@@ -246,7 +246,7 @@ function ProductCard({
                 onClick={handleDecrement}
                 className="p-1 text-xs text-gray-900"
               >
-                <Image
+                <img
                   src="/assets/icons/minus.png"
                   alt="Decrease"
                   className="h-4 w-4"
@@ -259,7 +259,7 @@ function ProductCard({
                 onClick={handleIncrement}
                 className="p-1 text-xs text-gray-900"
               >
-                <Image
+                <img
                   src="/assets/icons/plus.png"
                   alt="Increase"
                   className="h-4 w-4"

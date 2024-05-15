@@ -45,10 +45,8 @@ function Map({
       center: initialCenter,
       zoom: 9,
       accessToken: env.NEXT_PUBLIC_MAPBOX_API_TOKEN,
-    })
-    setMap(
-      nMap
-    );
+    });
+    setMap(nMap);
     nMap.getCanvas().setAttribute("data-vaul-no-drag", "true");
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -56,7 +54,6 @@ function Map({
 
   useEffect(() => {
     if (!map || !selectMarker) return;
-
 
     const marker = new mapbox.Marker({
       color: "red",
@@ -107,7 +104,7 @@ function Map({
       root.render(
         <div>
           <div className="flex min-h-24 gap-4">
-            <Image
+            <img
               className="h-24 w-24 rounded-lg"
               src={store.logo}
               alt={store.name}
