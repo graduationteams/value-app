@@ -207,7 +207,7 @@ export const productRouter = createTRPCRouter({
         S.name AS storeName,
         S."Logo"
   FROM "Product" p
-  JOIN "productOrder" po ON p.id = po."productId"
+  LEFT JOIN "productOrder" po ON p.id = po."productId"
   JOIN "Image" I ON p.id = I."productId"
   JOIN "Store" S ON S.id = p."storeId"
   WHERE p.id IN
@@ -216,6 +216,7 @@ export const productRouter = createTRPCRouter({
       WHERE status = 'VISIBLE'
         AND is_group_buy = TRUE
         AND group_buy_status = 'OPEN'
+        AND group_buy_end > now()
       ORDER BY id
       LIMIT ${input?.take ?? 999999999999})
   GROUP BY p.id,
