@@ -79,8 +79,7 @@ export default function OrderPage() {
                 alt="product"
                 width={57}
                 height={57}
-                priority={true}
-                className="h-auto w-auto rounded"
+                className="h-auto w-12 rounded"
               />
               <div>
                 <p className="text-black-B200">{productOrder.product.name}</p>
@@ -94,7 +93,7 @@ export default function OrderPage() {
                   src={productOrder.product.Store.Logo}
                   width={40}
                   height={40}
-                  className="rounded"
+                  className="w-12 rounded"
                 />
                 <p className="text-black-B200">
                   {productOrder.product.Store.name

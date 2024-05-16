@@ -87,8 +87,7 @@ function OrderCard({
               alt="product"
               width={40}
               height={40}
-              priority={true}
-              className="h-auto w-auto rounded"
+              className="h-auto w-12 rounded"
             />
           ))}
           {order.productOrder.length > 2 ? (
